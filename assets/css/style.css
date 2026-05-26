@@ -68,17 +68,11 @@ a { color: inherit; text-decoration: none; }
 img { display: block; width: 100%; }
 
 /* --- Logo image --- */
-.nav-logo .logo-img {
-  height: 28px;
-  width: auto;
-  max-width: 160px;
-  display: block;
-  object-fit: contain;
-}
+.nav-logo .logo-img,
 .footer-logo .logo-img {
-  height: 28px;
-  width: auto;
-  max-width: 160px;
+  height: 26px !important;
+  width: auto !important;
+  max-width: 140px !important;
   display: block;
   object-fit: contain;
 }
