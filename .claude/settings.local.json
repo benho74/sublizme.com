@@ -17,7 +17,8 @@
       "Bash(find /Users/vivasante/Desktop /Users/vivasante/Downloads /Users/vivasante/Documents -name \"*.png\" -o -name \"*.svg\" -o -name \"*.jpg\" -o -name \"*.webp\" 2>/dev/null | grep -i -E \"subli|logo\" | head -20)",
       "Read(//Users/vivasante/Library/Fonts/**)",
       "Read(//Users/vivasante/Downloads/**)",
-      "Bash(rsync -a --exclude='.git' \"/Users/vivasante/Desktop/Perso/Projets/Perso/Sublizme/Claude Code - Sublizme/\" /tmp/sublizme_preview/)"
+      "Bash(rsync -a --exclude='.git' \"/Users/vivasante/Desktop/Perso/Projets/Perso/Sublizme/Claude Code - Sublizme/\" /tmp/sublizme_preview/)",
+      "Bash(grep -n \"font-weight: 800\" /tmp/sublizme_preview/assets/css/style.css | head -5)"
     ]
   }
 }
