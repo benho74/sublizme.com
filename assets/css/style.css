@@ -67,29 +67,14 @@ p { line-height: 1.75; color: var(--taupe); }
 a { color: inherit; text-decoration: none; }
 img { display: block; width: 100%; }
 
-/* --- Logo Z stylisé --- */
-.logo-z {
-  position: relative;
-  display: inline-block;
+/* --- Logo image --- */
+.logo-img {
+  height: 26px;
+  width: auto;
+  display: block;
 }
-.logo-z::after {
-  content: '';
-  position: absolute;
-  left: -5%;
-  right: -5%;
-  top: 50%;
-  height: 1.5px;
-  background: var(--z-cut-color);
-  transform: rotate(-20deg) translateY(-50%);
-  transform-origin: center;
-  pointer-events: none;
-}
-
-/* --- Spark icon --- */
-.spark-icon {
-  display: inline-block;
-  vertical-align: middle;
-  flex-shrink: 0;
+.footer-logo .logo-img {
+  height: 28px;
 }
 
 /* ================================================================

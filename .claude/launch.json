@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "sublizme",
+      "runtimeExecutable": "ruby",
+      "runtimeArgs": ["/tmp/sublizme_serve.rb"],
+      "port": 3456
+    }
+  ]
+}
