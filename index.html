@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sublizme — Studio créatif spécialisé en graphisme, branding et web design. L'esthétique au sommet de son art.">
+  <title>Sublizme — Studio Créatif</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Curseur custom -->
+  <div class="cursor" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <svg class="spark-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" width="12" height="12">
+        <path d="M10 0L11.8 8.2L20 10L11.8 11.8L10 20L8.2 11.8L0 10L8.2 8.2L10 0Z"/>
+      </svg>
+      Subli<span class="logo-z">z</span>me
+    </a>
+    <ul class="nav-links">
+      <li><a href="services.html">Services</a></li>
+      <li><a href="portfolio.html">Portfolio</a></li>
+      <li><a href="about.html">Studio</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Menu mobile overlay -->
+  <nav class="nav-mobile" aria-label="Navigation mobile">
+    <a href="services.html">Services</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="about.html">Studio</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <main>
+
+    <!-- ── Hero ─────────────────────────────────────────── -->
+    <section class="hero" aria-label="Accueil">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <span class="hero-counter" aria-hidden="true">Studio créatif · Paris</span>
+
+      <div class="hero-content">
+        <p class="hero-eyebrow">
+          <svg class="spark-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" width="10" height="10">
+            <path d="M10 0L11.8 8.2L20 10L11.8 11.8L10 20L8.2 11.8L0 10L8.2 8.2L10 0Z"/>
+          </svg>
+          Graphisme · Branding · Web design
+        </p>
+
+        <h1>Subli<span class="logo-z">z</span>me</h1>
+
+        <div class="hero-sub">
+          <p class="hero-tagline">
+            Pour ceux qui n'acceptent pas<br>
+            le compromis esthétique.
+          </p>
+          <div class="hero-cta">
+            <a href="portfolio.html" class="btn"><span>Voir les projets</span></a>
+            <a href="contact.html" class="btn btn-filled"><span>Nous contacter</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Services preview ──────────────────────────────── -->
+    <section class="services-preview">
+      <p class="section-label reveal">Ce que nous faisons</p>
+      <h2 class="section-title reveal reveal-delay-1">
+        Trois disciplines.<br>
+        <em style="font-style:italic; color:var(--taupe)">Une exigence.</em>
+      </h2>
+
+      <div class="services-grid">
+
+        <article class="service-card reveal reveal-delay-1">
+          <p class="service-num">01</p>
+          <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+            <rect x="2" y="3" width="20" height="14" rx="1"/>
+            <path d="M8 21h8M12 17v4"/>
+          </svg>
+          <h3 class="service-title">Graphisme</h3>
+          <p class="service-desc">Affiches, éditorial, packaging, motion — chaque support devient une déclaration visuelle.</p>
+          <a href="services.html" class="service-link">Découvrir</a>
+        </article>
+
+        <article class="service-card reveal reveal-delay-2">
+          <p class="service-num">02</p>
+          <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12"/>
+          </svg>
+          <h3 class="service-title">Branding</h3>
+          <p class="service-desc">Stratégie de marque, identité visuelle, charte graphique — des fondations qui durent.</p>
+          <a href="services.html" class="service-link">Découvrir</a>
+        </article>
+
+        <article class="service-card reveal reveal-delay-3">
+          <p class="service-num">03</p>
+          <svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+            <polyline points="16 18 22 12 16 6"/>
+            <polyline points="8 6 2 12 8 18"/>
+          </svg>
+          <h3 class="service-title">Web design</h3>
+          <p class="service-desc">Sites vitrines, landing pages, interfaces — l'excellence numérique au service de votre image.</p>
+          <a href="services.html" class="service-link">Découvrir</a>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ── Featured Work ─────────────────────────────────── -->
+    <section class="work-section">
+      <p class="section-label reveal">Projets récents</p>
+      <h2 class="section-title reveal reveal-delay-1">
+        Quelques travaux<br>qui parlent d'eux-mêmes.
+      </h2>
+
+      <div class="work-grid">
+
+        <a href="portfolio.html" class="work-item reveal">
+          <div class="work-thumb">
+            <div class="work-thumb-inner g1"></div>
+          </div>
+          <div class="work-info">
+            <h3 class="work-title">Maison Verdure</h3>
+            <span class="work-category">Branding · 2024</span>
+          </div>
+        </a>
+
+        <a href="portfolio.html" class="work-item reveal reveal-delay-1">
+          <div class="work-thumb">
+            <div class="work-thumb-inner g2"></div>
+          </div>
+          <div class="work-info">
+            <h3 class="work-title">Studio Ferro</h3>
+            <span class="work-category">Graphisme · 2024</span>
+          </div>
+        </a>
+
+        <a href="portfolio.html" class="work-item reveal reveal-delay-2">
+          <div class="work-thumb">
+            <div class="work-thumb-inner g3"></div>
+          </div>
+          <div class="work-info">
+            <h3 class="work-title">Lumière Digital</h3>
+            <span class="work-category">Web design · 2024</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ── Stats ─────────────────────────────────────────── -->
+    <div class="stats-section" aria-label="Chiffres clés">
+      <div class="stat-item reveal">
+        <p class="stat-num" data-target="48" data-suffix="+">0+</p>
+        <p class="stat-label">Projets livrés</p>
+      </div>
+      <div class="stat-item reveal reveal-delay-1">
+        <p class="stat-num" data-target="32" data-suffix="+">0+</p>
+        <p class="stat-label">Clients satisfaits</p>
+      </div>
+      <div class="stat-item reveal reveal-delay-2">
+        <p class="stat-num" data-target="5" data-suffix=" ans">0 ans</p>
+        <p class="stat-label">D'expérience</p>
+      </div>
+      <div class="stat-item reveal reveal-delay-3">
+        <p class="stat-num" data-target="3" data-suffix="">0</p>
+        <p class="stat-label">Prix reçus</p>
+      </div>
+    </div>
+
+    <!-- ── CTA ───────────────────────────────────────────── -->
+    <section class="cta-section">
+      <h2 class="reveal">
+        Un projet<br>
+        <em>en tête ?</em>
+      </h2>
+      <p class="reveal reveal-delay-1">Parlons-en. On transforme vos idées en identités mémorables.</p>
+      <div class="btn-group reveal reveal-delay-2">
+        <a href="contact.html" class="btn btn-light"><span>Démarrer un projet</span></a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Footer ────────────────────────────────────────── -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <svg class="spark-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" width="11" height="11">
+            <path d="M10 0L11.8 8.2L20 10L11.8 11.8L10 20L8.2 11.8L0 10L8.2 8.2L10 0Z"/>
+          </svg>
+          Sublizme
+        </div>
+        <p>Studio créatif spécialisé en graphisme, branding et web design. L'esthétique au sommet de son art.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="about.html">Studio</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="services.html">Graphisme</a></li>
+          <li><a href="services.html">Branding</a></li>
+          <li><a href="services.html">Web design</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:hello@sublizme.fr">hello@sublizme.fr</a></li>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Behance</a></li>
+          <li><a href="#">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024 Sublizme. Tous droits réservés.</span>
+      <span>Paris, France</span>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
