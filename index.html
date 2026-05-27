@@ -75,7 +75,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 @keyframes blobshift{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-4vw,4vw) scale(1.05)}}
 .hero>*:not(.blob){position:relative;z-index:1}
 
-/* Hero footer → devient nav fixe au scroll via mix-blend-mode */
+/* Hero footer → nav */
 .hero-foot{
   display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;gap:24px;
   border-top:1px solid var(--line);padding-top:22px;margin-top:30px;
@@ -84,23 +84,51 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .hero-foot .version{display:flex;align-items:center;gap:10px}
 .hero-foot .socials{display:flex;justify-content:center;gap:6px}
 .hero-foot .socials .sep{color:var(--ink-dim)}
-.hero-foot .nav{display:flex;justify-content:flex-end;gap:32px}
+.hero-foot .nav{display:flex;justify-content:flex-end;align-items:center;gap:28px}
 .hero-foot a{cursor:none;transition:opacity .2s}
 .hero-foot a:hover{opacity:.55}
-/* État sticky : transparent + blend mode = blanc/noir automatique */
+
+/* Toggle dark/light */
+.mode-btn{
+  background:none;border:1px solid var(--ink-mute);border-radius:999px;
+  color:var(--ink);font-family:var(--sans);font-size:11px;font-weight:500;
+  letter-spacing:.04em;padding:4px 11px;cursor:none;
+  transition:border-color .25s,color .25s;line-height:1.4;
+}
+.mode-btn:hover{border-color:var(--ink)}
+
+/* État sticky : glassmorphisme 2026 */
 .hero-foot.is-sticky{
   position:fixed;top:0;left:0;right:0;z-index:80;
-  padding:18px var(--pad);margin:0;
-  border-top:none;border-bottom:1px solid rgba(255,255,255,.12);
-  background:transparent;
-  mix-blend-mode:difference;
-  color:#fff;
+  padding:16px var(--pad);margin:0;
+  border-top:none;border-bottom:1px solid rgba(255,255,255,.07);
+  background:rgba(10,10,10,.55);
+  backdrop-filter:blur(22px) saturate(180%);
+  -webkit-backdrop-filter:blur(22px) saturate(180%);
+  color:var(--ink);
+  animation:navIn .32s cubic-bezier(.2,.8,.2,1) forwards;
 }
-.hero-foot.is-sticky a,.hero-foot.is-sticky span{color:#fff}
-.hero-foot.is-sticky .sep{color:rgba(255,255,255,.4)}
+body.light .hero-foot.is-sticky{
+  background:rgba(242,242,239,.65);
+  border-bottom-color:rgba(0,0,0,.07);
+}
+@keyframes navIn{
+  from{opacity:0;transform:translateY(-8px)}
+  to  {opacity:1;transform:translateY(0)}
+}
 /* Spacer pour éviter le saut de layout */
 .hero-foot-spacer{display:none}
 .hero-foot-spacer.active{display:block}
+
+/* Mode clair */
+body.light{
+  --bg:#f2f2ef;--ink:#0a0a0a;--ink-dim:#6a6a66;--ink-mute:#c5c5c0;--line:#d8d8d3;
+}
+body.light .blob{opacity:.35;filter:blur(80px)}
+body.light .mode-btn{border-color:rgba(0,0,0,.2);color:#0a0a0a}
+body.light .mode-btn:hover{border-color:#0a0a0a}
+/* Transitions globales lors du switch de thème */
+body,body *{transition:background-color .4s ease,color .35s ease,border-color .35s ease,opacity .3s ease}
 
 /* ── ABOUT ────────────────────────────────────────── */
 .about{min-height:100vh;position:relative;padding:0 var(--pad);display:flex;align-items:center;overflow:hidden}
@@ -193,49 +221,70 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .service-row.open + .service-body .chip:nth-child(5){transition-delay:.19s}
 .service-row.open + .service-body .chip:nth-child(6){transition-delay:.23s}
 
-/* ── CONTACT ──────────────────────────────────────── */
-.contact{background:#f0f0ee;color:#0a0a0a;min-height:100vh;position:relative;padding:120px var(--pad)}
-.contact .label{font-size:13px;color:#6a6a66;margin-bottom:80px;letter-spacing:.06em;font-weight:500;text-transform:uppercase}
-.contact-grid{display:grid;grid-template-columns:1fr 220px 1fr;gap:48px;align-items:start}
-.contact h1{font-family:var(--sans);font-weight:800;font-size:clamp(120px,15vw,260px);line-height:.86;letter-spacing:-.05em;color:#0a0a0a}
-.contact .body-1{font-size:15px;line-height:1.55;color:#0a0a0a;text-align:justify;max-width:240px;font-weight:300}
-.contact .body-1 em{font-family:var(--display);font-style:italic}
-.contact .img-1{aspect-ratio:1/1;position:relative;overflow:hidden;background:radial-gradient(60% 50% at 50% 45%,#7a4ad0 0%,#3a1a70 50%,#1a0a3a 100%),linear-gradient(180deg,#3a0c0c,#7a1a1a);background-blend-mode:multiply}
-.contact .img-1::before,.contact .img-1::after,.contact .img-2::before,.contact .img-2::after{content:'+';position:absolute;font-size:18px;color:#fff;font-weight:300}
-.contact .img-1::before{left:10px;bottom:10px}
-.contact .img-1::after{right:10px;bottom:10px}
-.contact .img-2::before{left:10px;top:10px}
-.contact .img-2::after{right:10px;top:10px}
-.contact-bottom{display:grid;grid-template-columns:1fr 1fr 1fr;gap:48px;align-items:start;margin-top:120px}
-.contact-bottom .socials{display:flex;flex-direction:column;gap:10px}
-.contact-bottom .socials a{font-weight:700;font-size:22px;letter-spacing:-.01em;cursor:none;transition:opacity .25s;color:#0a0a0a}
-.contact-bottom .socials a:hover{opacity:.55}
-.contact-bottom .socials .email{font-weight:400;font-size:15px;color:#0a0a0a;margin-top:30px}
-.contact .img-2{aspect-ratio:5/3;position:relative;overflow:hidden;background:radial-gradient(60% 50% at 50% 60%,#c81a1a 0%,#7a0a0a 60%,#2a0202 100%)}
-.contact .img-2 .crack{position:absolute;left:30%;top:40%;width:30%;height:30%;background:linear-gradient(180deg,#e8d4d0,#a878a0);border-radius:50% 30% 60% 30%;transform:rotate(-30deg);opacity:.7;filter:blur(.5px)}
-.contact .body-2{font-family:var(--sans);font-size:14px;line-height:1.55;text-align:justify;max-width:260px;justify-self:end;font-weight:300;color:#0a0a0a}
-.contact .body-2 em{font-family:var(--display);font-style:italic}
+/* ── CONTACT + FOOTER (fusionnés, fond noir) ──────── */
+.contact{
+  background:var(--bg);color:var(--ink);
+  padding:140px var(--pad) 0;position:relative;overflow:hidden;
+}
+.contact-head{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding-bottom:60px;border-bottom:1px solid var(--line);
+  margin-bottom:72px;
+}
+.contact-head .label{
+  font-size:12px;letter-spacing:.1em;font-weight:500;text-transform:uppercase;
+  color:var(--ink-dim);padding-bottom:6px;
+}
+.contact h1{
+  font-family:var(--sans);font-weight:800;
+  font-size:clamp(90px,13vw,220px);line-height:.88;letter-spacing:-.05em;
+  color:var(--ink);
+}
+.contact-cols{
+  display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:48px;
+  padding-bottom:100px;border-bottom:1px solid var(--line);
+}
+.contact-col .col-label{
+  font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-dim);font-weight:500;margin-bottom:20px;
+}
+.contact-col .big-link{
+  display:block;font-size:clamp(17px,2vw,26px);font-weight:700;
+  letter-spacing:-.01em;margin-bottom:8px;cursor:none;
+  transition:opacity .2s;
+}
+.contact-col .big-link:hover{opacity:.5}
+.contact-col p{
+  font-size:14px;line-height:1.65;color:var(--ink-dim);font-weight:300;max-width:28ch;margin-top:24px;
+}
+.contact-col p em{font-family:var(--display);font-style:italic}
 
-/* ── FOOTER ───────────────────────────────────────── */
-.footer{background:var(--bg);color:var(--ink);padding:100px var(--pad) 0;position:relative;overflow:hidden}
-.footer-top{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding-bottom:160px}
-.footer-top .col{display:flex;flex-direction:column;gap:6px}
-.footer-top .col.center{align-items:flex-start}
-.footer-top .col.right{align-items:flex-end}
-.footer-top a{transition:opacity .25s;cursor:none}
-.footer-top a:hover{opacity:.55}
-.footer-top .em-link{text-transform:none;letter-spacing:.01em;font-weight:600;font-size:14px}
-.footer-top .copy{font-weight:600;font-size:14px;letter-spacing:.02em}
-.footer-giant{position:relative;display:flex;align-items:baseline;justify-content:space-between;gap:4vw;padding-bottom:16px;--foot-fs:clamp(96px,22vw,360px)}
+/* Footer intégré */
+.contact-footer{position:relative;padding-top:80px;overflow:hidden}
+.contact-footer-bar{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;align-items:center;
+  font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-dim);margin-bottom:60px;
+}
+.contact-footer-bar .f-socials{display:flex;gap:16px;justify-content:center}
+.contact-footer-bar .f-nav{display:flex;gap:24px;justify-content:flex-end}
+.contact-footer-bar a{cursor:none;transition:opacity .2s;color:var(--ink-dim)}
+.contact-footer-bar a:hover{opacity:.55}
+.footer-giant{
+  position:relative;z-index:1;
+  display:flex;align-items:baseline;justify-content:space-between;gap:4vw;
+  padding-bottom:16px;--foot-fs:clamp(96px,22vw,360px);
+}
 .footer-giant .sans-name{font-family:var(--sans);font-weight:800;font-size:var(--foot-fs);line-height:.86;letter-spacing:-.05em;white-space:nowrap}
 .footer-giant .serif-name{font-family:var(--display);font-style:italic;font-weight:400;font-size:var(--foot-fs);line-height:.86;letter-spacing:-.025em;white-space:nowrap}
 .footer-giant .punct{color:var(--accent);font-style:normal}
-.halftone{position:absolute;inset:30px 0 120px 0;z-index:0;opacity:.85;pointer-events:none;
+.halftone{
+  position:absolute;inset:0 0 120px 0;z-index:0;opacity:.75;pointer-events:none;
   background-image:radial-gradient(circle,var(--accent) 1.6px,transparent 2.0px);background-size:7px 7px;
   -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 600' preserveAspectRatio='xMidYMid slice'><defs><filter id='b' x='-20%25' y='-20%25' width='140%25' height='140%25'><feGaussianBlur stdDeviation='14'/></filter></defs><g fill='%23000' filter='url(%23b)'><ellipse cx='240' cy='220' rx='240' ry='110'/><ellipse cx='420' cy='280' rx='120' ry='70'/><ellipse cx='520' cy='200' rx='60' ry='40'/><ellipse cx='150' cy='320' rx='130' ry='60'/><ellipse cx='1150' cy='320' rx='320' ry='130'/><ellipse cx='1430' cy='370' rx='130' ry='70'/><ellipse cx='950' cy='240' rx='90' ry='50'/><ellipse cx='1050' cy='430' rx='150' ry='60'/></g></svg>");
   mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 600' preserveAspectRatio='xMidYMid slice'><defs><filter id='b' x='-20%25' y='-20%25' width='140%25' height='140%25'><feGaussianBlur stdDeviation='14'/></filter></defs><g fill='%23000' filter='url(%23b)'><ellipse cx='240' cy='220' rx='240' ry='110'/><ellipse cx='420' cy='280' rx='120' ry='70'/><ellipse cx='520' cy='200' rx='60' ry='40'/><ellipse cx='150' cy='320' rx='130' ry='60'/><ellipse cx='1150' cy='320' rx='320' ry='130'/><ellipse cx='1430' cy='370' rx='130' ry='70'/><ellipse cx='950' cy='240' rx='90' ry='50'/><ellipse cx='1050' cy='430' rx='150' ry='60'/></g></svg>");
-  -webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
-.footer>*{position:relative;z-index:1}
+  -webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+}
 
 /* Responsive */
 @media(max-width:960px){
@@ -246,9 +295,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   .about .copy{max-width:100%;font-size:42px}
   .about-portrait{width:80%;opacity:.25}
   .project-list{max-width:100%}
-  .services,.contact-grid,.contact-bottom,.footer-top{grid-template-columns:1fr;gap:40px}
+  .services,.contact-cols,.contact-footer-bar{grid-template-columns:1fr;gap:40px}
   .services-left{position:static}
   .gallery .center-text{font-size:36px}
+  .contact-head{flex-direction:column;align-items:flex-start;gap:16px}
 }
 </style>
 </head>
@@ -305,6 +355,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
       <a href="#projects">Projets</a>
       <a href="#about">Studio</a>
       <a href="#contact">Contact</a>
+      <button class="mode-btn" id="mode-btn">◑</button>
     </div>
   </div>
   <!-- Spacer qui compense la hauteur quand hero-foot devient fixed -->
@@ -420,50 +471,55 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
   </div>
 </section>
 
-<!-- ========== CONTACT ========== -->
+<!-- ========== CONTACT + FOOTER ========== -->
 <section class="contact" id="contact">
-  <div class="label">Parlons-en</div>
-  <div class="contact-grid">
-    <h1>Contact</h1>
-    <p class="body-1">Un projet en tête ? Une <em>intuition créative</em> à explorer ? On vous répond sous 48h.</p>
-    <div class="img-1" aria-hidden="true"></div>
-  </div>
-  <div class="contact-bottom">
-    <div class="socials">
-      <a href="#">Instagram</a>
-      <a href="#">Behance</a>
-      <a href="#">LinkedIn</a>
-      <a href="mailto:hello@sublizme.fr" class="email">hello@sublizme.fr</a>
-    </div>
-    <div class="img-2" aria-hidden="true"><span class="crack"></span></div>
-    <p class="body-2">Disponibles pour des <em>projets ambitieux</em> en France et à l'international. Paris, <em>pour ceux qui n'acceptent pas le compromis.</em></p>
-  </div>
-</section>
 
-<!-- ========== FOOTER ========== -->
-<footer class="footer">
-  <div class="halftone" aria-hidden="true"></div>
-  <div class="footer-top">
-    <div class="col">
-      <a href="mailto:hello@sublizme.fr" class="em-link">hello@sublizme.fr</a>
-      <span class="copy">© 2026 Sublizme</span>
+  <div class="contact-head">
+    <div class="label">Parlons-en</div>
+    <h1>Contact</h1>
+  </div>
+
+  <div class="contact-cols">
+    <div class="contact-col">
+      <div class="col-label">Écrire</div>
+      <a href="mailto:hello@sublizme.fr" class="big-link">hello@sublizme.fr</a>
+      <p>Un projet en tête ?<br>Une <em>intuition créative</em> à explorer ?<br>On répond sous 48h.</p>
     </div>
-    <div class="col center">
-      <a href="#">Instagram</a>
-      <a href="#">Behance</a>
-      <a href="#">LinkedIn</a>
+    <div class="contact-col">
+      <div class="col-label">Réseaux</div>
+      <a href="#" class="big-link">Instagram</a>
+      <a href="#" class="big-link">Behance</a>
+      <a href="#" class="big-link">LinkedIn</a>
     </div>
-    <div class="col right">
-      <a href="#projects">Projets</a>
-      <a href="#about">Studio</a>
-      <a href="#contact">Contact</a>
+    <div class="contact-col">
+      <div class="col-label">Localisation</div>
+      <p>Paris, France.<br>Disponible à<br><em>l'international.</em></p>
     </div>
   </div>
-  <div class="footer-giant">
-    <div class="sans-name">Sublizme</div>
-    <div class="serif-name"><span>Studio</span><span class="punct">.</span></div>
+
+  <!-- Footer intégré -->
+  <div class="contact-footer">
+    <div class="halftone" aria-hidden="true"></div>
+    <div class="contact-footer-bar">
+      <span>© 2026 Sublizme</span>
+      <div class="f-socials">
+        <a href="#">Instagram</a>
+        <a href="#">Behance</a>
+        <a href="#">LinkedIn</a>
+      </div>
+      <div class="f-nav">
+        <a href="#projects">Projets</a>
+        <a href="#about">Studio</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+    <div class="footer-giant">
+      <div class="sans-name">Sublizme</div>
+      <div class="serif-name"><span>Studio</span><span class="punct">.</span></div>
+    </div>
   </div>
-</footer>
+
+</section>
 
 <script>
 /* ── Cursor ────────────────────────────────────────── */
@@ -575,22 +631,42 @@ function updateAboutReveal(){
   });
 }
 
-/* ── Hero foot sticky ─────────────────────────────── */
+/* ── Hero foot sticky — transition invisible ──────── */
 let heroFootSticky = false;
+let heroFootAnimating = false;
 function updateHeroFootSticky(){
   const hh = heroFoot.offsetHeight;
   const threshold = heroEl.offsetTop + heroEl.offsetHeight - hh - 40;
   const shouldStick = window.scrollY >= threshold;
-  if(shouldStick === heroFootSticky) return;
-  heroFootSticky = shouldStick;
+
+  /* Fade out progressif sur les derniers 80px avant le seuil */
+  if(!shouldStick && !heroFootAnimating){
+    const dist = threshold - window.scrollY;
+    const fadeZone = 80;
+    heroFoot.style.opacity = dist < fadeZone ? String(Math.max(0, dist / fadeZone)) : '';
+  }
+
+  if(shouldStick === heroFootSticky || heroFootAnimating) return;
+
   if(shouldStick){
-    heroFoot.classList.add('is-sticky');
-    heroSpacer.classList.add('active');
-    heroSpacer.style.height = hh + 'px';
+    heroFootSticky = true;
+    heroFootAnimating = true;
+    heroFoot.style.opacity = '0';
+    /* Petit délai pour que le fade-out soit visible, puis snap+slide-in */
+    setTimeout(()=>{
+      heroFoot.classList.add('is-sticky');
+      heroSpacer.classList.add('active');
+      heroSpacer.style.height = hh + 'px';
+      heroFoot.style.opacity = '';   /* CSS animation prend le relai */
+      heroFootAnimating = false;
+    }, 90);
   } else {
+    heroFootSticky = false;
     heroFoot.classList.remove('is-sticky');
     heroSpacer.classList.remove('active');
     heroSpacer.style.height = '0';
+    heroFoot.style.opacity = '0';
+    requestAnimationFrame(()=>{ heroFoot.style.opacity = ''; });
   }
 }
 
@@ -636,6 +712,13 @@ function onScroll(){
 onScroll();
 window.addEventListener('scroll', onScroll, {passive:true});
 window.addEventListener('resize', onScroll);
+
+/* ── Dark / Light mode toggle ─────────────────────── */
+const modeBtn = document.getElementById('mode-btn');
+modeBtn.addEventListener('click', ()=>{
+  document.body.classList.toggle('light');
+  modeBtn.textContent = document.body.classList.contains('light') ? '◐' : '◑';
+});
 
 /* ── Services accordion ───────────────────────────── */
 document.querySelectorAll('.service-row').forEach(row=>{
