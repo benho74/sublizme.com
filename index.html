@@ -362,9 +362,9 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 <!-- Rail droite -->
 <aside class="rail" aria-hidden="true">
   <div class="stack">
-    <div class="tick" data-label="Studio"   data-section="about"></div>
-    <div class="tick" data-label="Projets"  data-section="projects"></div>
     <div class="tick" data-label="Galerie"  data-section="gallery"></div>
+    <div class="tick" data-label="Projets"  data-section="projects"></div>
+    <div class="tick" data-label="Studio"   data-section="about"></div>
     <div class="tick" data-label="Services" data-section="services"></div>
   </div>
 </aside>
@@ -411,6 +411,54 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
   <div class="hero-foot-spacer" id="hero-foot-spacer"></div>
 </section>
 
+<!-- ========== GALLERY ========== -->
+<section class="gallery" id="gallery">
+  <div class="pic pic-1"><div class="inner">01</div></div>
+  <div class="pic pic-2"><div class="inner">02</div></div>
+  <div class="pic pic-3"><div class="inner">03</div></div>
+  <div class="pic pic-4"><div class="inner">04</div></div>
+  <div class="pic pic-5"><div class="inner">05</div></div>
+  <div class="pic pic-6"><div class="inner">06</div></div>
+  <div class="pic pic-7"><div class="inner">07</div></div>
+  <div class="center-text">
+    Chaque projet est une occasion <em>de sublimer,</em> d'<em>élever</em> <span class="fade">une marque au-delà</span> <span class="fade2">du visible.</span>
+  </div>
+</section>
+
+<!-- ========== PROJECTS ========== -->
+<section class="projects" id="projects">
+  <div class="project-list">
+    <a class="project-row" data-idx="0" href="projet.html">
+      <span class="title">Maison Verdure</span>
+      <span class="meta">Branding</span>
+    </a>
+    <a class="project-row muted" data-idx="1" href="projet.html">
+      <span class="title">Studio Ferro</span>
+      <span class="meta">Graphisme</span>
+    </a>
+    <a class="project-row muted" data-idx="2" href="projet.html">
+      <span class="title">Lumière Digital</span>
+      <span class="meta">Web design</span>
+    </a>
+    <a class="project-row muted" data-idx="3" href="projet.html">
+      <span class="title">Atelier Brun</span>
+      <span class="meta">Branding</span>
+    </a>
+    <a class="project-row muted" data-idx="4" href="projet.html">
+      <span class="title">Rogue Parfums</span>
+      <span class="meta">Branding</span>
+    </a>
+    <a class="project-row muted" data-idx="5" href="projet.html">
+      <span class="title">Nova Systems</span>
+      <span class="meta">Graphisme</span>
+    </a>
+    <a class="project-row muted" data-idx="6" href="projet.html">
+      <span class="title">Essence Studio</span>
+      <span class="meta">Web design</span>
+    </a>
+  </div>
+</section>
+
 <!-- ========== ABOUT ========== -->
 <section class="about" id="about">
   <div class="about-bg"></div>
@@ -429,54 +477,6 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
     <span class="rw">compétitif.</span>
     <span class="rw">Chaque détail</span>
     <span class="rw">compte.</span>
-  </div>
-</section>
-
-<!-- ========== PROJECTS ========== -->
-<section class="projects" id="projects">
-  <div class="project-list">
-    <div class="project-row" data-idx="0">
-      <span class="title">Maison Verdure</span>
-      <span class="meta">Branding</span>
-    </div>
-    <div class="project-row muted" data-idx="1">
-      <span class="title">Studio Ferro</span>
-      <span class="meta">Graphisme</span>
-    </div>
-    <div class="project-row muted" data-idx="2">
-      <span class="title">Lumière Digital</span>
-      <span class="meta">Web design</span>
-    </div>
-    <div class="project-row muted" data-idx="3">
-      <span class="title">Atelier Brun</span>
-      <span class="meta">Branding</span>
-    </div>
-    <div class="project-row muted" data-idx="4">
-      <span class="title">Rogue Parfums</span>
-      <span class="meta">Branding</span>
-    </div>
-    <div class="project-row muted" data-idx="5">
-      <span class="title">Nova Systems</span>
-      <span class="meta">Graphisme</span>
-    </div>
-    <div class="project-row muted" data-idx="6">
-      <span class="title">Essence Studio</span>
-      <span class="meta">Web design</span>
-    </div>
-  </div>
-</section>
-
-<!-- ========== GALLERY ========== -->
-<section class="gallery" id="gallery">
-  <div class="pic pic-1"><div class="inner">01</div></div>
-  <div class="pic pic-2"><div class="inner">02</div></div>
-  <div class="pic pic-3"><div class="inner">03</div></div>
-  <div class="pic pic-4"><div class="inner">04</div></div>
-  <div class="pic pic-5"><div class="inner">05</div></div>
-  <div class="pic pic-6"><div class="inner">06</div></div>
-  <div class="pic pic-7"><div class="inner">07</div></div>
-  <div class="center-text">
-    Chaque projet est une occasion <em>de sublimer,</em> d'<em>élever</em> <span class="fade">une marque au-delà</span> <span class="fade2">du visible.</span>
   </div>
 </section>
 
@@ -608,7 +608,7 @@ const heroSpacer  = document.getElementById('hero-foot-spacer');
 const pctEl       = document.getElementById('pct');
 const railEl      = document.querySelector('.rail');
 const ticks       = document.querySelectorAll('.rail .tick');
-const railSecs    = ['about','projects','gallery','services'].map(id=>document.getElementById(id));
+const railSecs    = ['gallery','projects','about','services'].map(id=>document.getElementById(id));
 const contactEl   = document.getElementById('contact');
 const aboutEl     = document.getElementById('about');
 const projectsEl  = document.getElementById('projects');
