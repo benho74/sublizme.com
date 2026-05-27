@@ -48,28 +48,6 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 body.light{--bg:#f2f2ef;--ink:#0a0a0a;--ink-dim:#6a6a66;--ink-mute:#c5c5c0;--line:#d8d8d3}
 body,body *{transition:background-color .4s ease,color .35s ease,border-color .35s ease}
 
-/* ── NAV ─────────────────────────────────────────── */
-.nav-bar{
-  position:fixed;top:0;left:0;right:0;z-index:80;
-  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
-  padding:18px var(--pad);
-  background:rgba(10,10,10,.55);
-  backdrop-filter:blur(22px) saturate(180%);
-  -webkit-backdrop-filter:blur(22px) saturate(180%);
-  border-bottom:1px solid rgba(255,255,255,.07);
-  font-size:12px;letter-spacing:.06em;font-weight:500;text-transform:uppercase;
-}
-body.light .nav-bar{background:rgba(242,242,239,.65);border-bottom-color:rgba(0,0,0,.07)}
-.nav-back{display:flex;align-items:center;gap:10px;cursor:none;transition:opacity .2s;color:var(--ink-dim)}
-.nav-back:hover{opacity:.7;color:var(--ink)}
-.nav-back .arrow{font-size:16px;transition:transform .25s}
-.nav-back:hover .arrow{transform:translateX(-4px)}
-.nav-logo{text-align:center;font-weight:800;font-size:13px;letter-spacing:.1em}
-.nav-right{display:flex;justify-content:flex-end;align-items:center;gap:20px}
-.nav-cat{color:var(--ink-dim)}
-.mode-btn{background:none;border:1px solid var(--ink-mute);border-radius:999px;color:var(--ink);font-family:var(--sans);font-size:11px;font-weight:500;letter-spacing:.04em;padding:4px 11px;cursor:none;transition:border-color .25s,color .25s;line-height:1.4}
-.mode-btn:hover{border-color:var(--ink)}
-
 /* ── HERO PROJET ─────────────────────────────────── */
 .ph{
   min-height:100vh;padding:120px var(--pad) 80px;
@@ -210,49 +188,17 @@ body.light .nav-bar{background:rgba(242,242,239,.65);border-bottom-color:rgba(0,
 }
 .pn:hover .pn-arrow{color:var(--ink)}
 
-/* ── FOOTER MINIMAL ──────────────────────────────── */
-.pf{
-  padding:28px var(--pad);
-  border-top:1px solid var(--line);
-  display:flex;align-items:center;justify-content:space-between;
-  font-size:11px;letter-spacing:.07em;text-transform:uppercase;
-  color:var(--ink-dim);font-weight:500;
-}
-.pf a{cursor:none;transition:color .2s}
-.pf a:hover{color:var(--ink)}
-.pf .pf-links{display:flex;gap:24px}
-
 /* Responsive */
 @media(max-width:900px){
-  .cursor,.cursor-ring{display:none}
-  body{cursor:auto!important}
   .pi{grid-template-columns:1fr;gap:60px}
   .pn{grid-template-columns:1fr}
   .pn-right{justify-content:flex-start}
   .pi-img-full{aspect-ratio:16/7}
   .pi-duo{grid-template-columns:1fr}
-  .nav-bar{grid-template-columns:1fr 1fr}
-  .nav-logo{display:none}
 }
 </style>
 </head>
 <body>
-
-<div class="cursor" aria-hidden="true"></div>
-<div class="cursor-ring" aria-hidden="true"></div>
-
-<!-- ── NAV ── -->
-<nav class="nav-bar">
-  <a href="index.html#projects" class="nav-back">
-    <span class="arrow">←</span>
-    <span>Projets</span>
-  </a>
-  <div class="nav-logo">Sublizme</div>
-  <div class="nav-right">
-    <span class="nav-cat">Branding</span>
-    <button class="mode-btn" id="mode-btn">◑</button>
-  </div>
-</nav>
 
 <!-- ── HERO ── -->
 <section class="ph">
@@ -327,40 +273,11 @@ body.light .nav-bar{background:rgba(242,242,239,.65);border-bottom-color:rgba(0,
   </div>
 </a>
 
-<!-- ── FOOTER ── -->
-<footer class="pf">
-  <span>© 2026 Sublizme</span>
-  <div class="pf-links">
-    <a href="index.html">Accueil</a>
-    <a href="index.html#projects">Projets</a>
-    <a href="index.html#contact">Contact</a>
-  </div>
-</footer>
-
+<script src="assets/js/site.js"></script>
 <script>
-/* Cursor */
-const cur = document.querySelector('.cursor');
-const ring = document.querySelector('.cursor-ring');
-let cx=0,cy=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{cx=e.clientX;cy=e.clientY;cur.style.left=cx+'px';cur.style.top=cy+'px'});
-(function anim(){rx+=(cx-rx)*.12;ry+=(cy-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim)})();
-document.querySelectorAll('a,button').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cur.classList.add('hover');ring.classList.add('hover')});
-  el.addEventListener('mouseleave',()=>{cur.classList.remove('hover');ring.classList.remove('hover')});
-});
-
-/* Mode toggle */
-document.getElementById('mode-btn').addEventListener('click',()=>{
-  document.body.classList.toggle('light');
-  document.getElementById('mode-btn').textContent = document.body.classList.contains('light') ? '◐' : '◑';
-});
-
-/* Nav fade in on load */
-document.querySelector('.nav-bar').style.animation='navFadeIn .5s .1s ease forwards';
-document.querySelector('.nav-bar').style.opacity='0';
-const s=document.createElement('style');
-s.textContent='@keyframes navFadeIn{to{opacity:1}}';
-document.head.appendChild(s);
+/* Header + footer communs */
+SublizmeSite.injectNav({back: 'index.html#projects', label: 'Projets'});
+SublizmeSite.injectFooter();
 
 /* Reveal on scroll */
 const revealEls = document.querySelectorAll('.pi-desc, .pi-meta, .pi-quote blockquote, .pn');

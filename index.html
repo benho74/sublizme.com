@@ -582,17 +582,8 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 
 </section>
 
+<script src="assets/js/site.js"></script>
 <script>
-/* ── Cursor ────────────────────────────────────────── */
-const cursor = document.querySelector('.cursor');
-const ring   = document.querySelector('.cursor-ring');
-let cx=0,cy=0,rx=0,ry=0;
-document.addEventListener('mousemove', e => { cx=e.clientX; cy=e.clientY; cursor.style.left=cx+'px'; cursor.style.top=cy+'px'; });
-(function anim(){ rx+=(cx-rx)*.12; ry+=(cy-ry)*.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(anim); })();
-document.querySelectorAll('a,button,.project-row,.service-row').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{ cursor.classList.add('hover'); ring.classList.add('hover'); });
-  el.addEventListener('mouseleave',()=>{ cursor.classList.remove('hover'); ring.classList.remove('hover'); });
-});
 
 /* ── Name fit ──────────────────────────────────────── */
 function fitName(c){ if(!c)return; const p=c.parentElement; if(!p)return; const f=c.classList.contains('footer-giant'); const mf=f?360:320; const bv=f?22:19; const vn=f?'--foot-fs':'--name-fs'; c.style.setProperty(vn,`clamp(80px,${bv}vw,${mf}px)`); const tg=p.clientWidth-48; let t=0; while(c.scrollWidth>tg&&t<30){const cur=parseFloat(getComputedStyle(c).getPropertyValue(vn))||mf;const nx=Math.max(48,cur*.93);c.style.setProperty(vn,nx+'px');if(nx<=48)break;t++;} }
@@ -781,13 +772,6 @@ onScroll();
 window.addEventListener('scroll', onScroll, {passive:true});
 window.addEventListener('resize', onScroll);
 
-/* ── Dark / Light mode toggle ─────────────────────── */
-const modeBtn = document.getElementById('mode-btn');
-modeBtn.addEventListener('click', ()=>{
-  document.body.classList.toggle('light');
-  modeBtn.textContent = document.body.classList.contains('light') ? '◐' : '◑';
-});
-
 /* ── Services accordion ───────────────────────────── */
 document.querySelectorAll('.service-row').forEach(row=>{
   row.addEventListener('click',()=>{
@@ -796,6 +780,10 @@ document.querySelectorAll('.service-row').forEach(row=>{
     if(!wasOpen) row.classList.add('open');
   });
 });
+
+/* ── Module commun : restauration scroll + hover curseur ── */
+SublizmeSite.initScrollRestore();
+SublizmeSite.addCursorHover('.project-row,.service-row');
 </script>
 </body>
 </html>
