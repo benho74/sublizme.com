@@ -27,7 +27,9 @@
       "Bash(tar -xf /tmp/design -C /tmp/design_extract)",
       "Bash(ls /tmp/sublizme_serve.rb 2>/dev/null || echo \"missing\")",
       "Bash(mkdir -p /tmp/sublizme_preview && rsync -a --exclude='.git' \"/Users/vivasante/Desktop/Perso/Projets/Perso/Sublizme/Claude Code - Sublizme/\" /tmp/sublizme_preview/ && echo \"Sync OK\")",
-      "Bash(lsof -i :3456 -sTCP:LISTEN)"
+      "Bash(lsof -i :3456 -sTCP:LISTEN)",
+      "WebFetch(domain:benjaminhocq.com)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp"
     ]
   }
 }

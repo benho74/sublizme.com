@@ -226,114 +226,6 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 .service-row.open + .service-body .chip:nth-child(5){transition-delay:.19s}
 .service-row.open + .service-body .chip:nth-child(6){transition-delay:.23s}
 
-/* ── CONTACT + FOOTER (fusionnés, fond noir) ──────── */
-.contact{
-  background:var(--bg);color:var(--ink);
-  padding:140px var(--pad) 0;position:relative;overflow:hidden;
-}
-/* En-tête : label + badge dispo + titre */
-.contact-head{
-  padding-bottom:64px;border-bottom:1px solid var(--line);margin-bottom:72px;
-}
-.contact-head-top{
-  display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;
-}
-.contact-head .label{
-  font-size:12px;letter-spacing:.1em;font-weight:500;text-transform:uppercase;color:var(--ink-dim);
-}
-/* Badge "Disponible" */
-.avail{
-  display:inline-flex;align-items:center;gap:8px;
-  font-size:11px;letter-spacing:.06em;font-weight:500;text-transform:uppercase;color:var(--ink-dim);
-  border:1px solid var(--line);border-radius:999px;padding:5px 13px;
-}
-.avail-dot{
-  width:6px;height:6px;border-radius:50%;background:#22c55e;flex-shrink:0;
-  box-shadow:0 0 7px rgba(34,197,94,.7);animation:pulse 2.2s ease-in-out infinite;
-}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-.contact h1{
-  font-family:var(--sans);font-weight:800;
-  font-size:clamp(80px,12vw,210px);line-height:.88;letter-spacing:-.05em;color:var(--ink);
-}
-/* Grande ligne email CTA */
-.contact-email-cta{
-  display:flex;align-items:center;justify-content:space-between;gap:24px;
-  padding:40px 0;border-bottom:1px solid var(--line);margin-bottom:72px;
-  cursor:none;
-}
-.contact-email-cta a{
-  font-family:var(--sans);font-weight:700;
-  font-size:clamp(24px,3.5vw,60px);letter-spacing:-.03em;color:var(--ink);
-  transition:opacity .25s;
-}
-.contact-email-cta:hover a{opacity:.55}
-.contact-email-cta .cta-arr{
-  font-size:clamp(20px,3vw,50px);color:var(--ink-mute);
-  transition:transform .35s cubic-bezier(.2,.8,.2,1),color .25s;flex-shrink:0;
-}
-.contact-email-cta:hover .cta-arr{transform:translateX(10px);color:var(--ink)}
-/* Colonnes */
-.contact-cols{
-  display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:48px;
-  padding-bottom:100px;border-bottom:1px solid var(--line);
-}
-.contact-col .col-label{
-  font-size:11px;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--ink-dim);font-weight:500;margin-bottom:22px;
-}
-.contact-col .link-row{
-  display:flex;align-items:center;justify-content:space-between;
-  font-size:17px;font-weight:600;letter-spacing:-.01em;
-  padding:12px 0;border-bottom:1px solid var(--line);
-  cursor:none;transition:opacity .2s;
-}
-.contact-col .link-row:first-of-type{border-top:1px solid var(--line)}
-.contact-col .link-row .arr{color:var(--ink-dim);font-size:13px;transition:transform .25s}
-.contact-col .link-row:hover{opacity:.55}
-.contact-col .link-row:hover .arr{transform:translate(3px,-3px)}
-.contact-col p{
-  font-size:14px;line-height:1.7;color:var(--ink-dim);font-weight:300;max-width:26ch;
-}
-.contact-col p em{font-family:var(--display);font-style:italic}
-.contact-col .response-badge{
-  display:inline-flex;align-items:center;gap:6px;margin-top:18px;
-  font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-dim);
-  border:1px solid var(--line);border-radius:999px;padding:4px 12px;
-}
-
-/* ── Footer intégré ───────────────────────────────── */
-.contact-footer{position:relative;padding-top:72px}
-/* Barre bas propre (sans halftone derrière) */
-.contact-footer-bar{
-  position:relative;z-index:2;
-  display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;align-items:center;
-  font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;
-  color:var(--ink-mute);padding-bottom:48px;border-bottom:1px solid var(--line);
-  margin-bottom:0;
-}
-.contact-footer-bar .f-socials{display:flex;gap:20px;justify-content:center}
-.contact-footer-bar .f-nav{display:flex;gap:20px;justify-content:flex-end}
-.contact-footer-bar a{cursor:none;transition:color .2s;color:var(--ink-mute)}
-.contact-footer-bar a:hover{color:var(--ink)}
-/* Zone halftone + géant — isolée */
-.footer-name-zone{position:relative;overflow:hidden}
-.halftone{
-  position:absolute;inset:30px 0 100px 0;z-index:0;opacity:.8;pointer-events:none;
-  background-image:radial-gradient(circle,var(--accent) 1.6px,transparent 2px);background-size:7px 7px;
-  -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 600' preserveAspectRatio='xMidYMid slice'><defs><filter id='b' x='-20%25' y='-20%25' width='140%25' height='140%25'><feGaussianBlur stdDeviation='14'/></filter></defs><g fill='%23000' filter='url(%23b)'><ellipse cx='240' cy='220' rx='240' ry='110'/><ellipse cx='420' cy='280' rx='120' ry='70'/><ellipse cx='520' cy='200' rx='60' ry='40'/><ellipse cx='150' cy='320' rx='130' ry='60'/><ellipse cx='1150' cy='320' rx='320' ry='130'/><ellipse cx='1430' cy='370' rx='130' ry='70'/><ellipse cx='950' cy='240' rx='90' ry='50'/><ellipse cx='1050' cy='430' rx='150' ry='60'/></g></svg>");
-  mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 600' preserveAspectRatio='xMidYMid slice'><defs><filter id='b' x='-20%25' y='-20%25' width='140%25' height='140%25'><feGaussianBlur stdDeviation='14'/></filter></defs><g fill='%23000' filter='url(%23b)'><ellipse cx='240' cy='220' rx='240' ry='110'/><ellipse cx='420' cy='280' rx='120' ry='70'/><ellipse cx='520' cy='200' rx='60' ry='40'/><ellipse cx='150' cy='320' rx='130' ry='60'/><ellipse cx='1150' cy='320' rx='320' ry='130'/><ellipse cx='1430' cy='370' rx='130' ry='70'/><ellipse cx='950' cy='240' rx='90' ry='50'/><ellipse cx='1050' cy='430' rx='150' ry='60'/></g></svg>");
-  -webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
-}
-.footer-giant{
-  position:relative;z-index:1;
-  display:flex;align-items:baseline;justify-content:space-between;gap:4vw;
-  padding:60px 0 16px;--foot-fs:clamp(96px,22vw,360px);
-}
-.footer-giant .sans-name{font-family:var(--sans);font-weight:800;font-size:var(--foot-fs);line-height:.86;letter-spacing:-.05em;white-space:nowrap}
-.footer-giant .serif-name{font-family:var(--display);font-style:italic;font-weight:400;font-size:var(--foot-fs);line-height:.86;letter-spacing:-.025em;white-space:nowrap}
-.footer-giant .punct{color:var(--accent);font-style:normal}
-
 /* Responsive */
 @media(max-width:960px){
   .pct,.rail,.preview-fixed{display:none}
@@ -343,11 +235,9 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
   .about .copy{max-width:100%;font-size:42px}
   .about-portrait{width:80%;opacity:.25}
   .project-list{max-width:100%}
-  .services,.contact-cols,.contact-footer-bar{grid-template-columns:1fr;gap:40px}
+  .services{grid-template-columns:1fr;gap:40px}
   .services-left{position:static}
   .gallery .center-text{font-size:36px}
-  .contact-email-cta a{font-size:22px}
-  .contact-head h1{font-size:clamp(60px,14vw,140px)}
 }
 </style>
 </head>
@@ -428,32 +318,36 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 <!-- ========== PROJECTS ========== -->
 <section class="projects" id="projects">
   <div class="project-list">
-    <a class="project-row" data-idx="0" href="projet.html">
-      <span class="title">Maison Verdure</span>
+    <a class="project-row" data-idx="0" href="projet-lacourdesgrands.html">
+      <span class="title">La Cour des Grands</span>
       <span class="meta">Branding</span>
     </a>
-    <a class="project-row muted" data-idx="1" href="projet.html">
-      <span class="title">Studio Ferro</span>
-      <span class="meta">Graphisme</span>
-    </a>
-    <a class="project-row muted" data-idx="2" href="projet.html">
-      <span class="title">Lumière Digital</span>
+    <a class="project-row muted" data-idx="1" href="projet-stylingcoiffure.html">
+      <span class="title">Styling Coiffure</span>
       <span class="meta">Web design</span>
     </a>
-    <a class="project-row muted" data-idx="3" href="projet.html">
-      <span class="title">Atelier Brun</span>
+    <a class="project-row muted" data-idx="2" href="projet-congresannecy.html">
+      <span class="title">Congrès Annecy</span>
+      <span class="meta">Identité visuelle</span>
+    </a>
+    <a class="project-row muted" data-idx="3" href="projet-vulpo.html">
+      <span class="title">Vulpo</span>
+      <span class="meta">UX · UI Design</span>
+    </a>
+    <a class="project-row muted" data-idx="4" href="projet-lakepub-identite.html">
+      <span class="title">Lake Pub — Identité</span>
       <span class="meta">Branding</span>
     </a>
-    <a class="project-row muted" data-idx="4" href="projet.html">
-      <span class="title">Rogue Parfums</span>
-      <span class="meta">Branding</span>
+    <a class="project-row muted" data-idx="5" href="projet-fablab.html">
+      <span class="title">Fab Lab</span>
+      <span class="meta">UX · UI Design</span>
     </a>
-    <a class="project-row muted" data-idx="5" href="projet.html">
-      <span class="title">Nova Systems</span>
-      <span class="meta">Graphisme</span>
+    <a class="project-row muted" data-idx="6" href="projet-lempire.html">
+      <span class="title">L'Empire</span>
+      <span class="meta">Identité visuelle</span>
     </a>
-    <a class="project-row muted" data-idx="6" href="projet.html">
-      <span class="title">Essence Studio</span>
+    <a class="project-row muted" data-idx="7" href="projet-lakepub-web.html">
+      <span class="title">Lake Pub — Site web</span>
       <span class="meta">Web design</span>
     </a>
   </div>
@@ -520,74 +414,12 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
   </div>
 </section>
 
-<!-- ========== CONTACT + FOOTER ========== -->
-<section class="contact" id="contact">
-
-  <div class="contact-head">
-    <div class="contact-head-top">
-      <span class="label">Parlons-en</span>
-      <span class="avail"><span class="avail-dot"></span>Disponible</span>
-    </div>
-    <h1>Contact</h1>
-  </div>
-
-  <!-- Grande ligne email CTA -->
-  <div class="contact-email-cta">
-    <a href="mailto:hello@sublizme.fr">hello@sublizme.fr</a>
-    <span class="cta-arr">→</span>
-  </div>
-
-  <!-- 3 colonnes -->
-  <div class="contact-cols">
-    <div class="contact-col">
-      <div class="col-label">Un projet ?</div>
-      <p>Un brief, une idée,<br><em>une ambition à construire.</em><br>On vous répond sous 48h.</p>
-      <span class="response-badge"><span class="avail-dot"></span>Réponse sous 48h</span>
-    </div>
-    <div class="contact-col">
-      <div class="col-label">Réseaux</div>
-      <a href="#" class="link-row">Instagram<span class="arr">↗</span></a>
-      <a href="#" class="link-row">Behance<span class="arr">↗</span></a>
-      <a href="#" class="link-row">LinkedIn<span class="arr">↗</span></a>
-    </div>
-    <div class="contact-col">
-      <div class="col-label">Basé à</div>
-      <p>Paris, France.<br>Disponible à<br><em>l'international.</em></p>
-    </div>
-  </div>
-
-  <!-- Footer intégré -->
-  <div class="contact-footer">
-    <div class="contact-footer-bar">
-      <span>© 2026 Sublizme</span>
-      <div class="f-socials">
-        <a href="#">Instagram</a>
-        <a href="#">Behance</a>
-        <a href="#">LinkedIn</a>
-      </div>
-      <div class="f-nav">
-        <a href="#projects">Projets</a>
-        <a href="#about">Studio</a>
-        <a href="#contact">Contact</a>
-      </div>
-    </div>
-    <div class="footer-name-zone">
-      <div class="halftone" aria-hidden="true"></div>
-      <div class="footer-giant">
-        <div class="sans-name">Sublizme</div>
-        <div class="serif-name"><span>Studio</span><span class="punct">.</span></div>
-      </div>
-    </div>
-  </div>
-
-</section>
-
 <script src="assets/js/site.js"></script>
 <script>
 
 /* ── Name fit ──────────────────────────────────────── */
 function fitName(c){ if(!c)return; const p=c.parentElement; if(!p)return; const f=c.classList.contains('footer-giant'); const mf=f?360:320; const bv=f?22:19; const vn=f?'--foot-fs':'--name-fs'; c.style.setProperty(vn,`clamp(80px,${bv}vw,${mf}px)`); const tg=p.clientWidth-48; let t=0; while(c.scrollWidth>tg&&t<30){const cur=parseFloat(getComputedStyle(c).getPropertyValue(vn))||mf;const nx=Math.max(48,cur*.93);c.style.setProperty(vn,nx+'px');if(nx<=48)break;t++;} }
-function fitAll(){ document.querySelectorAll('.nameblock,.footer-giant').forEach(fitName); }
+function fitAll(){ document.querySelectorAll('.nameblock').forEach(fitName); }
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitAll);
 setTimeout(fitAll,50); setTimeout(fitAll,400);
 window.addEventListener('resize',fitAll);
@@ -600,6 +432,7 @@ const pctEl       = document.getElementById('pct');
 const railEl      = document.querySelector('.rail');
 const ticks       = document.querySelectorAll('.rail .tick');
 const railSecs    = ['gallery','projects','about','services'].map(id=>document.getElementById(id));
+SublizmeSite.injectFooter();
 const contactEl   = document.getElementById('contact');
 const aboutEl     = document.getElementById('about');
 const projectsEl  = document.getElementById('projects');
@@ -612,13 +445,14 @@ const revealWords = document.querySelectorAll('.rw');
 
 /* ── Project data ─────────────────────────────────── */
 const PROJECTS = [
-  { label:'Maison Verdure', cat:'Branding',  num:'01', bg:'linear-gradient(140deg,#0a1520,#12213a 60%,#08141e)' },
-  { label:'Studio Ferro',   cat:'Graphisme', num:'02', bg:'linear-gradient(140deg,#1a0a05,#2c1410 60%,#160806)' },
-  { label:'Lumière Digital',cat:'Web design',num:'03', bg:'linear-gradient(140deg,#041518,#08222a 60%,#021010)' },
-  { label:'Atelier Brun',   cat:'Branding',  num:'04', bg:'linear-gradient(140deg,#18041e,#26082e 60%,#100218)' },
-  { label:'Rogue Parfums',  cat:'Branding',  num:'05', bg:'linear-gradient(140deg,#1a0a08,#3a1510 60%,#120805)' },
-  { label:'Nova Systems',   cat:'Graphisme', num:'06', bg:'linear-gradient(140deg,#041518,#0a2a2a 60%,#021010)' },
-  { label:'Essence Studio', cat:'Web design',num:'07', bg:'linear-gradient(140deg,#041518,#06181a 60%,#020c0c)' },
+  { label:'La Cour des Grands', cat:'Branding',        num:'01', img:'assets/img/projects/lacourdesgrands-cover.png' },
+  { label:'Styling Coiffure',   cat:'Web design',      num:'02', img:'assets/img/projects/stylingcoiffure-cover.png' },
+  { label:'Congrès Annecy',     cat:'Identité',        num:'03', img:'assets/img/projects/congresannecy-cover.png'   },
+  { label:'Vulpo',              cat:'UX · UI',         num:'04', img:'assets/img/projects/vulpo-cover.jpg'           },
+  { label:'Lake Pub — Identité',cat:'Branding',        num:'05', img:'assets/img/projects/lakepub-id-cover.png'      },
+  { label:'Fab Lab',            cat:'UX · UI',         num:'06', img:'assets/img/projects/fablab-cover.png'          },
+  { label:"L'Empire",          cat:'Identité',        num:'07', img:'assets/img/projects/lempire-cover.png'         },
+  { label:'Lake Pub — Site web',cat:'Web design',      num:'08', img:'assets/img/projects/lakepub-web-cover.png'     },
 ];
 let currentIdx = 0;
 
@@ -627,7 +461,10 @@ function setPreview(idx){
   currentIdx = idx;
   const d = PROJECTS[idx];
   setTimeout(()=>{
-    previewScr.style.background = d.bg;
+    previewScr.style.background = '#0a0a0a';
+    previewScr.style.backgroundImage = `url('${d.img}')`;
+    previewScr.style.backgroundSize = 'cover';
+    previewScr.style.backgroundPosition = 'center';
     previewNum.textContent = d.num;
   }, 180);
 }

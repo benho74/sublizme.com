@@ -1,13 +1,17 @@
 /**
  * Sublizme — site.js
- * Module partagé : nav, footer, curseur, mode dark/light, restauration scroll
+ * Module partagé : nav, contact+footer, curseur, mode dark/light, restauration scroll
  */
 (function () {
   'use strict';
 
-  /* ── CSS commun injecté dynamiquement ──────────────────────────── */
+  /* ── Thème persistant (localStorage) ───────────────────────── */
+  var _saved = localStorage.getItem('sublizme_theme');
+  if (_saved === 'light') document.body.classList.add('light');
+
+  /* ── CSS commun injecté dynamiquement ──────────────────────── */
   var sharedCSS = [
-    /* Site nav (pages secondaires) */
+    /* Site nav */
     '.site-nav{position:fixed;top:0;left:0;right:0;z-index:80;',
     'display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;',
     'padding:16px var(--pad);',
@@ -37,43 +41,75 @@
     'transition:border-color .25s,color .25s;line-height:1.4}',
     '.mode-btn:hover{border-color:var(--ink)}',
     'body.light .mode-btn{border-color:rgba(0,0,0,.2);color:#0a0a0a}',
-    /* Site footer */
-    '.site-footer{background:var(--bg);color:var(--ink);position:relative;overflow:hidden}',
-    '.sf-bar{position:relative;z-index:2;',
+    /* ── Contact section ── */
+    '.contact{background:var(--bg);color:var(--ink);padding:140px var(--pad) 0;position:relative;overflow:hidden}',
+    '.contact-head{padding-bottom:64px;border-bottom:1px solid var(--line);margin-bottom:72px}',
+    '.contact-head-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}',
+    '.contact-head .label{font-size:12px;letter-spacing:.1em;font-weight:500;text-transform:uppercase;color:var(--ink-dim)}',
+    '.avail{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.06em;font-weight:500;text-transform:uppercase;color:var(--ink-dim);border:1px solid var(--line);border-radius:999px;padding:5px 13px}',
+    '.avail-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;flex-shrink:0;box-shadow:0 0 7px rgba(34,197,94,.7);animation:sfPulse 2.2s ease-in-out infinite}',
+    '@keyframes sfPulse{0%,100%{opacity:1}50%{opacity:.35}}',
+    '.contact h1{font-family:var(--sans);font-weight:800;font-size:clamp(80px,12vw,210px);line-height:.88;letter-spacing:-.05em;color:var(--ink)}',
+    '.contact-email-cta{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:40px 0;border-bottom:1px solid var(--line);margin-bottom:72px;cursor:none}',
+    '.contact-email-cta a{font-family:var(--sans);font-weight:700;font-size:clamp(24px,3.5vw,60px);letter-spacing:-.03em;color:var(--ink);transition:opacity .25s}',
+    '.contact-email-cta:hover a{opacity:.55}',
+    '.contact-email-cta .cta-arr{font-size:clamp(20px,3vw,50px);color:var(--ink-mute);transition:transform .35s cubic-bezier(.2,.8,.2,1),color .25s;flex-shrink:0}',
+    '.contact-email-cta:hover .cta-arr{transform:translateX(10px);color:var(--ink)}',
+    '.contact-cols{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:48px;padding-bottom:100px;border-bottom:1px solid var(--line)}',
+    '.contact-col .col-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-dim);font-weight:500;margin-bottom:22px}',
+    '.contact-col .link-row{display:flex;align-items:center;justify-content:space-between;font-size:17px;font-weight:600;letter-spacing:-.01em;padding:12px 0;border-bottom:1px solid var(--line);cursor:none;transition:opacity .2s}',
+    '.contact-col .link-row:first-of-type{border-top:1px solid var(--line)}',
+    '.contact-col .link-row .arr{color:var(--ink-dim);font-size:13px;transition:transform .25s}',
+    '.contact-col .link-row:hover{opacity:.55}',
+    '.contact-col .link-row:hover .arr{transform:translate(3px,-3px)}',
+    '.contact-col p{font-size:14px;line-height:1.7;color:var(--ink-dim);font-weight:300;max-width:26ch}',
+    '.contact-col p em{font-family:var(--display);font-style:italic}',
+    '.contact-col .response-badge{display:inline-flex;align-items:center;gap:6px;margin-top:18px;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-dim);border:1px solid var(--line);border-radius:999px;padding:4px 12px}',
+    /* ── Footer intégré dans contact ── */
+    '.contact-footer{position:relative;padding-top:72px}',
+    '.contact-footer-bar{position:relative;z-index:2;',
     'display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;align-items:center;',
-    'padding:28px var(--pad);',
     'font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;',
-    'color:var(--ink-mute);border-top:1px solid var(--line)}',
-    '.sf-socials{display:flex;gap:20px;justify-content:center}',
-    '.sf-nav{display:flex;gap:20px;justify-content:flex-end}',
-    '.sf-bar a{cursor:none;transition:color .2s;color:var(--ink-mute)}',
-    '.sf-bar a:hover{color:var(--ink)}',
-    '.sf-name-zone{position:relative;overflow:hidden}',
-    '.sf-halftone{position:absolute;inset:30px 0 100px 0;z-index:0;opacity:.8;pointer-events:none;',
+    'color:var(--ink-mute);padding-bottom:48px;border-bottom:1px solid var(--line)}',
+    '.contact-footer-bar .f-socials{display:flex;gap:20px;justify-content:center}',
+    '.contact-footer-bar .f-nav{display:flex;gap:20px;justify-content:flex-end}',
+    '.contact-footer-bar a{cursor:none;transition:color .2s;color:var(--ink-mute)}',
+    '.contact-footer-bar a:hover{color:var(--ink)}',
+    '.footer-name-zone{position:relative;overflow:hidden}',
+    '.halftone{position:absolute;inset:30px 0 100px 0;z-index:0;opacity:.8;pointer-events:none;',
     'background-image:radial-gradient(circle,var(--accent) 1.6px,transparent 2px);',
     'background-size:7px 7px;',
-    '-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 1600 600\' preserveAspectRatio=\'xMidYMid slice\'><defs><filter id=\'b\' x=\'-20%25\' y=\'-20%25\' width=\'140%25\' height=\'140%25\'><feGaussianBlur stdDeviation=\'14\'/></filter></defs><g fill=\'%23000\' filter=\'url(%23b)\'><ellipse cx=\'240\' cy=\'220\' rx=\'240\' ry=\'110\'/><ellipse cx=\'420\' cy=\'280\' rx=\'120\' ry=\'70\'/><ellipse cx=\'1150\' cy=\'320\' rx=\'320\' ry=\'130\'/><ellipse cx=\'1430\' cy=\'370\' rx=\'130\' ry=\'70\'/></g></svg>");',
-    'mask-image:url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 1600 600\' preserveAspectRatio=\'xMidYMid slice\'><defs><filter id=\'b\' x=\'-20%25\' y=\'-20%25\' width=\'140%25\' height=\'140%25\'><feGaussianBlur stdDeviation=\'14\'/></filter></defs><g fill=\'%23000\' filter=\'url(%23b)\'><ellipse cx=\'240\' cy=\'220\' rx=\'240\' ry=\'110\'/><ellipse cx=\'420\' cy=\'280\' rx=\'120\' ry=\'70\'/><ellipse cx=\'1150\' cy=\'320\' rx=\'320\' ry=\'130\'/><ellipse cx=\'1430\' cy=\'370\' rx=\'130\' ry=\'70\'/></g></svg>");',
+    '-webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 1600 600\' preserveAspectRatio=\'xMidYMid slice\'><defs><filter id=\'b\' x=\'-20%25\' y=\'-20%25\' width=\'140%25\' height=\'140%25\'><feGaussianBlur stdDeviation=\'14\'/></filter></defs><g fill=\'%23000\' filter=\'url(%23b)\'><ellipse cx=\'240\' cy=\'220\' rx=\'240\' ry=\'110\'/><ellipse cx=\'420\' cy=\'280\' rx=\'120\' ry=\'70\'/><ellipse cx=\'520\' cy=\'200\' rx=\'60\' ry=\'40\'/><ellipse cx=\'150\' cy=\'320\' rx=\'130\' ry=\'60\'/><ellipse cx=\'1150\' cy=\'320\' rx=\'320\' ry=\'130\'/><ellipse cx=\'1430\' cy=\'370\' rx=\'130\' ry=\'70\'/><ellipse cx=\'950\' cy=\'240\' rx=\'90\' ry=\'50\'/><ellipse cx=\'1050\' cy=\'430\' rx=\'150\' ry=\'60\'/></g></svg>");',
+    'mask-image:url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 1600 600\' preserveAspectRatio=\'xMidYMid slice\'><defs><filter id=\'b\' x=\'-20%25\' y=\'-20%25\' width=\'140%25\' height=\'140%25\'><feGaussianBlur stdDeviation=\'14\'/></filter></defs><g fill=\'%23000\' filter=\'url(%23b)\'><ellipse cx=\'240\' cy=\'220\' rx=\'240\' ry=\'110\'/><ellipse cx=\'420\' cy=\'280\' rx=\'120\' ry=\'70\'/><ellipse cx=\'520\' cy=\'200\' rx=\'60\' ry=\'40\'/><ellipse cx=\'150\' cy=\'320\' rx=\'130\' ry=\'60\'/><ellipse cx=\'1150\' cy=\'320\' rx=\'320\' ry=\'130\'/><ellipse cx=\'1430\' cy=\'370\' rx=\'130\' ry=\'70\'/><ellipse cx=\'950\' cy=\'240\' rx=\'90\' ry=\'50\'/><ellipse cx=\'1050\' cy=\'430\' rx=\'150\' ry=\'60\'/></g></svg>");',
     '-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}',
-    '.sf-giant{position:relative;z-index:1;',
+    '.footer-giant{position:relative;z-index:1;',
     'display:flex;align-items:baseline;justify-content:space-between;gap:4vw;',
-    'padding:60px var(--pad) 16px;--sf-fs:clamp(96px,22vw,360px)}',
-    '.sf-giant .sans-name{font-family:var(--sans);font-weight:800;font-size:var(--sf-fs);line-height:.86;letter-spacing:-.05em;white-space:nowrap}',
-    '.sf-giant .serif-name{font-family:var(--display);font-style:italic;font-weight:400;font-size:var(--sf-fs);line-height:.86;letter-spacing:-.025em;white-space:nowrap}',
-    '.sf-giant .punct{color:var(--accent);font-style:normal}',
+    'padding:60px var(--pad) 16px;--foot-fs:clamp(96px,22vw,360px)}',
+    '.footer-giant .sans-name{font-family:var(--sans);font-weight:800;font-size:var(--foot-fs);line-height:.86;letter-spacing:-.05em;white-space:nowrap}',
+    '.footer-giant .serif-name{font-family:var(--display);font-style:italic;font-weight:400;font-size:var(--foot-fs);line-height:.86;letter-spacing:-.025em;white-space:nowrap}',
+    '.footer-giant .punct{color:var(--accent);font-style:normal}',
     /* Responsive */
     '@media(max-width:960px){',
     '.site-nav{grid-template-columns:1fr auto}',
     '.sn-socials{display:none}',
-    '.sf-bar{grid-template-columns:1fr}',
-    '.sf-socials,.sf-nav{justify-content:flex-start}}'
+    '.contact-cols,.contact-footer-bar{grid-template-columns:1fr}',
+    '.contact-cols{gap:40px}',
+    '.contact-email-cta a{font-size:22px}',
+    '.contact h1{font-size:clamp(60px,14vw,140px)}}'
   ].join('');
 
   var styleEl = document.createElement('style');
   styleEl.textContent = sharedCSS;
   document.head.appendChild(styleEl);
 
-  /* ── Curseur ────────────────────────────────────────────────────── */
+  /* ── Met à jour l'icône des boutons mode selon le thème actuel ── */
+  function _syncModeIcons() {
+    var isLight = document.body.classList.contains('light');
+    document.querySelectorAll('.mode-btn').forEach(function(b){ b.textContent = isLight ? '◐' : '◑'; });
+  }
+  _syncModeIcons();
+
+  /* ── Curseur ────────────────────────────────────────────────── */
   var cur, ring;
 
   function initCursor() {
@@ -105,21 +141,22 @@
     document.querySelectorAll(selector).forEach(_addHover);
   }
 
-  /* ── Mode dark / light ──────────────────────────────────────────── */
+  /* ── Mode dark / light (avec persistance) ───────────────────── */
   document.addEventListener('click', function(e) {
     var btn = e.target.closest ? e.target.closest('.mode-btn') : null;
     if (!btn) return;
     document.body.classList.toggle('light');
-    var icon = document.body.classList.contains('light') ? '◐' : '◑';
-    document.querySelectorAll('.mode-btn').forEach(function(b){ b.textContent = icon; });
+    var isLight = document.body.classList.contains('light');
+    localStorage.setItem('sublizme_theme', isLight ? 'light' : 'dark');
+    _syncModeIcons();
   });
 
-  /* ── Helpers ────────────────────────────────────────────────────── */
+  /* ── Helpers ────────────────────────────────────────────────── */
   function fitGiant(el) {
     if (!el) return;
     var p = el.parentElement;
     if (!p) return;
-    var vn = '--sf-fs';
+    var vn = '--foot-fs';
     el.style.setProperty(vn, 'clamp(96px,22vw,360px)');
     var tg = p.clientWidth - 48;
     var t = 0;
@@ -132,16 +169,14 @@
     }
   }
 
-  /* ── API publique ───────────────────────────────────────────────── */
+  /* ── API publique ───────────────────────────────────────────── */
   window.SublizmeSite = {
 
-    /* Injecte la nav commune en haut de <body>
-       opts.back  : href pour le lien retour (ex: 'index.html#projects')
-       opts.label : libellé du lien retour (défaut: 'Projets')
-    */
+    /* Injecte la nav commune */
     injectNav: function(opts) {
       if (document.querySelector('.site-nav')) return;
       opts = opts || {};
+      var isLight = document.body.classList.contains('light');
       var leftHTML = opts.back
         ? '<a href="' + opts.back + '" class="sn-back"><span class="sn-arr">←</span>' + (opts.label || 'Projets') + '</a>'
         : '<span class="sn-brand">→ Graphisme · Branding · Web</span>';
@@ -160,44 +195,76 @@
           '<a href="index.html#projects">Projets</a>' +
           '<a href="index.html#about">Studio</a>' +
           '<a href="index.html#contact">Contact</a>' +
-          '<button class="mode-btn" id="mode-btn">◑</button>' +
+          '<button class="mode-btn" id="mode-btn">' + (isLight ? '◐' : '◑') + '</button>' +
         '</div>';
 
       document.body.prepend(nav);
       nav.querySelectorAll('a,button').forEach(_addHover);
     },
 
-    /* Injecte le footer commun en bas de <body> */
+    /* Injecte le contact + footer commun */
     injectFooter: function() {
-      if (document.querySelector('.site-footer')) return;
-      var footer = document.createElement('footer');
-      footer.className = 'site-footer';
-      footer.innerHTML =
-        '<div class="sf-bar">' +
-          '<span>© 2026 Sublizme</span>' +
-          '<div class="sf-socials">' +
-            '<a href="#">Instagram</a>' +
-            '<a href="#">Behance</a>' +
-            '<a href="#">LinkedIn</a>' +
+      if (document.getElementById('footer-giant')) return;
+
+      var section = document.createElement('section');
+      section.className = 'contact';
+      section.id = 'contact';
+      section.innerHTML =
+        '<div class="contact-head">' +
+          '<div class="contact-head-top">' +
+            '<span class="label">Parlons-en</span>' +
+            '<span class="avail"><span class="avail-dot"></span>Disponible</span>' +
           '</div>' +
-          '<div class="sf-nav">' +
-            '<a href="index.html#projects">Projets</a>' +
-            '<a href="index.html#about">Studio</a>' +
-            '<a href="index.html#contact">Contact</a>' +
+          '<h1>Contact</h1>' +
+        '</div>' +
+        '<div class="contact-email-cta">' +
+          '<a href="mailto:hello@sublizme.fr">hello@sublizme.fr</a>' +
+          '<span class="cta-arr">→</span>' +
+        '</div>' +
+        '<div class="contact-cols">' +
+          '<div class="contact-col">' +
+            '<div class="col-label">Un projet ?</div>' +
+            '<p>Un brief, une idée,<br>une ambition à construire.<br>On vous répond sous 48h.</p>' +
+            '<span class="response-badge"><span class="avail-dot"></span>Réponse sous 48h</span>' +
+          '</div>' +
+          '<div class="contact-col">' +
+            '<div class="col-label">Réseaux</div>' +
+            '<a href="#" class="link-row">Instagram<span class="arr">↗</span></a>' +
+            '<a href="#" class="link-row">Behance<span class="arr">↗</span></a>' +
+            '<a href="#" class="link-row">LinkedIn<span class="arr">↗</span></a>' +
+          '</div>' +
+          '<div class="contact-col">' +
+            '<div class="col-label">Basé à</div>' +
+            '<p>Paris, France.<br>Disponible à<br><em>l\'international.</em></p>' +
           '</div>' +
         '</div>' +
-        '<div class="sf-name-zone">' +
-          '<div class="sf-halftone" aria-hidden="true"></div>' +
-          '<div class="sf-giant" id="sf-giant">' +
-            '<div class="sans-name">Sublizme</div>' +
-            '<div class="serif-name"><span>Studio</span><span class="punct">.</span></div>' +
+        '<div class="contact-footer">' +
+          '<div class="contact-footer-bar">' +
+            '<span>© 2026 Sublizme</span>' +
+            '<div class="f-socials">' +
+              '<a href="#">Instagram</a>' +
+              '<a href="#">Behance</a>' +
+              '<a href="#">LinkedIn</a>' +
+            '</div>' +
+            '<div class="f-nav">' +
+              '<a href="index.html#projects">Projets</a>' +
+              '<a href="index.html#about">Studio</a>' +
+              '<a href="index.html#contact">Contact</a>' +
+            '</div>' +
+          '</div>' +
+          '<div class="footer-name-zone">' +
+            '<div class="halftone" aria-hidden="true"></div>' +
+            '<div class="footer-giant" id="footer-giant">' +
+              '<div class="sans-name">Sublizme</div>' +
+              '<div class="serif-name"><span>Studio</span><span class="punct">.</span></div>' +
+            '</div>' +
           '</div>' +
         '</div>';
 
-      document.body.appendChild(footer);
-      footer.querySelectorAll('a').forEach(_addHover);
+      document.body.appendChild(section);
+      section.querySelectorAll('a').forEach(_addHover);
 
-      var g = document.getElementById('sf-giant');
+      var g = document.getElementById('footer-giant');
       if (document.fonts && document.fonts.ready) {
         document.fonts.ready.then(function(){ fitGiant(g); });
       }
@@ -211,20 +278,17 @@
       _addHoverAll(selector);
     },
 
-    /* Sauvegarde + restauration du scroll (appeler dans index.html) */
+    /* Sauvegarde + restauration du scroll */
     initScrollRestore: function() {
-      /* Save avant de partir sur un projet */
       document.querySelectorAll('a.project-row').forEach(function(a) {
         a.addEventListener('click', function() {
           sessionStorage.setItem('sublizme_scrollY', String(Math.round(window.scrollY)));
         });
       });
 
-      /* Restaure au retour */
       var saved = sessionStorage.getItem('sublizme_scrollY');
       if (saved !== null) {
         sessionStorage.removeItem('sublizme_scrollY');
-        /* Désactiver le smooth scroll le temps du jump */
         document.documentElement.style.scrollBehavior = 'auto';
         var y = parseInt(saved, 10);
         requestAnimationFrame(function() {
