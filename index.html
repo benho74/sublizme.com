@@ -34,11 +34,16 @@ a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
 ::selection{background:var(--accent);color:#fff}
 
-/* Cursor */
-.cursor{width:8px;height:8px;background:var(--ink);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);will-change:left,top}
-.cursor-ring{width:36px;height:36px;border:1px solid rgba(237,237,235,.3);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);will-change:left,top}
-.cursor.hover{transform:translate(-50%,-50%) scale(.5)}
-.cursor-ring.hover{transform:translate(-50%,-50%) scale(1.5)}
+/* Cursor — blend mode : blanc sur noir, noir sur blanc */
+.cursor{width:9px;height:9px;background:#fff;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);will-change:left,top;mix-blend-mode:difference;transition:transform .15s ease}
+.cursor-ring{width:38px;height:38px;border:1px solid rgba(255,255,255,.55);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);will-change:left,top;mix-blend-mode:difference;transition:transform .15s ease}
+.cursor.hover{transform:translate(-50%,-50%) scale(.4)}
+.cursor-ring.hover{transform:translate(-50%,-50%) scale(1.6)}
+/* Masquer le curseur sur mobile/touch */
+@media(hover:none),(pointer:coarse){
+  .cursor,.cursor-ring{display:none}
+  body{cursor:auto!important}
+}
 
 /* Grain */
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;mix-blend-mode:overlay;opacity:.05;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='.85'/></svg>")}
@@ -226,65 +231,108 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
   background:var(--bg);color:var(--ink);
   padding:140px var(--pad) 0;position:relative;overflow:hidden;
 }
+/* En-tête : label + badge dispo + titre */
 .contact-head{
-  display:flex;align-items:flex-end;justify-content:space-between;
-  padding-bottom:60px;border-bottom:1px solid var(--line);
-  margin-bottom:72px;
+  padding-bottom:64px;border-bottom:1px solid var(--line);margin-bottom:72px;
+}
+.contact-head-top{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;
 }
 .contact-head .label{
-  font-size:12px;letter-spacing:.1em;font-weight:500;text-transform:uppercase;
-  color:var(--ink-dim);padding-bottom:6px;
+  font-size:12px;letter-spacing:.1em;font-weight:500;text-transform:uppercase;color:var(--ink-dim);
 }
+/* Badge "Disponible" */
+.avail{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;letter-spacing:.06em;font-weight:500;text-transform:uppercase;color:var(--ink-dim);
+  border:1px solid var(--line);border-radius:999px;padding:5px 13px;
+}
+.avail-dot{
+  width:6px;height:6px;border-radius:50%;background:#22c55e;flex-shrink:0;
+  box-shadow:0 0 7px rgba(34,197,94,.7);animation:pulse 2.2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 .contact h1{
   font-family:var(--sans);font-weight:800;
-  font-size:clamp(90px,13vw,220px);line-height:.88;letter-spacing:-.05em;
-  color:var(--ink);
+  font-size:clamp(80px,12vw,210px);line-height:.88;letter-spacing:-.05em;color:var(--ink);
 }
+/* Grande ligne email CTA */
+.contact-email-cta{
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  padding:40px 0;border-bottom:1px solid var(--line);margin-bottom:72px;
+  cursor:none;
+}
+.contact-email-cta a{
+  font-family:var(--sans);font-weight:700;
+  font-size:clamp(24px,3.5vw,60px);letter-spacing:-.03em;color:var(--ink);
+  transition:opacity .25s;
+}
+.contact-email-cta:hover a{opacity:.55}
+.contact-email-cta .cta-arr{
+  font-size:clamp(20px,3vw,50px);color:var(--ink-mute);
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),color .25s;flex-shrink:0;
+}
+.contact-email-cta:hover .cta-arr{transform:translateX(10px);color:var(--ink)}
+/* Colonnes */
 .contact-cols{
-  display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:48px;
+  display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:48px;
   padding-bottom:100px;border-bottom:1px solid var(--line);
 }
 .contact-col .col-label{
   font-size:11px;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--ink-dim);font-weight:500;margin-bottom:20px;
+  color:var(--ink-dim);font-weight:500;margin-bottom:22px;
 }
-.contact-col .big-link{
-  display:block;font-size:clamp(17px,2vw,26px);font-weight:700;
-  letter-spacing:-.01em;margin-bottom:8px;cursor:none;
-  transition:opacity .2s;
+.contact-col .link-row{
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:17px;font-weight:600;letter-spacing:-.01em;
+  padding:12px 0;border-bottom:1px solid var(--line);
+  cursor:none;transition:opacity .2s;
 }
-.contact-col .big-link:hover{opacity:.5}
+.contact-col .link-row:first-of-type{border-top:1px solid var(--line)}
+.contact-col .link-row .arr{color:var(--ink-dim);font-size:13px;transition:transform .25s}
+.contact-col .link-row:hover{opacity:.55}
+.contact-col .link-row:hover .arr{transform:translate(3px,-3px)}
 .contact-col p{
-  font-size:14px;line-height:1.65;color:var(--ink-dim);font-weight:300;max-width:28ch;margin-top:24px;
+  font-size:14px;line-height:1.7;color:var(--ink-dim);font-weight:300;max-width:26ch;
 }
 .contact-col p em{font-family:var(--display);font-style:italic}
+.contact-col .response-badge{
+  display:inline-flex;align-items:center;gap:6px;margin-top:18px;
+  font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-dim);
+  border:1px solid var(--line);border-radius:999px;padding:4px 12px;
+}
 
-/* Footer intégré */
-.contact-footer{position:relative;padding-top:80px;overflow:hidden}
+/* ── Footer intégré ───────────────────────────────── */
+.contact-footer{position:relative;padding-top:72px}
+/* Barre bas propre (sans halftone derrière) */
 .contact-footer-bar{
+  position:relative;z-index:2;
   display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;align-items:center;
-  font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;
-  color:var(--ink-dim);margin-bottom:60px;
+  font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--ink-mute);padding-bottom:48px;border-bottom:1px solid var(--line);
+  margin-bottom:0;
 }
-.contact-footer-bar .f-socials{display:flex;gap:16px;justify-content:center}
-.contact-footer-bar .f-nav{display:flex;gap:24px;justify-content:flex-end}
-.contact-footer-bar a{cursor:none;transition:opacity .2s;color:var(--ink-dim)}
-.contact-footer-bar a:hover{opacity:.55}
-.footer-giant{
-  position:relative;z-index:1;
-  display:flex;align-items:baseline;justify-content:space-between;gap:4vw;
-  padding-bottom:16px;--foot-fs:clamp(96px,22vw,360px);
-}
-.footer-giant .sans-name{font-family:var(--sans);font-weight:800;font-size:var(--foot-fs);line-height:.86;letter-spacing:-.05em;white-space:nowrap}
-.footer-giant .serif-name{font-family:var(--display);font-style:italic;font-weight:400;font-size:var(--foot-fs);line-height:.86;letter-spacing:-.025em;white-space:nowrap}
-.footer-giant .punct{color:var(--accent);font-style:normal}
+.contact-footer-bar .f-socials{display:flex;gap:20px;justify-content:center}
+.contact-footer-bar .f-nav{display:flex;gap:20px;justify-content:flex-end}
+.contact-footer-bar a{cursor:none;transition:color .2s;color:var(--ink-mute)}
+.contact-footer-bar a:hover{color:var(--ink)}
+/* Zone halftone + géant — isolée */
+.footer-name-zone{position:relative;overflow:hidden}
 .halftone{
-  position:absolute;inset:0 0 120px 0;z-index:0;opacity:.75;pointer-events:none;
-  background-image:radial-gradient(circle,var(--accent) 1.6px,transparent 2.0px);background-size:7px 7px;
+  position:absolute;inset:30px 0 100px 0;z-index:0;opacity:.8;pointer-events:none;
+  background-image:radial-gradient(circle,var(--accent) 1.6px,transparent 2px);background-size:7px 7px;
   -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 600' preserveAspectRatio='xMidYMid slice'><defs><filter id='b' x='-20%25' y='-20%25' width='140%25' height='140%25'><feGaussianBlur stdDeviation='14'/></filter></defs><g fill='%23000' filter='url(%23b)'><ellipse cx='240' cy='220' rx='240' ry='110'/><ellipse cx='420' cy='280' rx='120' ry='70'/><ellipse cx='520' cy='200' rx='60' ry='40'/><ellipse cx='150' cy='320' rx='130' ry='60'/><ellipse cx='1150' cy='320' rx='320' ry='130'/><ellipse cx='1430' cy='370' rx='130' ry='70'/><ellipse cx='950' cy='240' rx='90' ry='50'/><ellipse cx='1050' cy='430' rx='150' ry='60'/></g></svg>");
   mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 600' preserveAspectRatio='xMidYMid slice'><defs><filter id='b' x='-20%25' y='-20%25' width='140%25' height='140%25'><feGaussianBlur stdDeviation='14'/></filter></defs><g fill='%23000' filter='url(%23b)'><ellipse cx='240' cy='220' rx='240' ry='110'/><ellipse cx='420' cy='280' rx='120' ry='70'/><ellipse cx='520' cy='200' rx='60' ry='40'/><ellipse cx='150' cy='320' rx='130' ry='60'/><ellipse cx='1150' cy='320' rx='320' ry='130'/><ellipse cx='1430' cy='370' rx='130' ry='70'/><ellipse cx='950' cy='240' rx='90' ry='50'/><ellipse cx='1050' cy='430' rx='150' ry='60'/></g></svg>");
   -webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
 }
+.footer-giant{
+  position:relative;z-index:1;
+  display:flex;align-items:baseline;justify-content:space-between;gap:4vw;
+  padding:60px 0 16px;--foot-fs:clamp(96px,22vw,360px);
+}
+.footer-giant .sans-name{font-family:var(--sans);font-weight:800;font-size:var(--foot-fs);line-height:.86;letter-spacing:-.05em;white-space:nowrap}
+.footer-giant .serif-name{font-family:var(--display);font-style:italic;font-weight:400;font-size:var(--foot-fs);line-height:.86;letter-spacing:-.025em;white-space:nowrap}
+.footer-giant .punct{color:var(--accent);font-style:normal}
 
 /* Responsive */
 @media(max-width:960px){
@@ -298,7 +346,8 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
   .services,.contact-cols,.contact-footer-bar{grid-template-columns:1fr;gap:40px}
   .services-left{position:static}
   .gallery .center-text{font-size:36px}
-  .contact-head{flex-direction:column;align-items:flex-start;gap:16px}
+  .contact-email-cta a{font-size:22px}
+  .contact-head h1{font-size:clamp(60px,14vw,140px)}
 }
 </style>
 </head>
@@ -475,31 +524,40 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 <section class="contact" id="contact">
 
   <div class="contact-head">
-    <div class="label">Parlons-en</div>
+    <div class="contact-head-top">
+      <span class="label">Parlons-en</span>
+      <span class="avail"><span class="avail-dot"></span>Disponible</span>
+    </div>
     <h1>Contact</h1>
   </div>
 
+  <!-- Grande ligne email CTA -->
+  <div class="contact-email-cta">
+    <a href="mailto:hello@sublizme.fr">hello@sublizme.fr</a>
+    <span class="cta-arr">→</span>
+  </div>
+
+  <!-- 3 colonnes -->
   <div class="contact-cols">
     <div class="contact-col">
-      <div class="col-label">Écrire</div>
-      <a href="mailto:hello@sublizme.fr" class="big-link">hello@sublizme.fr</a>
-      <p>Un projet en tête ?<br>Une <em>intuition créative</em> à explorer ?<br>On répond sous 48h.</p>
+      <div class="col-label">Un projet ?</div>
+      <p>Un brief, une idée,<br><em>une ambition à construire.</em><br>On vous répond sous 48h.</p>
+      <span class="response-badge"><span class="avail-dot"></span>Réponse sous 48h</span>
     </div>
     <div class="contact-col">
       <div class="col-label">Réseaux</div>
-      <a href="#" class="big-link">Instagram</a>
-      <a href="#" class="big-link">Behance</a>
-      <a href="#" class="big-link">LinkedIn</a>
+      <a href="#" class="link-row">Instagram<span class="arr">↗</span></a>
+      <a href="#" class="link-row">Behance<span class="arr">↗</span></a>
+      <a href="#" class="link-row">LinkedIn<span class="arr">↗</span></a>
     </div>
     <div class="contact-col">
-      <div class="col-label">Localisation</div>
+      <div class="col-label">Basé à</div>
       <p>Paris, France.<br>Disponible à<br><em>l'international.</em></p>
     </div>
   </div>
 
   <!-- Footer intégré -->
   <div class="contact-footer">
-    <div class="halftone" aria-hidden="true"></div>
     <div class="contact-footer-bar">
       <span>© 2026 Sublizme</span>
       <div class="f-socials">
@@ -513,9 +571,12 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
         <a href="#contact">Contact</a>
       </div>
     </div>
-    <div class="footer-giant">
-      <div class="sans-name">Sublizme</div>
-      <div class="serif-name"><span>Studio</span><span class="punct">.</span></div>
+    <div class="footer-name-zone">
+      <div class="halftone" aria-hidden="true"></div>
+      <div class="footer-giant">
+        <div class="sans-name">Sublizme</div>
+        <div class="serif-name"><span>Studio</span><span class="punct">.</span></div>
+      </div>
     </div>
   </div>
 
@@ -679,17 +740,24 @@ function onScroll(){
   /* Hero foot sticky */
   updateHeroFootSticky();
 
-  /* Rail + % : après hero, avant contact */
+  /* Rail + % : après hero, avant/pendant contact */
   const contactRatio = contactEl ? contactEl.getBoundingClientRect().top/window.innerHeight : 1;
-  pctEl.classList.toggle('visible', pastHero);
+
+  /* % : 100% atteint un peu avant le top de contact (viewport à 80%) */
+  const earlyEnd = contactEl
+    ? contactEl.offsetTop - window.innerHeight * 0.2
+    : document.documentElement.scrollHeight - window.innerHeight;
+  const p = Math.max(0, Math.min(100, Math.round(scrollY / earlyEnd * 100)));
+  pctEl.textContent = String(p).padStart(2,'0') + '%';
+
+  /* Visibilité % : apparaît après hero, disparaît comme la rail un peu après 100% */
+  const showPct = pastHero && contactRatio > 0.22;
+  pctEl.classList.toggle('visible', showPct);
+
+  /* Rail */
   if(!pastHero){ railEl.classList.remove('visible'); railEl.classList.add('hide'); }
   else if(contactRatio<0.35){ railEl.classList.add('hide'); }
   else if(contactRatio>0.6){ railEl.classList.remove('hide'); railEl.classList.add('visible'); }
-
-  /* % counter — 100% à Contact */
-  const endY = contactEl ? contactEl.offsetTop : document.documentElement.scrollHeight - window.innerHeight;
-  const p = Math.max(0,Math.min(100,Math.round(scrollY/endY*100)));
-  pctEl.textContent = String(p).padStart(2,'0')+'%';
 
   /* Rail ticks */
   const yCenter = scrollY + window.innerHeight*0.4;
