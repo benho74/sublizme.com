@@ -127,22 +127,17 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .project-row.muted{color:var(--ink-mute)}
 .project-row .meta{font-size:13px;color:var(--ink-dim);font-weight:500;letter-spacing:.04em;text-transform:uppercase;flex-shrink:0;transition:color .45s}
 
-/* Preview fixe à droite */
+/* Preview fixe à droite — image seule */
 .preview-fixed{
   position:fixed;right:var(--pad);top:50%;transform:translateY(-50%);
-  width:clamp(220px,22vw,360px);z-index:60;
+  width:clamp(280px,28vw,460px);z-index:60;
   opacity:0;pointer-events:none;
-  transition:opacity .55s ease;
+  transition:opacity .65s ease;
 }
 .preview-fixed.visible{opacity:1}
-.prev-frame{border-radius:12px;overflow:hidden;background:#141414;box-shadow:0 40px 90px -20px rgba(0,0,0,.75);transform:rotate(-1deg);transition:transform .08s ease}
-.prev-topbar{padding:12px 16px;display:flex;align-items:center;gap:7px;background:#101010;border-bottom:1px solid rgba(255,255,255,.05)}
-.prev-dot{width:10px;height:10px;border-radius:50%;background:var(--ink-mute);display:inline-block}
+.prev-frame{border-radius:18px;overflow:hidden;box-shadow:0 60px 120px -30px rgba(0,0,0,.9);transform:rotate(-2.5deg);transition:transform .06s ease}
 .prev-body{aspect-ratio:4/3;position:relative;display:flex;align-items:center;justify-content:center;transition:background .65s ease}
-.prev-num{font-family:var(--sans);font-size:clamp(52px,7vw,100px);font-weight:800;letter-spacing:-.05em;color:rgba(255,255,255,.07);user-select:none;position:absolute}
-.prev-footer{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.05);background:#101010}
-.prev-footer-label{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:-.01em;color:var(--ink);transition:opacity .3s}
-.prev-footer-cat{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-dim)}
+.prev-num{font-family:var(--sans);font-size:clamp(72px,9vw,130px);font-weight:800;letter-spacing:-.05em;color:rgba(255,255,255,.06);user-select:none;position:absolute}
 
 /* ── GALLERY ──────────────────────────────────────── */
 .gallery{min-height:120vh;position:relative;padding:80px var(--pad);display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -278,17 +273,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 <!-- Preview fixe droite (page Projets) -->
 <div class="preview-fixed" id="preview-fixed" aria-hidden="true">
   <div class="prev-frame" id="preview-frame">
-    <div class="prev-topbar">
-      <span class="prev-dot"></span>
-      <span class="prev-dot"></span>
-      <span class="prev-dot"></span>
-    </div>
     <div class="prev-body" id="preview-screen">
       <div class="prev-num" id="preview-num">01</div>
-    </div>
-    <div class="prev-footer">
-      <span class="prev-footer-label" id="preview-label">Maison Verdure</span>
-      <span class="prev-footer-cat" id="preview-cat">Branding</span>
     </div>
   </div>
 </div>
@@ -513,8 +499,6 @@ const previewEl   = document.getElementById('preview-fixed');
 const previewFrame= document.getElementById('preview-frame');
 const previewScr  = document.getElementById('preview-screen');
 const previewNum  = document.getElementById('preview-num');
-const previewLbl  = document.getElementById('preview-label');
-const previewCat  = document.getElementById('preview-cat');
 const projectRows = document.querySelectorAll('.project-row');
 const revealWords = document.querySelectorAll('.rw');
 
@@ -534,26 +518,22 @@ function setPreview(idx){
   if(idx===currentIdx && previewEl.classList.contains('visible'))return;
   currentIdx = idx;
   const d = PROJECTS[idx];
-  previewLbl.style.opacity='0';
   setTimeout(()=>{
     previewScr.style.background = d.bg;
     previewNum.textContent = d.num;
-    previewLbl.textContent = d.label;
-    previewCat.textContent = d.cat;
-    previewLbl.style.opacity='1';
-  }, 200);
+  }, 180);
 }
 
 /* ── Mouse tilt on preview ────────────────────────── */
 projectsEl.addEventListener('mousemove', e=>{
   const x = (e.clientX/window.innerWidth  - 0.5);
   const y = (e.clientY/window.innerHeight - 0.5);
-  previewFrame.style.transition = 'transform .08s ease';
-  previewFrame.style.transform = `rotate(-1deg) perspective(900px) rotateX(${-y*6}deg) rotateY(${x*9}deg)`;
+  previewFrame.style.transition = 'transform .05s ease';
+  previewFrame.style.transform = `rotate(-2.5deg) perspective(700px) rotateX(${-y*16}deg) rotateY(${x*22}deg) scale(1.03)`;
 });
 projectsEl.addEventListener('mouseleave', ()=>{
-  previewFrame.style.transition = 'transform .6s ease';
-  previewFrame.style.transform  = 'rotate(-1deg)';
+  previewFrame.style.transition = 'transform .7s cubic-bezier(.2,.8,.2,1)';
+  previewFrame.style.transform  = 'rotate(-2.5deg)';
 });
 
 /* ── Project active — souris en priorité, scroll en fallback ── */
@@ -641,9 +621,9 @@ function onScroll(){
   railSecs.forEach((s,i)=>{ if(!s)return; if(yCenter>=s.offsetTop&&yCenter<s.offsetTop+s.offsetHeight)activeIdx=i; });
   ticks.forEach((t,i)=>t.classList.toggle('active',i===activeIdx));
 
-  /* Preview fixe : visible sur la section projects */
+  /* Preview fixe : apparaît plus tard, disparaît plus tôt */
   const prjRect = projectsEl.getBoundingClientRect();
-  const prjVisible = prjRect.top < window.innerHeight * 0.85 && prjRect.bottom > window.innerHeight * 0.15;
+  const prjVisible = prjRect.top < window.innerHeight * 0.3 && prjRect.bottom > window.innerHeight * 0.55;
   previewEl.classList.toggle('visible', prjVisible);
 
   /* About reveal */
