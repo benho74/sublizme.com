@@ -18,7 +18,13 @@
       "Read(//Users/vivasante/Library/Fonts/**)",
       "Read(//Users/vivasante/Downloads/**)",
       "Bash(rsync -a --exclude='.git' \"/Users/vivasante/Desktop/Perso/Projets/Perso/Sublizme/Claude Code - Sublizme/\" /tmp/sublizme_preview/)",
-      "Bash(grep -n \"font-weight: 800\" /tmp/sublizme_preview/assets/css/style.css | head -5)"
+      "Bash(grep -n \"font-weight: 800\" /tmp/sublizme_preview/assets/css/style.css | head -5)",
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(cp \"/Users/vivasante/.claude/projects/-Users-vivasante-Desktop-Perso-Projets-Perso-Sublizme-Claude-Code---Sublizme/2dd0d5f1-71dc-431c-8ebd-468fe852a070/tool-results/webfetch-1779874897377-vztx6g.bin\" /tmp/design.gz)",
+      "Bash(gunzip -f /tmp/design.gz)",
+      "Read(//tmp/**)",
+      "Bash(mkdir -p /tmp/design_extract)",
+      "Bash(tar -xf /tmp/design -C /tmp/design_extract)"
     ]
   }
 }
