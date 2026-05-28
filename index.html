@@ -17,7 +17,7 @@
 @font-face{font-family:'Articulat CF';src:url('assets/fonts/ArticulatCF-Heavy.otf') format('opentype');font-weight:900;font-style:normal;font-display:swap}
 
 :root{
-  --bg:#0a0a0a;--ink:#ededeb;--ink-dim:#6a6a66;--ink-mute:#3a3a36;
+  --bg:#0a0a0a;--bg-r:10;--bg-g:10;--bg-b:10;--ink:#ededeb;--ink-dim:#6a6a66;--ink-mute:#3a3a36;
   --line:#1f1f1c;--accent:#ff1f1f;
   --sans:'Articulat CF',-apple-system,sans-serif;
   --pad:clamp(24px,3vw,56px);
@@ -129,7 +129,7 @@ body.light .hero-foot.is-sticky{
 
 /* Mode clair */
 body.light{
-  --bg:#f2f2ef;--ink:#0a0a0a;--ink-dim:#6a6a66;--ink-mute:#c5c5c0;--line:#d8d8d3;
+  --bg:#f2f2ef;--bg-r:242;--bg-g:242;--bg-b:239;--ink:#0a0a0a;--ink-dim:#6a6a66;--ink-mute:#c5c5c0;--line:#d8d8d3;
 }
 body.light .blob{opacity:.35;filter:blur(80px)}
 body.light .mode-btn{border-color:rgba(0,0,0,.2);color:#0a0a0a}
@@ -139,9 +139,9 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 
 /* ── ABOUT ────────────────────────────────────────── */
 .about{min-height:100vh;position:relative;padding:0 var(--pad);display:flex;align-items:center;overflow:hidden}
-/* Ombre gauche pour lisibilité du texte */
+/* Ombre gauche pour lisibilité du texte — suit le thème via --bg-r/g/b */
 .about::before{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
-  background:linear-gradient(to right,#0a0a0a 42%,rgba(10,10,10,.55) 60%,transparent 76%)}
+  background:linear-gradient(to right,rgba(var(--bg-r),var(--bg-g),var(--bg-b),1) 42%,rgba(var(--bg-r),var(--bg-g),var(--bg-b),.55) 60%,rgba(var(--bg-r),var(--bg-g),var(--bg-b),0) 76%)}
 /* Portrait — pleine largeur, photo entière visible */
 .about-portrait{
   position:absolute;inset:0;
