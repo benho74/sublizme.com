@@ -150,7 +150,7 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 
 /* ── PROJECTS ─────────────────────────────────────── */
 .projects{min-height:100vh;position:relative;padding:120px var(--pad) 80px}
-.project-list{margin-top:80px;display:flex;flex-direction:column;max-width:58%}
+.project-list{margin-top:80px;display:flex;flex-direction:column;max-width:58%;position:relative;z-index:2}
 .project-row{
   padding:34px 0;border-bottom:1px solid var(--line);
   font-family:var(--sans);font-size:clamp(36px,4.2vw,68px);font-weight:400;line-height:1;letter-spacing:-.02em;
@@ -162,16 +162,16 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 .project-row.muted{color:var(--ink-mute)}
 .project-row .meta{font-size:13px;color:var(--ink-dim);font-weight:500;letter-spacing:.04em;text-transform:uppercase;flex-shrink:0;transition:color .45s}
 
-/* Preview fixe à droite — image seule */
+/* Preview centrée en fond — faible opacité */
 .preview-fixed{
-  position:fixed;right:var(--pad);top:50%;transform:translateY(-50%);
-  width:clamp(280px,28vw,460px);z-index:60;
+  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:clamp(380px,52vw,760px);z-index:0;
   opacity:0;pointer-events:none;
-  transition:opacity .65s ease;
+  transition:opacity .7s ease;
 }
-.preview-fixed.visible{opacity:1}
-.prev-frame{border-radius:18px;overflow:hidden;box-shadow:0 60px 120px -30px rgba(0,0,0,.9);transform:rotate(-2.5deg);transition:transform .06s ease}
-.prev-body{aspect-ratio:4/3;position:relative;display:flex;align-items:center;justify-content:center;transition:background .65s ease}
+.preview-fixed.visible{opacity:.18}
+.prev-frame{border-radius:12px;overflow:hidden;box-shadow:none;transform:none;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.prev-body{aspect-ratio:16/9;position:relative;display:flex;align-items:center;justify-content:center;transition:background .65s ease}
 .prev-num{font-family:var(--sans);font-size:clamp(72px,9vw,130px);font-weight:800;letter-spacing:-.05em;color:rgba(255,255,255,.06);user-select:none;position:absolute}
 
 
@@ -183,7 +183,7 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 .services-left .cta{display:inline-flex;align-items:center;gap:10px;margin-top:48px;font-size:13px;letter-spacing:.06em;font-weight:600;text-transform:uppercase;cursor:none;transition:opacity .25s}
 .services-left .cta:hover{opacity:.6}
 .services-left .cta .star{color:var(--accent)}
-.services-right{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.services-right{display:flex;flex-direction:column;border-top:1px solid var(--line);margin-top:60px;padding-right:80px}
 .service-row{border-bottom:1px solid var(--line);padding:36px 0;display:flex;align-items:center;justify-content:space-between;cursor:none;transition:border-bottom-color .3s}
 .service-row.open{border-bottom-color:transparent}
 .service-row .name{font-family:var(--sans);font-size:clamp(28px,3.4vw,52px);font-weight:400;letter-spacing:-.02em;line-height:1}
@@ -272,6 +272,27 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 </section>
 
 
+<!-- ========== ABOUT ========== -->
+<section class="about" id="about">
+  <div class="about-bg"></div>
+  <div class="about-portrait" aria-hidden="true">
+    <svg viewBox="0 0 200 250" preserveAspectRatio="xMidYMax meet">
+      <ellipse cx="100" cy="80" rx="42" ry="50" fill="#0a0303" opacity=".9"/>
+      <path d="M 30 250 C 30 160, 55 130, 100 130 C 145 130, 170 160, 170 250 Z" fill="#0a0303" opacity=".9"/>
+    </svg>
+  </div>
+  <div class="copy" id="about-copy">
+    <span class="rw">Un studio créatif</span>
+    <span class="rw">fondé sur une conviction :</span>
+    <span class="rw"><em>l'esthétique</em></span>
+    <span class="rw">n'est pas un luxe,</span>
+    <span class="rw">c'est un avantage</span>
+    <span class="rw">compétitif.</span>
+    <span class="rw">Chaque détail</span>
+    <span class="rw">compte.</span>
+  </div>
+</section>
+
 <!-- ========== PROJECTS ========== -->
 <section class="projects" id="projects">
   <div class="project-list">
@@ -307,27 +328,6 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
       <span class="title">Lake Pub — Site web</span>
       <span class="meta">Web design</span>
     </a>
-  </div>
-</section>
-
-<!-- ========== ABOUT ========== -->
-<section class="about" id="about">
-  <div class="about-bg"></div>
-  <div class="about-portrait" aria-hidden="true">
-    <svg viewBox="0 0 200 250" preserveAspectRatio="xMidYMax meet">
-      <ellipse cx="100" cy="80" rx="42" ry="50" fill="#0a0303" opacity=".9"/>
-      <path d="M 30 250 C 30 160, 55 130, 100 130 C 145 130, 170 160, 170 250 Z" fill="#0a0303" opacity=".9"/>
-    </svg>
-  </div>
-  <div class="copy" id="about-copy">
-    <span class="rw">Un studio créatif</span>
-    <span class="rw">fondé sur une conviction :</span>
-    <span class="rw"><em>l'esthétique</em></span>
-    <span class="rw">n'est pas un luxe,</span>
-    <span class="rw">c'est un avantage</span>
-    <span class="rw">compétitif.</span>
-    <span class="rw">Chaque détail</span>
-    <span class="rw">compte.</span>
   </div>
 </section>
 
@@ -371,7 +371,7 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
   </div>
 </section>
 
-<script src="assets/js/site.js?v=2"></script>
+<script src="assets/js/site.js?v=3"></script>
 <script>
 
 /* ── Elements ─────────────────────────────────────── */
@@ -419,16 +419,16 @@ function setPreview(idx){
   }, 180);
 }
 
-/* ── Mouse tilt on preview ────────────────────────── */
+/* ── Parallaxe douce sur le fond preview ─────────── */
 projectsEl.addEventListener('mousemove', e=>{
-  const x = (e.clientX/window.innerWidth  - 0.5);
-  const y = (e.clientY/window.innerHeight - 0.5);
-  previewFrame.style.transition = 'transform .05s ease';
-  previewFrame.style.transform = `rotate(-2.5deg) perspective(700px) rotateX(${-y*16}deg) rotateY(${x*22}deg) scale(1.03)`;
+  const x = (e.clientX/window.innerWidth  - 0.5) * 14;
+  const y = (e.clientY/window.innerHeight - 0.5) * 10;
+  previewFrame.style.transition = 'transform .12s ease';
+  previewFrame.style.transform = `translate(${x}px,${y}px)`;
 });
 projectsEl.addEventListener('mouseleave', ()=>{
-  previewFrame.style.transition = 'transform .7s cubic-bezier(.2,.8,.2,1)';
-  previewFrame.style.transform  = 'rotate(-2.5deg)';
+  previewFrame.style.transition = 'transform .9s cubic-bezier(.2,.8,.2,1)';
+  previewFrame.style.transform  = 'translate(0,0)';
 });
 
 /* ── Project active — souris en priorité, scroll en fallback ── */

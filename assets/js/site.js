@@ -63,7 +63,7 @@
     'body.light .lang-btn{border-color:rgba(0,0,0,.2);color:#0a0a0a}',
     /* ── Contact section ── */
     '.contact{background:var(--bg);color:var(--ink);padding:140px var(--pad) 0;position:relative;overflow:hidden}',
-    '.contact-head{padding-bottom:32px;border-bottom:1px solid var(--line);margin-bottom:48px}',
+    '.contact-head{padding-bottom:16px;margin-bottom:40px}',
     '.contact-head-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}',
     '.contact-head .label{font-size:12px;letter-spacing:.1em;font-weight:500;text-transform:uppercase;color:var(--ink-dim)}',
     '.avail{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.06em;font-weight:500;text-transform:uppercase;color:var(--ink-dim);border:1px solid var(--line);border-radius:999px;padding:5px 13px}',
@@ -269,7 +269,6 @@
             '<span class="label">Parlons-en</span>' +
             '<span class="avail"><span class="avail-dot"></span>Disponible</span>' +
           '</div>' +
-          '<h1>Contact</h1>' +
         '</div>' +
         '<div class="contact-email-cta">' +
           '<a href="mailto:hello@sublizme.fr">hello@sublizme.fr</a>' +
