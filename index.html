@@ -150,7 +150,7 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 
 /* ── PROJECTS ─────────────────────────────────────── */
 .projects{min-height:100vh;position:relative;padding:120px var(--pad) 80px}
-.project-list{margin-top:80px;display:flex;flex-direction:column;max-width:58%;position:relative;z-index:2}
+.project-list{margin-top:80px;display:flex;flex-direction:column;padding-right:96px;position:relative;z-index:2}
 .project-row{
   padding:34px 0;border-bottom:1px solid var(--line);
   font-family:var(--sans);font-size:clamp(36px,4.2vw,68px);font-weight:400;line-height:1;letter-spacing:-.02em;
@@ -170,8 +170,8 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
   transition:opacity .7s ease;
 }
 .preview-fixed.visible{opacity:.18}
-.prev-frame{border-radius:12px;overflow:hidden;box-shadow:none;transform:none;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
-.prev-body{aspect-ratio:16/9;position:relative;display:flex;align-items:center;justify-content:center;transition:background .65s ease}
+.prev-frame{border-radius:12px;overflow:hidden;box-shadow:none;transform:rotate(-2deg);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.prev-body{aspect-ratio:16/9;position:relative;display:flex;align-items:center;justify-content:center;transition:background 0s}
 .prev-num{font-family:var(--sans);font-size:clamp(72px,9vw,130px);font-weight:800;letter-spacing:-.05em;color:rgba(255,255,255,.06);user-select:none;position:absolute}
 
 
@@ -183,19 +183,21 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 .services-left .cta{display:inline-flex;align-items:center;gap:10px;margin-top:48px;font-size:13px;letter-spacing:.06em;font-weight:600;text-transform:uppercase;cursor:none;transition:opacity .25s}
 .services-left .cta:hover{opacity:.6}
 .services-left .cta .star{color:var(--accent)}
-.services-right{display:flex;flex-direction:column;border-top:1px solid var(--line);margin-top:60px;padding-right:80px}
+.services-right{display:flex;flex-direction:column;margin-top:60px;padding-right:80px}
+.service-row:first-child{border-top:1px solid var(--line)}
 .service-row{border-bottom:1px solid var(--line);padding:36px 0;display:flex;align-items:center;justify-content:space-between;cursor:none;transition:border-bottom-color .3s}
 .service-row.open{border-bottom-color:transparent}
 .service-row .name{font-family:var(--sans);font-size:clamp(28px,3.4vw,52px);font-weight:400;letter-spacing:-.02em;line-height:1}
 .service-row .plus{width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:var(--ink-dim);font-size:24px;font-weight:300;transition:transform .35s,color .25s;flex-shrink:0}
 .service-row.open .plus{transform:rotate(45deg);color:var(--ink)}
 .service-body{overflow:hidden;max-height:0;transition:max-height .5s cubic-bezier(.2,.7,.2,1),border-bottom-color .3s;border-bottom:1px solid transparent}
-.service-row.open + .service-body{max-height:260px;border-bottom-color:var(--line)}
-.service-body .inner{padding:0 0 28px;display:flex;flex-wrap:wrap;gap:8px 18px}
+.service-row.open + .service-body{max-height:360px;border-bottom-color:var(--line)}
+.service-body .inner{padding:0 0 28px;display:flex;flex-direction:column;gap:6px}
 /* Chips : top-to-bottom sans flou */
 .service-body .chip{
   padding:6px 12px;border:1px solid var(--line);border-radius:999px;
   font-size:12px;color:var(--ink);letter-spacing:.02em;
+  align-self:flex-start;
   opacity:0;transform:translateY(-8px);
   transition:opacity .22s ease,transform .22s ease;
 }
@@ -209,14 +211,19 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 
 /* Responsive */
 @media(max-width:960px){
-  .pct,.rail,.preview-fixed{display:none}
+  .pct,.preview-fixed{display:none}
+  .rail{right:8px}
+  .rail .stack{padding-right:0}
+  .rail .tick::after{writing-mode:vertical-rl;right:0;top:50%;transform:translateY(-50%);font-size:9px;letter-spacing:.06em}
   .hero-foot{grid-template-columns:1fr;gap:14px}
   .hero-foot .nav{justify-content:flex-start}
   .about .copy{max-width:100%;font-size:42px}
   .about-portrait{width:80%;opacity:.25}
-  .project-list{max-width:100%}
+  .project-list{padding-right:60px}
+  .project-row .meta{display:none}
   .services{grid-template-columns:1fr;gap:40px}
-  .services-left{position:static}
+  .services-left{position:static;padding-right:60px}
+  .services-right{padding-right:60px}
 }
 </style>
 </head>
@@ -371,7 +378,7 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
   </div>
 </section>
 
-<script src="assets/js/site.js?v=3"></script>
+<script src="assets/js/site.js?v=4"></script>
 <script>
 
 /* ── Elements ─────────────────────────────────────── */
@@ -410,25 +417,23 @@ function setPreview(idx){
   if(idx===currentIdx && previewEl.classList.contains('visible'))return;
   currentIdx = idx;
   const d = PROJECTS[idx];
-  setTimeout(()=>{
-    previewScr.style.background = '#0a0a0a';
-    previewScr.style.backgroundImage = `url('${d.img}')`;
-    previewScr.style.backgroundSize = 'cover';
-    previewScr.style.backgroundPosition = 'center';
-    previewNum.textContent = d.num;
-  }, 180);
+  previewScr.style.background = '#0a0a0a';
+  previewScr.style.backgroundImage = `url('${d.img}')`;
+  previewScr.style.backgroundSize = 'cover';
+  previewScr.style.backgroundPosition = 'center';
+  previewNum.textContent = d.num;
 }
 
 /* ── Parallaxe douce sur le fond preview ─────────── */
 projectsEl.addEventListener('mousemove', e=>{
-  const x = (e.clientX/window.innerWidth  - 0.5) * 14;
-  const y = (e.clientY/window.innerHeight - 0.5) * 10;
-  previewFrame.style.transition = 'transform .12s ease';
-  previewFrame.style.transform = `translate(${x}px,${y}px)`;
+  const x = (e.clientX/window.innerWidth  - 0.5) * 38;
+  const y = (e.clientY/window.innerHeight - 0.5) * 28;
+  previewFrame.style.transition = 'transform .1s ease';
+  previewFrame.style.transform = `rotate(-2deg) translate(${x}px,${y}px)`;
 });
 projectsEl.addEventListener('mouseleave', ()=>{
   previewFrame.style.transition = 'transform .9s cubic-bezier(.2,.8,.2,1)';
-  previewFrame.style.transform  = 'translate(0,0)';
+  previewFrame.style.transform  = 'rotate(-2deg) translate(0,0)';
 });
 
 /* ── Project active — souris en priorité, scroll en fallback ── */
@@ -575,6 +580,8 @@ document.querySelectorAll('.service-row').forEach(row=>{
     if(!wasOpen) row.classList.add('open');
   });
 });
+/* Ouvrir le premier item au chargement */
+document.querySelector('.service-row')?.classList.add('open');
 
 /* ── Module commun : restauration scroll + hover curseur ── */
 SublizmeSite.initScrollRestore();
