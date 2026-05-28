@@ -29,6 +29,10 @@ img{display:block;max-width:100%;height:auto}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;mix-blend-mode:overlay;opacity:.05;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='.85'/></svg>")}
 body.light{--bg:#f2f2ef;--ink:#0a0a0a;--ink-dim:#6a6a66;--ink-mute:#c5c5c0;--line:#d8d8d3}
 body,body *{transition:background-color .4s ease,color .35s ease,border-color .35s ease}
+/* MASONRY */
+.masonry{margin:80px var(--pad) 100px;columns:2;column-gap:12px}
+.masonry img{width:100%;margin-bottom:12px;break-inside:avoid;display:block;border-radius:4px}
+@media(max-width:640px){.masonry{columns:1}}
 </style>
 </head>
 <body>
@@ -56,8 +60,10 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 <!-- INFO -->
 <section class="pi">
   <div class="pi-desc">
-    <p class="pi-intro">Maquetter en une semaine un site complet pour un FabLab — <em>du brief au prototype</em>.</p>
-    <p>Workshop intensif d'une semaine organisé par les Gobelins Annecy. Conception d'une identité visuelle et de maquettes complètes pour un FabLab : page d'accueil, page événement, page équipement — versions desktop et mobile. Du concept au prototype en un temps record.</p>
+    <p class="pi-intro">Concevoir en une semaine l'identité numérique <em>d'un espace de création.</em></p>
+    <p>Ce projet a été réalisé dans le cadre d'un workshop organisé par l'École des Gobelins, centré sur la maîtrise de Figma comme outil de design. L'objectif : créer des maquettes complètes pour le site web d'un Fab Lab basé à Annecy.</p>
+    <p>En une semaine, j'ai livré une identité visuelle cohérente, des maquettes desktop pour la page d'accueil, une page événements et une page équipements, ainsi qu'une version mobile de la homepage — le tout accompagné d'un design system documenté dans Figma.</p>
+    <p>Le résultat est un prototype interactif fonctionnel qui pourrait servir de base au déploiement réel du site web du Fab Lab.</p>
   </div>
   <div class="pi-meta">
     <div class="pi-meta-row"><span class="mk">Client</span><span class="mv">FabLab / Les Gobelins</span></div>
@@ -67,22 +73,11 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
   </div>
 </section>
 
-<!-- MID IMAGE -->
-<div class="pi-img-full">
+<!-- MASONRY -->
+<div class="masonry">
   <img src="assets/img/projects/fablab-mid.png" alt="Fab Lab">
-</div>
-
-<!-- QUOTE -->
-<div class="pi-quote">
-  <div class="q-mark">"</div>
-  <blockquote>De l'idée au prototype en une semaine — <em>l'efficacité au service du design</em>.</blockquote>
-  <div class="q-src">Direction créative — Sublizme</div>
-</div>
-
-<!-- DUO -->
-<div class="pi-duo">
-  <div class="pi-duo-img"><img src="assets/img/projects/fablab-duo1.png" alt="Fab Lab 1"></div>
-  <div class="pi-duo-img"><img src="assets/img/projects/fablab-duo2.png" alt="Fab Lab 2"></div>
+  <img src="assets/img/projects/fablab-duo1.png" alt="Fab Lab">
+  <img src="assets/img/projects/fablab-duo2.png" alt="Fab Lab">
 </div>
 
 <!-- NEXT -->
@@ -99,7 +94,7 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 SublizmeSite.injectNav({back: 'index.html#projects', label: 'Projets'});
 SublizmeSite.injectFooter();
 
-const revealEls = document.querySelectorAll('.pi-desc, .pi-meta, .pi-quote blockquote, .pn');
+const revealEls = document.querySelectorAll('.pi-desc, .pi-meta, .pn');
 const ro = new IntersectionObserver(entries=>{
   entries.forEach(e=>{
     if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';ro.unobserve(e.target);}

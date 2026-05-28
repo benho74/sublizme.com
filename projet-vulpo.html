@@ -29,6 +29,10 @@ img{display:block;max-width:100%;height:auto}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;mix-blend-mode:overlay;opacity:.05;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='.85'/></svg>")}
 body.light{--bg:#f2f2ef;--ink:#0a0a0a;--ink-dim:#6a6a66;--ink-mute:#c5c5c0;--line:#d8d8d3}
 body,body *{transition:background-color .4s ease,color .35s ease,border-color .35s ease}
+/* MASONRY */
+.masonry{margin:80px var(--pad) 100px;columns:2;column-gap:12px}
+.masonry img{width:100%;margin-bottom:12px;break-inside:avoid;display:block;border-radius:4px}
+@media(max-width:640px){.masonry{columns:1}}
 </style>
 </head>
 <body>
@@ -56,8 +60,10 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 <!-- INFO -->
 <section class="pi">
   <div class="pi-desc">
-    <p class="pi-intro">Concevoir une application <em>au service de la nature</em> — randonnée, faune et données en temps réel.</p>
-    <p>Projet de fin de bachelor en équipe (3 designers + 1 développeur). Vulpo est une application mobile qui enrichit l'expérience des randonnées grâce à des balises intelligentes : données en temps réel sur la faune, les sentiers et les dangers. Conception UX/UI complète sur Figma.</p>
+    <p class="pi-intro">Concevoir une application qui <em>réconcilie technologie et nature.</em></p>
+    <p>Vulpo est un projet de fin d'études réalisé en équipe — trois designers et un développeur. L'ambition : créer une application intuitive et immersive pour enrichir les expériences en pleine nature, que ce soit en randonnée, en forêt ou lors d'une simple promenade.</p>
+    <p>L'application repose sur un système de balises connectées positionnées dans les espaces naturels, qui transmettent en temps réel des informations sur la faune présente, les sentiers à explorer et les dangers à éviter. L'interface a été conçue pour être ergonomique, fluide et accessible à tous les profils d'utilisateurs.</p>
+    <p>Vulpo incarne une vision de la technologie au service du vivant : permettre aux gens de profiter de la nature en toute sérénité, tout en approfondissant leur connaissance des écosystèmes qui les entourent.</p>
   </div>
   <div class="pi-meta">
     <div class="pi-meta-row"><span class="mk">Client</span><span class="mv">Projet académique</span></div>
@@ -67,22 +73,9 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
   </div>
 </section>
 
-<!-- MID IMAGE -->
-<div class="pi-img-full">
+<!-- MASONRY -->
+<div class="masonry">
   <img src="assets/img/projects/vulpo-mid.jpg" alt="Vulpo">
-</div>
-
-<!-- QUOTE -->
-<div class="pi-quote">
-  <div class="q-mark">"</div>
-  <blockquote>Une interface <em>intuitive et immersive</em> pour explorer la nature autrement.</blockquote>
-  <div class="q-src">Direction créative — Sublizme</div>
-</div>
-
-<!-- DUO -->
-<div class="pi-duo">
-  <div class="pi-duo-img"><img src="assets/img/projects/vulpo-cover.jpg" alt="Vulpo 1"></div>
-  <div class="pi-duo-img"><img src="assets/img/projects/vulpo-mid.jpg" alt="Vulpo 2"></div>
 </div>
 
 <!-- NEXT -->
@@ -99,7 +92,7 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 SublizmeSite.injectNav({back: 'index.html#projects', label: 'Projets'});
 SublizmeSite.injectFooter();
 
-const revealEls = document.querySelectorAll('.pi-desc, .pi-meta, .pi-quote blockquote, .pn');
+const revealEls = document.querySelectorAll('.pi-desc, .pi-meta, .pn');
 const ro = new IntersectionObserver(entries=>{
   entries.forEach(e=>{
     if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';ro.unobserve(e.target);}
