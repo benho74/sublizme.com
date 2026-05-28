@@ -5,10 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Sublizme — Studio créatif. Graphisme, branding et web design haut de gamme. Paris.">
 <title>Sublizme — Studio Créatif</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
-<link rel="icon" type="image/png" href="assets/img/logo-favicon.png">
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
 <style>
 /* Articulat CF */
 @font-face{font-family:'Articulat CF';src:url('assets/fonts/ArticulatCF-Light.otf') format('opentype');font-weight:300;font-style:normal;font-display:swap}
@@ -23,7 +20,6 @@
   --bg:#0a0a0a;--ink:#ededeb;--ink-dim:#6a6a66;--ink-mute:#3a3a36;
   --line:#1f1f1c;--accent:#ff1f1f;
   --sans:'Articulat CF',-apple-system,sans-serif;
-  --display:'Instrument Serif','Times New Roman',serif;
   --pad:clamp(24px,3vw,56px);
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -71,11 +67,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 /* ── HERO ─────────────────────────────────────────── */
 .hero{min-height:100vh;position:relative;padding:0 var(--pad);display:flex;flex-direction:column;justify-content:space-between;padding-top:80px;padding-bottom:32px;overflow:hidden}
 .hero .tagline{max-width:340px;font-size:14px;line-height:1.55;color:var(--ink);margin-top:30px;font-weight:300}
-.hero .tagline em{font-family:var(--display);font-style:italic}
+.hero .tagline em{font-style:italic}
 .hero .nameblock{display:flex;align-items:baseline;justify-content:space-between;gap:4vw;width:100%;margin-top:auto;--name-fs:clamp(80px,19vw,320px)}
 .hero .name-sans{font-family:var(--sans);font-weight:800;font-size:var(--name-fs);line-height:.86;letter-spacing:-.05em;white-space:nowrap}
-.hero .name-serif{font-family:var(--display);font-style:italic;font-weight:400;font-size:var(--name-fs);line-height:.86;letter-spacing:-.025em;white-space:nowrap}
-.hero .name-serif .punct{color:var(--accent);font-style:normal}
 .blob{position:absolute;pointer-events:none;z-index:0;width:78vw;height:78vw;max-width:1300px;max-height:1300px;right:-12vw;top:-12vw;background:radial-gradient(closest-side,var(--accent) 0%,rgba(255,31,31,.72) 28%,rgba(160,12,12,.45) 55%,rgba(40,0,0,0) 78%);filter:blur(60px);opacity:.95;animation:blobshift 22s ease-in-out infinite}
 @keyframes blobshift{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-4vw,4vw) scale(1.05)}}
 .hero>*:not(.blob){position:relative;z-index:1}
@@ -92,6 +86,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .hero-foot .nav{display:flex;justify-content:flex-end;align-items:center;gap:28px}
 .hero-foot a{cursor:none;transition:opacity .2s}
 .hero-foot a:hover{opacity:.55}
+.hero-foot .version a{display:flex;align-items:center;cursor:none}
+.hero-foot .version svg{height:16px;width:auto;display:block}
 
 /* Toggle dark/light */
 .mode-btn{
@@ -144,7 +140,7 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 .about .copy{position:relative;z-index:2;max-width:62%;font-family:var(--sans);font-weight:300;font-size:clamp(42px,5.2vw,88px);line-height:1.04;letter-spacing:-.025em}
 .rw{display:inline;filter:blur(16px);opacity:.1;transition:filter 1.1s cubic-bezier(.25,.46,.45,.94),opacity 1.1s cubic-bezier(.25,.46,.45,.94)}
 .rw.revealed{filter:blur(0);opacity:1}
-.rw em{font-family:var(--display);font-style:italic;letter-spacing:-.015em}
+.rw em{font-style:italic;letter-spacing:-.015em}
 
 /* ── PROJECTS ─────────────────────────────────────── */
 .projects{min-height:100vh;position:relative;padding:120px var(--pad) 80px}
@@ -172,27 +168,6 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 .prev-body{aspect-ratio:4/3;position:relative;display:flex;align-items:center;justify-content:center;transition:background .65s ease}
 .prev-num{font-family:var(--sans);font-size:clamp(72px,9vw,130px);font-weight:800;letter-spacing:-.05em;color:rgba(255,255,255,.06);user-select:none;position:absolute}
 
-/* ── GALLERY ──────────────────────────────────────── */
-.gallery{min-height:120vh;position:relative;padding:80px var(--pad);display:flex;align-items:center;justify-content:center;overflow:hidden}
-.gallery .center-text{position:relative;z-index:2;max-width:780px;text-align:center;font-family:var(--sans);font-weight:300;font-size:clamp(38px,4.6vw,72px);line-height:1.05;letter-spacing:-.025em}
-.gallery .center-text em{font-family:var(--display);font-style:italic}
-.gallery .center-text .fade{color:var(--ink-dim);filter:blur(6px);opacity:.55}
-.gallery .center-text .fade2{color:var(--ink-mute);filter:blur(14px);opacity:.35}
-.gallery .pic{position:absolute;border-radius:6px;overflow:hidden;box-shadow:0 30px 80px -30px rgba(0,0,0,.6);z-index:1}
-.pic .inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.4}
-.pic-1{left:14%;top:28%;width:200px;aspect-ratio:5/4;transform:rotate(-6deg);background:linear-gradient(150deg,#e4dcd1,#a99c8a)}
-.pic-1::after{content:'';position:absolute;left:8%;top:10%;right:8%;bottom:22%;background:linear-gradient(180deg,#12213a,#1a3560);border-radius:6px;border:5px solid #2a2b2d}
-.pic-2{left:30%;top:18%;width:170px;aspect-ratio:5/4;transform:rotate(3deg);background:linear-gradient(170deg,#e8893a 0%,#a9531e 60%,#5e2d10 100%)}
-.pic-3{left:46%;top:24%;width:200px;aspect-ratio:5/4;transform:rotate(-2deg);background:repeating-linear-gradient(45deg,#1d1815 0 14px,#0a0807 14px 28px),#0a0807}
-.pic-3::after{content:'';position:absolute;left:10%;top:14%;right:10%;bottom:14%;background:linear-gradient(160deg,#2c1410,#5c2a17);opacity:.7;border-radius:4px}
-.pic-4{right:14%;top:28%;width:180px;aspect-ratio:9/12;transform:rotate(8deg);background:linear-gradient(180deg,#0a0a0a,#000)}
-.pic-4::after{content:'';position:absolute;inset:8%;background:linear-gradient(180deg,#26082e,#4a1060);border-radius:4px;opacity:.7}
-.pic-5{right:7%;top:45%;width:140px;aspect-ratio:9/12;transform:rotate(-4deg);background:linear-gradient(180deg,#0c1828,#1f3358)}
-.pic-5::after{content:'';position:absolute;inset:8%;background:linear-gradient(180deg,#08222a,#104040);border-radius:4px;opacity:.7}
-.pic-6{left:6%;bottom:8%;width:230px;aspect-ratio:5/4;transform:rotate(4deg);background:linear-gradient(160deg,#cfd2d6,#8a8d93)}
-.pic-6::after{content:'';position:absolute;left:8%;top:12%;right:8%;bottom:20%;background:linear-gradient(160deg,#0a0a1a,#1a1a3a);border-radius:6px;border:5px solid #2a2b2d}
-.pic-7{left:40%;bottom:14%;width:240px;aspect-ratio:5/4;transform:rotate(-3deg);background:linear-gradient(160deg,#d6d6d9,#9a9aa0)}
-.pic-7::after{content:'';position:absolute;left:8%;top:12%;right:8%;bottom:20%;background:linear-gradient(160deg,#1a0a08,#3a1510);border-radius:6px;border:5px solid #2a2b2d}
 
 /* ── SERVICES ─────────────────────────────────────── */
 .services{min-height:100vh;position:relative;padding:120px var(--pad);display:grid;grid-template-columns:1fr 1.2fr;gap:8vw;align-items:start}
@@ -237,7 +212,6 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
   .project-list{max-width:100%}
   .services{grid-template-columns:1fr;gap:40px}
   .services-left{position:static}
-  .gallery .center-text{font-size:36px}
 }
 </style>
 </head>
@@ -252,7 +226,6 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 <!-- Rail droite -->
 <aside class="rail" aria-hidden="true">
   <div class="stack">
-    <div class="tick" data-label="Galerie"  data-section="gallery"></div>
     <div class="tick" data-label="Projets"  data-section="projects"></div>
     <div class="tick" data-label="Studio"   data-section="about"></div>
     <div class="tick" data-label="Services" data-section="services"></div>
@@ -278,13 +251,12 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 
   <div class="nameblock">
     <div class="name-sans">Sublizme</div>
-    <div class="name-serif">
-      <span>Studio</span><span class="punct">.</span>
-    </div>
   </div>
 
   <div class="hero-foot" id="hero-foot">
-    <div class="version"><span>→</span>&nbsp;<span>Graphisme · Branding · Web</span></div>
+    <div class="version">
+      <a href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1382.81 239.48" fill="currentColor" aria-label="Sublizme"><path d="M114.4,103.4l-28.28-5.66c-14.46-3.14-17.6-11-17.6-16.66,0-8.49,5.97-18.54,25.77-18.54,14.77,0,30.17,5.03,28.91,23.89h61.91c0-50.28-36.46-72.91-89.26-72.91S5.97,34.88,5.97,81.08c0,43.69,33.63,57.83,66.31,64.11l31.74,6.29c16.97,3.46,23.26,8.49,23.26,18.23,0,13.83-12.57,20.74-30.8,20.74-25.14,0-33.63-14.14-34.57-30.8H0c0,53.74,38.34,79.83,96.17,79.83,49.97,0,94.28-18.86,94.28-70.09,0-32.06-17.28-54.37-76.06-66Z"/><path d="M315.85,163.74c0,21.06-12.57,27.97-26.08,27.97s-22.94-6.91-22.94-27.97v-90.83h-58.14v105.29c0,39.29,23.57,61.28,55,61.28s46.51-20.74,49.66-38.34h2.51v35.2h58.14V72.91h-58.14v90.83Z"/><path d="M497.5,69.77c-21.69,0-37.71,10.06-42.43,18.86V16.34h-58.14v220h58.14v-15.72c4.72,8.8,20.74,18.86,42.43,18.86,33.63,0,70.08-23.89,70.08-84.86s-36.46-84.86-70.08-84.86ZM482.42,191.39c-14.14,0-29.86-11.31-29.86-36.77s15.71-36.77,29.86-36.77,30.48,11.31,30.48,36.77-16.03,36.77-30.48,36.77Z"/><rect x="582.67" y="16.34" width="58.14" height="220"/><rect x="663.75" y="72.91" width="58.14" height="163.43"/><path d="M692.66,0c-16.03,0-30.48,13.2-30.48,30.8s14.46,30.49,30.48,30.49,30.8-12.88,30.8-30.49-14.46-30.8-30.8-30.8Z"/><path d="M1149.3,69.77c-27.34,0-46.83,20.11-49.34,37.4h-.32c-7.23-24.2-26.08-37.4-48.08-37.4-25.46,0-43.06,20.75-45.57,38.34h-2.51v-35.2h-58.14v163.43h58.14v-90.83c0-21.06,10.69-27.97,21.37-27.97s19.8,6.91,19.8,27.97v90.83h58.14v-90.83c0-21.06,10.69-27.97,21.37-27.97s19.8,6.91,19.8,27.97v90.83h58.14v-105.28c0-39.29-21.69-61.29-52.8-61.29Z"/><path d="M1382.81,155.57c0-66-38.34-85.8-80.46-85.8s-85.17,22.31-85.17,83.91c0,65.05,45.57,85.8,84.86,85.8,42.43,0,71.97-22.95,78.57-60.66h-50.6c-1.89,7.54-5.66,16.97-27.03,16.97-16.97,0-27.66-6.91-30.48-27.03h109.37c.63-3.77.94-6.91.94-13.2ZM1272.81,136.08c2.83-14.77,11.32-22.63,27.97-22.63,21.69,0,26.4,13.51,27.34,22.63h-55.31Z"/><path d="M833.61,214.08c-.08-16.27-5.33-30.99-13.8-41.72-7.46-9.45-20.74-11.79-31.1-5.65-23.82,14.12-39.65,39.43-39.65,69.63h173.32v-81.71h-41.36c-26.12.19-47.27,26.7-47.42,59.45Z"/><path d="M833.61,95.17c.08,16.27,5.33,30.99,13.8,41.72,7.46,9.45,20.74,11.79,31.1,5.65,23.82-14.12,39.65-39.43,39.65-69.63h-173.32v81.71h41.37c26.12-.19,47.26-26.7,47.41-59.45Z"/></svg></a>
+    </div>
     <div class="socials">
       <a href="#">Instagram</a><span class="sep">/</span>
       <a href="#">Behance</a><span class="sep">/</span>
@@ -292,7 +264,6 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
     </div>
     <div class="nav">
       <a href="#projects">Projets</a>
-      <a href="#about">Studio</a>
       <a href="#contact">Contact</a>
       <button class="mode-btn" id="mode-btn">◑</button>
     </div>
@@ -301,19 +272,6 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
   <div class="hero-foot-spacer" id="hero-foot-spacer"></div>
 </section>
 
-<!-- ========== GALLERY ========== -->
-<section class="gallery" id="gallery">
-  <div class="pic pic-1"><div class="inner">01</div></div>
-  <div class="pic pic-2"><div class="inner">02</div></div>
-  <div class="pic pic-3"><div class="inner">03</div></div>
-  <div class="pic pic-4"><div class="inner">04</div></div>
-  <div class="pic pic-5"><div class="inner">05</div></div>
-  <div class="pic pic-6"><div class="inner">06</div></div>
-  <div class="pic pic-7"><div class="inner">07</div></div>
-  <div class="center-text">
-    Chaque projet est une occasion <em>de sublimer,</em> d'<em>élever</em> <span class="fade">une marque au-delà</span> <span class="fade2">du visible.</span>
-  </div>
-</section>
 
 <!-- ========== PROJECTS ========== -->
 <section class="projects" id="projects">
@@ -431,7 +389,7 @@ const heroSpacer  = document.getElementById('hero-foot-spacer');
 const pctEl       = document.getElementById('pct');
 const railEl      = document.querySelector('.rail');
 const ticks       = document.querySelectorAll('.rail .tick');
-const railSecs    = ['gallery','projects','about','services'].map(id=>document.getElementById(id));
+const railSecs    = ['projects','about','services'].map(id=>document.getElementById(id));
 SublizmeSite.injectFooter();
 const contactEl   = document.getElementById('contact');
 const aboutEl     = document.getElementById('about');
