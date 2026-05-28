@@ -39,7 +39,12 @@
       "Bash(curl -sI \"https://sublizme.com\")",
       "Bash(curl -sI \"https://sublizme.com/projet-lacourdesgrands.html\")",
       "Bash(sed -i '' 's/site\\\\.js?v=2/site.js?v=3/g' index.html projet-*.html projet.html)",
-      "Bash(rsync -a --exclude='.git' . /tmp/sublizme_preview/)"
+      "Bash(rsync -a --exclude='.git' . /tmp/sublizme_preview/)",
+      "Bash(git config *)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); [print\\(x['created_at'], x['environment'], x.get\\('description',''\\)\\) for x in d]\")",
+      "WebFetch(domain:benho74.github.io)",
+      "WebFetch(domain:sublizme.com)",
+      "Bash(curl -s \"https://sublizme.com/\")"
     ]
   }
 }
