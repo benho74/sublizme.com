@@ -139,10 +139,7 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 
 /* ── ABOUT ────────────────────────────────────────── */
 .about{min-height:100vh;position:relative;padding:0 var(--pad);display:flex;align-items:center;overflow:hidden}
-/* Ombre gauche pour lisibilité du texte — suit le thème via --bg-r/g/b */
-.about::before{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
-  background:linear-gradient(to right,rgba(var(--bg-r),var(--bg-g),var(--bg-b),1) 42%,rgba(var(--bg-r),var(--bg-g),var(--bg-b),.55) 60%,rgba(var(--bg-r),var(--bg-g),var(--bg-b),0) 76%)}
-/* Portrait — pleine largeur, photo entière visible */
+/* Portrait — pleine largeur, fondu sur la gauche via masque CSS */
 .about-portrait{
   position:absolute;inset:0;
   z-index:1;
@@ -151,7 +148,11 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
   transition:transform 1.4s cubic-bezier(.16,1,.3,1);
 }
 .about-portrait.in{transform:translateX(0)}
-.about-portrait img{width:auto;height:auto;max-width:58%;max-height:100%;display:block}
+.about-portrait img{
+  width:auto;height:auto;max-width:58%;max-height:100%;display:block;
+  -webkit-mask-image:linear-gradient(to right,transparent 0%,black 28%);
+  mask-image:linear-gradient(to right,transparent 0%,black 28%);
+}
 /* Flottement doux */
 @keyframes floatImg{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
 .about-portrait.floating img{animation:floatImg 5s ease-in-out infinite}
@@ -239,7 +240,7 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
   .about::before{display:none}
   .about .copy{max-width:100%;font-size:42px;order:1}
   .about-portrait{position:relative;width:100vw;margin-left:calc(-1 * var(--pad));order:2;margin-top:48px;transform:none!important;transition:none!important;justify-content:center;opacity:1}
-  .about-portrait img{width:100%;height:auto;max-width:100%;max-height:none;display:block}
+  .about-portrait img{width:100%;height:auto;max-width:100%;max-height:none;display:block;mask-image:none;-webkit-mask-image:none}
   .project-list{padding-right:60px}
   .project-row .meta{display:none}
   .services{grid-template-columns:1fr;gap:40px}
