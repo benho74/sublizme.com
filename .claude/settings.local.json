@@ -37,7 +37,9 @@
       "Bash(python3 -c \"import sys,json; commits=json.load\\(sys.stdin\\); [print\\(c['sha'][:7], c['commit']['message'][:50], c['commit']['author']['date']\\) for c in commits]\")",
       "Bash(curl -s \"https://api.github.com/repos/benho74/sublizme.com/pages\")",
       "Bash(curl -sI \"https://sublizme.com\")",
-      "Bash(curl -sI \"https://sublizme.com/projet-lacourdesgrands.html\")"
+      "Bash(curl -sI \"https://sublizme.com/projet-lacourdesgrands.html\")",
+      "Bash(sed -i '' 's/site\\\\.js?v=2/site.js?v=3/g' index.html projet-*.html projet.html)",
+      "Bash(rsync -a --exclude='.git' . /tmp/sublizme_preview/)"
     ]
   }
 }
