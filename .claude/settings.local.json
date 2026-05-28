@@ -44,7 +44,9 @@
       "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); [print\\(x['created_at'], x['environment'], x.get\\('description',''\\)\\) for x in d]\")",
       "WebFetch(domain:benho74.github.io)",
       "WebFetch(domain:sublizme.com)",
-      "Bash(curl -s \"https://sublizme.com/\")"
+      "Bash(curl -s \"https://sublizme.com/\")",
+      "WebFetch(domain:www.benjaminhocq.com)",
+      "Bash(cp \"/Users/vivasante/Desktop/Perso/Projets/Perso/Sublizme/Claude Code - Sublizme/\"projet-*.html /tmp/sublizme_preview/ && echo \"OK\")"
     ]
   }
 }
