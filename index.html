@@ -59,35 +59,41 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
 .rail.visible{opacity:1;transform:translateX(0)}
 .rail.hide{opacity:0;transform:translateX(20px)}
 .rail .stack{height:60vh;display:flex;flex-direction:column;justify-content:space-between;padding-right:14px}
-.rail .tick{width:1px;height:14vh;background:var(--ink-mute);position:relative;align-self:flex-end;transition:background .4s}
-.rail .tick::after{content:attr(data-label);position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--ink);opacity:0;transition:opacity .4s;white-space:nowrap}
+.rail .tick{width:1px;height:14vh;background:var(--ink-mute);position:relative;align-self:flex-end;transition:background .4s;pointer-events:auto}
+.rail .tick::after{content:attr(data-label);position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--ink);opacity:.18;transition:opacity .4s;white-space:nowrap}
+.rail .tick:hover::after{opacity:.65}
 .rail .tick.active{background:var(--ink)}
 .rail .tick.active::after{opacity:1}
 
 /* ── HERO ─────────────────────────────────────────── */
-.hero{min-height:100vh;position:relative;padding:0 var(--pad);display:flex;flex-direction:column;justify-content:space-between;padding-top:80px;padding-bottom:32px;overflow:hidden}
-.hero .tagline{max-width:340px;font-size:14px;line-height:1.55;color:var(--ink);margin-top:30px;font-weight:300}
-.hero .tagline em{font-style:italic}
-.hero .nameblock{display:flex;align-items:baseline;justify-content:space-between;gap:4vw;width:100%;margin-top:auto;--name-fs:clamp(80px,19vw,320px)}
-.hero .name-sans{font-family:var(--sans);font-weight:800;font-size:var(--name-fs);line-height:.86;letter-spacing:-.05em;white-space:nowrap}
-.blob{position:absolute;pointer-events:none;z-index:0;width:78vw;height:78vw;max-width:1300px;max-height:1300px;right:-12vw;top:-12vw;background:radial-gradient(closest-side,var(--accent) 0%,rgba(255,31,31,.72) 28%,rgba(160,12,12,.45) 55%,rgba(40,0,0,0) 78%);filter:blur(60px);opacity:.95;animation:blobshift 22s ease-in-out infinite}
-@keyframes blobshift{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-4vw,4vw) scale(1.05)}}
-.hero>*:not(.blob){position:relative;z-index:1}
+.hero{min-height:100vh;padding:0 var(--pad) 32px;display:flex;flex-direction:column;justify-content:space-between}
+.hero-center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:60px 0 32px}
+.hero-symbol{display:flex;justify-content:center}
+.hero-symbol svg{width:clamp(100px,18vw,240px);height:auto;display:block}
+.hero-tagline{font-size:13px;line-height:1.6;color:var(--ink-dim);text-align:center;font-weight:300;letter-spacing:.01em}
+.hero-tagline em{font-style:italic}
 
 /* Hero footer → nav */
 .hero-foot{
-  display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;gap:24px;
-  border-top:1px solid var(--line);padding-top:22px;margin-top:30px;
+  display:grid;grid-template-columns:auto 1fr;align-items:center;gap:24px;
+  border-top:1px solid var(--line);padding-top:22px;
   font-size:12px;letter-spacing:.06em;font-weight:500;text-transform:uppercase;
 }
 .hero-foot .version{display:flex;align-items:center;gap:10px}
-.hero-foot .socials{display:flex;justify-content:center;gap:6px}
-.hero-foot .socials .sep{color:var(--ink-dim)}
-.hero-foot .nav{display:flex;justify-content:flex-end;align-items:center;gap:28px}
+.hero-foot .nav{display:flex;justify-content:flex-end;align-items:center;gap:14px}
 .hero-foot a{cursor:none;transition:opacity .2s}
 .hero-foot a:hover{opacity:.55}
 .hero-foot .version a{display:flex;align-items:center;cursor:none}
 .hero-foot .version svg{height:16px;width:auto;display:block}
+/* Lang toggle */
+.lang-btn{
+  background:none;border:1px solid var(--ink-mute);border-radius:999px;
+  color:var(--ink);font-family:var(--sans);font-size:11px;font-weight:600;
+  letter-spacing:.06em;padding:4px 11px;cursor:none;
+  transition:border-color .25s,color .25s;line-height:1.4;
+}
+.lang-btn:hover{border-color:var(--ink)}
+body.light .lang-btn{border-color:rgba(0,0,0,.2);color:#0a0a0a}
 
 /* Toggle dark/light */
 .mode-btn{
@@ -205,8 +211,7 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 @media(max-width:960px){
   .pct,.rail,.preview-fixed{display:none}
   .hero-foot{grid-template-columns:1fr;gap:14px}
-  .hero-foot .socials,.hero-foot .nav{justify-content:flex-start}
-  .hero .nameblock{flex-direction:column;align-items:flex-start}
+  .hero-foot .nav{justify-content:flex-start}
   .about .copy{max-width:100%;font-size:42px}
   .about-portrait{width:80%;opacity:.25}
   .project-list{max-width:100%}
@@ -224,10 +229,10 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 <div class="pct" id="pct">00%</div>
 
 <!-- Rail droite -->
-<aside class="rail" aria-hidden="true">
+<aside class="rail" aria-label="Navigation sections">
   <div class="stack">
-    <div class="tick" data-label="Projets"  data-section="projects"></div>
     <div class="tick" data-label="Studio"   data-section="about"></div>
+    <div class="tick" data-label="Projets"  data-section="projects"></div>
     <div class="tick" data-label="Services" data-section="services"></div>
   </div>
 </aside>
@@ -243,32 +248,26 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 
 <!-- ========== HERO ========== -->
 <section class="hero" id="hero">
-  <div class="blob"></div>
-
-  <div class="tagline">
-    Studio créatif indépendant, <em>l'esthétique</em><br>au sommet de son art.
-  </div>
-
-  <div class="nameblock">
-    <div class="name-sans">Sublizme</div>
+  <div class="hero-center">
+    <figure class="hero-symbol" aria-label="Sublizme">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 177.56 163.43" fill="currentColor" role="img">
+        <path d="M136.19,81.71h0c-26.12.19-47.27,26.7-47.42,59.45-.08-16.27-5.33-30.99-13.8-41.72-7.46-9.45-20.74-11.79-31.1-5.65-23.82,14.12-39.65,39.43-39.65,69.63h173.32v-81.71h-41.37Z"/>
+        <path d="M88.78,22.26c.08,16.27,5.33,30.99,13.8,41.72,7.46,9.45,20.74,11.79,31.1,5.65,23.82-14.12,39.65-39.43,39.65-69.63H0v81.71h41.37c26.12-.19,47.26-26.7,47.41-59.45Z"/>
+      </svg>
+    </figure>
+    <p class="hero-tagline">Studio créatif indépendant, <em>l'esthétique</em><br>au sommet de son art.</p>
   </div>
 
   <div class="hero-foot" id="hero-foot">
     <div class="version">
       <a href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1382.81 239.48" fill="currentColor" aria-label="Sublizme"><path d="M114.4,103.4l-28.28-5.66c-14.46-3.14-17.6-11-17.6-16.66,0-8.49,5.97-18.54,25.77-18.54,14.77,0,30.17,5.03,28.91,23.89h61.91c0-50.28-36.46-72.91-89.26-72.91S5.97,34.88,5.97,81.08c0,43.69,33.63,57.83,66.31,64.11l31.74,6.29c16.97,3.46,23.26,8.49,23.26,18.23,0,13.83-12.57,20.74-30.8,20.74-25.14,0-33.63-14.14-34.57-30.8H0c0,53.74,38.34,79.83,96.17,79.83,49.97,0,94.28-18.86,94.28-70.09,0-32.06-17.28-54.37-76.06-66Z"/><path d="M315.85,163.74c0,21.06-12.57,27.97-26.08,27.97s-22.94-6.91-22.94-27.97v-90.83h-58.14v105.29c0,39.29,23.57,61.28,55,61.28s46.51-20.74,49.66-38.34h2.51v35.2h58.14V72.91h-58.14v90.83Z"/><path d="M497.5,69.77c-21.69,0-37.71,10.06-42.43,18.86V16.34h-58.14v220h58.14v-15.72c4.72,8.8,20.74,18.86,42.43,18.86,33.63,0,70.08-23.89,70.08-84.86s-36.46-84.86-70.08-84.86ZM482.42,191.39c-14.14,0-29.86-11.31-29.86-36.77s15.71-36.77,29.86-36.77,30.48,11.31,30.48,36.77-16.03,36.77-30.48,36.77Z"/><rect x="582.67" y="16.34" width="58.14" height="220"/><rect x="663.75" y="72.91" width="58.14" height="163.43"/><path d="M692.66,0c-16.03,0-30.48,13.2-30.48,30.8s14.46,30.49,30.48,30.49,30.8-12.88,30.8-30.49-14.46-30.8-30.8-30.8Z"/><path d="M1149.3,69.77c-27.34,0-46.83,20.11-49.34,37.4h-.32c-7.23-24.2-26.08-37.4-48.08-37.4-25.46,0-43.06,20.75-45.57,38.34h-2.51v-35.2h-58.14v163.43h58.14v-90.83c0-21.06,10.69-27.97,21.37-27.97s19.8,6.91,19.8,27.97v90.83h58.14v-90.83c0-21.06,10.69-27.97,21.37-27.97s19.8,6.91,19.8,27.97v90.83h58.14v-105.28c0-39.29-21.69-61.29-52.8-61.29Z"/><path d="M1382.81,155.57c0-66-38.34-85.8-80.46-85.8s-85.17,22.31-85.17,83.91c0,65.05,45.57,85.8,84.86,85.8,42.43,0,71.97-22.95,78.57-60.66h-50.6c-1.89,7.54-5.66,16.97-27.03,16.97-16.97,0-27.66-6.91-30.48-27.03h109.37c.63-3.77.94-6.91.94-13.2ZM1272.81,136.08c2.83-14.77,11.32-22.63,27.97-22.63,21.69,0,26.4,13.51,27.34,22.63h-55.31Z"/><path d="M833.61,214.08c-.08-16.27-5.33-30.99-13.8-41.72-7.46-9.45-20.74-11.79-31.1-5.65-23.82,14.12-39.65,39.43-39.65,69.63h173.32v-81.71h-41.36c-26.12.19-47.27,26.7-47.42,59.45Z"/><path d="M833.61,95.17c.08,16.27,5.33,30.99,13.8,41.72,7.46,9.45,20.74,11.79,31.1,5.65,23.82-14.12,39.65-39.43,39.65-69.63h-173.32v81.71h41.37c26.12-.19,47.26-26.7,47.41-59.45Z"/></svg></a>
     </div>
-    <div class="socials">
-      <a href="#">Instagram</a><span class="sep">/</span>
-      <a href="#">Behance</a><span class="sep">/</span>
-      <a href="#">LinkedIn</a>
-    </div>
     <div class="nav">
-      <a href="#projects">Projets</a>
       <a href="#contact">Contact</a>
+      <button class="lang-btn" id="lang-btn">FR</button>
       <button class="mode-btn" id="mode-btn">◑</button>
     </div>
   </div>
-  <!-- Spacer qui compense la hauteur quand hero-foot devient fixed -->
   <div class="hero-foot-spacer" id="hero-foot-spacer"></div>
 </section>
 
@@ -372,15 +371,8 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
   </div>
 </section>
 
-<script src="assets/js/site.js"></script>
+<script src="assets/js/site.js?v=2"></script>
 <script>
-
-/* ── Name fit ──────────────────────────────────────── */
-function fitName(c){ if(!c)return; const p=c.parentElement; if(!p)return; const f=c.classList.contains('footer-giant'); const mf=f?360:320; const bv=f?22:19; const vn=f?'--foot-fs':'--name-fs'; c.style.setProperty(vn,`clamp(80px,${bv}vw,${mf}px)`); const tg=p.clientWidth-48; let t=0; while(c.scrollWidth>tg&&t<30){const cur=parseFloat(getComputedStyle(c).getPropertyValue(vn))||mf;const nx=Math.max(48,cur*.93);c.style.setProperty(vn,nx+'px');if(nx<=48)break;t++;} }
-function fitAll(){ document.querySelectorAll('.nameblock').forEach(fitName); }
-if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitAll);
-setTimeout(fitAll,50); setTimeout(fitAll,400);
-window.addEventListener('resize',fitAll);
 
 /* ── Elements ─────────────────────────────────────── */
 const heroEl      = document.getElementById('hero');
@@ -389,7 +381,7 @@ const heroSpacer  = document.getElementById('hero-foot-spacer');
 const pctEl       = document.getElementById('pct');
 const railEl      = document.querySelector('.rail');
 const ticks       = document.querySelectorAll('.rail .tick');
-const railSecs    = ['projects','about','services'].map(id=>document.getElementById(id));
+const railSecs    = ['about','projects','services'].map(id=>document.getElementById(id));
 SublizmeSite.injectFooter();
 const contactEl   = document.getElementById('contact');
 const aboutEl     = document.getElementById('about');
@@ -566,6 +558,14 @@ function onScroll(){
 onScroll();
 window.addEventListener('scroll', onScroll, {passive:true});
 window.addEventListener('resize', onScroll);
+
+/* ── Rail — navigation par clic ──────────────────── */
+document.querySelectorAll('.rail .tick').forEach(tick => {
+  tick.addEventListener('click', () => {
+    const el = document.getElementById(tick.getAttribute('data-section'));
+    if (el) el.scrollIntoView({behavior:'smooth'});
+  });
+});
 
 /* ── Services accordion ───────────────────────────── */
 document.querySelectorAll('.service-row').forEach(row=>{

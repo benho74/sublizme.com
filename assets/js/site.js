@@ -28,7 +28,7 @@
   var sharedCSS = [
     /* ── Nav ── */
     '.site-nav{position:fixed;top:0;left:0;right:0;z-index:80;',
-    'display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;',
+    'display:grid;grid-template-columns:auto 1fr;align-items:center;',
     'padding:16px var(--pad);',
     'background:rgba(10,10,10,.55);',
     'backdrop-filter:blur(22px) saturate(180%);',
@@ -58,15 +58,18 @@
     'transition:border-color .25s,color .25s;line-height:1.4}',
     '.mode-btn:hover{border-color:var(--ink)}',
     'body.light .mode-btn{border-color:rgba(0,0,0,.2);color:#0a0a0a}',
+    '.lang-btn{background:none;border:1px solid var(--ink-mute);border-radius:999px;color:var(--ink);font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.06em;padding:4px 11px;cursor:none;transition:border-color .25s,color .25s;line-height:1.4}',
+    '.lang-btn:hover{border-color:var(--ink)}',
+    'body.light .lang-btn{border-color:rgba(0,0,0,.2);color:#0a0a0a}',
     /* ── Contact section ── */
     '.contact{background:var(--bg);color:var(--ink);padding:140px var(--pad) 0;position:relative;overflow:hidden}',
-    '.contact-head{padding-bottom:64px;border-bottom:1px solid var(--line);margin-bottom:72px}',
+    '.contact-head{padding-bottom:32px;border-bottom:1px solid var(--line);margin-bottom:48px}',
     '.contact-head-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}',
     '.contact-head .label{font-size:12px;letter-spacing:.1em;font-weight:500;text-transform:uppercase;color:var(--ink-dim)}',
     '.avail{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.06em;font-weight:500;text-transform:uppercase;color:var(--ink-dim);border:1px solid var(--line);border-radius:999px;padding:5px 13px}',
     '.avail-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;flex-shrink:0;box-shadow:0 0 7px rgba(34,197,94,.7);animation:sfPulse 2.2s ease-in-out infinite}',
     '@keyframes sfPulse{0%,100%{opacity:1}50%{opacity:.35}}',
-    '.contact h1{font-family:var(--sans);font-weight:800;font-size:clamp(80px,12vw,210px);line-height:.88;letter-spacing:-.05em;color:var(--ink)}',
+    '.contact h1{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim)}',
     '.contact-email-cta{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:40px 0;border-bottom:1px solid var(--line);margin-bottom:72px;cursor:none}',
     '.contact-email-cta a{font-family:var(--sans);font-weight:700;font-size:clamp(24px,3.5vw,60px);letter-spacing:-.03em;color:var(--ink);transition:opacity .25s}',
     '.contact-email-cta:hover a{opacity:.55}',
@@ -84,7 +87,7 @@
     /* ── Footer ── */
     '.contact-footer{position:relative;padding-top:72px}',
     '.contact-footer-bar{position:relative;z-index:2;',
-    'display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;align-items:center;',
+    'display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;',
     'font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;',
     'color:var(--ink-mute);padding-bottom:48px;border-bottom:1px solid var(--line)}',
     '.contact-footer-bar .f-socials{display:flex;gap:20px;justify-content:center}',
@@ -171,6 +174,12 @@
   }
   _syncModeIcons();
 
+  function _syncLangBtns() {
+    var lang = localStorage.getItem('sublizme_lang') || 'FR';
+    document.querySelectorAll('.lang-btn').forEach(function(b){ b.textContent = lang; });
+  }
+  _syncLangBtns();
+
   /* ── Curseur ─────────────────────────────────────────────────── */
   var cur, ring;
 
@@ -205,12 +214,19 @@
 
   /* ── Mode dark / light (avec persistance) ───────────────────── */
   document.addEventListener('click', function(e) {
-    var btn = e.target.closest ? e.target.closest('.mode-btn') : null;
-    if (!btn) return;
-    document.body.classList.toggle('light');
-    var isLight = document.body.classList.contains('light');
-    localStorage.setItem('sublizme_theme', isLight ? 'light' : 'dark');
-    _syncModeIcons();
+    if (e.target.closest && e.target.closest('.mode-btn')) {
+      document.body.classList.toggle('light');
+      var isLight = document.body.classList.contains('light');
+      localStorage.setItem('sublizme_theme', isLight ? 'light' : 'dark');
+      _syncModeIcons();
+      return;
+    }
+    if (e.target.closest && e.target.closest('.lang-btn')) {
+      var lang = (localStorage.getItem('sublizme_lang') || 'FR') === 'FR' ? 'EN' : 'FR';
+      localStorage.setItem('sublizme_lang', lang);
+      _syncLangBtns();
+      return;
+    }
   });
 
   /* ── API publique ────────────────────────────────────────────── */
@@ -230,14 +246,9 @@
       nav.id = 'site-nav';
       nav.innerHTML =
         '<div class="sn-left">' + leftHTML + '</div>' +
-        '<div class="sn-socials">' +
-          '<a href="#">Instagram</a><span class="sn-sep">/</span>' +
-          '<a href="#">Behance</a><span class="sn-sep">/</span>' +
-          '<a href="#">LinkedIn</a>' +
-        '</div>' +
         '<div class="sn-links">' +
-          '<a href="index.html#projects">Projets</a>' +
           '<a href="index.html#contact">Contact</a>' +
+          '<button class="lang-btn" id="lang-btn">' + (localStorage.getItem('sublizme_lang') || 'FR') + '</button>' +
           '<button class="mode-btn" id="mode-btn">' + (isLight ? '◐' : '◑') + '</button>' +
         '</div>';
 
@@ -247,7 +258,7 @@
 
     /* Injecte le contact + footer commun */
     injectFooter: function() {
-      if (document.getElementById('footer-giant')) return;
+      if (document.getElementById('contact')) return;
 
       var section = document.createElement('section');
       section.className = 'contact';
@@ -284,20 +295,10 @@
         '<div class="contact-footer">' +
           '<div class="contact-footer-bar">' +
             '<span>© 2026 Sublizme</span>' +
-            '<div class="f-socials">' +
-              '<a href="#">Instagram</a>' +
-              '<a href="#">Behance</a>' +
-              '<a href="#">LinkedIn</a>' +
-            '</div>' +
             '<div class="f-nav">' +
+              '<a href="index.html#about">Studio</a>' +
               '<a href="index.html#projects">Projets</a>' +
               '<a href="index.html#contact">Contact</a>' +
-            '</div>' +
-          '</div>' +
-          '<div class="footer-name-zone">' +
-            '<div class="halftone" aria-hidden="true"></div>' +
-            '<div class="footer-logo-zone" id="footer-giant">' +
-              _wm +
             '</div>' +
           '</div>' +
         '</div>';
