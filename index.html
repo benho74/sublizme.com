@@ -162,7 +162,9 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 .rw em{font-style:italic;letter-spacing:-.015em}
 
 /* ── PROJECTS ─────────────────────────────────────── */
-.projects{min-height:100vh;position:relative;padding:120px var(--pad) 80px}
+.projects{min-height:100vh;position:relative;padding:120px var(--pad) 80px;overflow:hidden}
+/* Fond image mobile (caché sur desktop, remplacé par .preview-fixed) */
+.projects-bg{display:none;position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity .6s ease;pointer-events:none;z-index:0}
 .project-list{margin-top:80px;display:flex;flex-direction:column;padding-right:96px;position:relative;z-index:2}
 .project-row{
   padding:34px 0;border-bottom:1px solid var(--line);
@@ -241,7 +243,9 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
   .about .copy{max-width:100%;font-size:42px;order:1}
   .about-portrait{position:relative;width:100vw;margin-left:calc(-1 * var(--pad));order:2;margin-top:48px;transform:none!important;transition:none!important;justify-content:center;opacity:1}
   .about-portrait img{width:100%;height:auto;max-width:100%;max-height:none;display:block;mask-image:none;-webkit-mask-image:none}
-  .project-list{padding-right:60px}
+  .projects-bg{display:block}
+  .projects-bg.visible{opacity:.13}
+  .project-list{padding-right:60px;position:relative;z-index:2}
   .project-row .meta{display:none}
   .services{grid-template-columns:1fr;gap:40px}
   .services-left{position:static;padding-right:60px}
@@ -320,6 +324,7 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 
 <!-- ========== PROJECTS ========== -->
 <section class="projects" id="projects">
+  <div class="projects-bg" id="projects-bg" aria-hidden="true"></div>
   <div class="project-list">
     <a class="project-row" data-idx="0" href="projet-lacourdesgrands.html">
       <span class="title">La Cour des Grands</span>
@@ -415,6 +420,7 @@ const previewEl   = document.getElementById('preview-fixed');
 const previewFrame= document.getElementById('preview-frame');
 const previewScr  = document.getElementById('preview-screen');
 const previewNum  = document.getElementById('preview-num');
+const projectsBg  = document.getElementById('projects-bg');
 const projectRows = document.querySelectorAll('.project-row');
 const revealWords = document.querySelectorAll('.rw');
 
@@ -432,9 +438,13 @@ const PROJECTS = [
 let currentIdx = 0;
 
 function setPreview(idx){
+  const d = PROJECTS[idx];
+  /* Mobile : fond section toujours à jour */
+  if(projectsBg){
+    projectsBg.style.backgroundImage = `url('${d.img}')`;
+  }
   if(idx===currentIdx && previewEl.classList.contains('visible'))return;
   currentIdx = idx;
-  const d = PROJECTS[idx];
   previewScr.style.background = '#0a0a0a';
   previewScr.style.backgroundImage = `url('${d.img}')`;
   previewScr.style.backgroundSize = 'cover';
@@ -577,6 +587,7 @@ function onScroll(){
   const prjRect = projectsEl.getBoundingClientRect();
   const prjVisible = prjRect.top < window.innerHeight * 0.3 && prjRect.bottom > window.innerHeight * 0.55;
   previewEl.classList.toggle('visible', prjVisible);
+  if(projectsBg) projectsBg.classList.toggle('visible', prjVisible);
 
   /* About reveal */
   updateAboutReveal();
