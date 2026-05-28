@@ -29,7 +29,15 @@
       "Bash(mkdir -p /tmp/sublizme_preview && rsync -a --exclude='.git' \"/Users/vivasante/Desktop/Perso/Projets/Perso/Sublizme/Claude Code - Sublizme/\" /tmp/sublizme_preview/ && echo \"Sync OK\")",
       "Bash(lsof -i :3456 -sTCP:LISTEN)",
       "WebFetch(domain:benjaminhocq.com)",
-      "mcp__Claude_in_Chrome__tabs_context_mcp"
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "Bash(gh api *)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('URL:', d.get\\('html_url'\\)\\); print\\('Status:', d.get\\('status'\\)\\); print\\('Branch:', d.get\\('source',{}\\).get\\('branch'\\)\\)\")",
+      "Bash(brew list *)",
+      "Bash(curl -s \"https://api.github.com/repos/benho74/sublizme.com/commits?per_page=2\")",
+      "Bash(python3 -c \"import sys,json; commits=json.load\\(sys.stdin\\); [print\\(c['sha'][:7], c['commit']['message'][:50], c['commit']['author']['date']\\) for c in commits]\")",
+      "Bash(curl -s \"https://api.github.com/repos/benho74/sublizme.com/pages\")",
+      "Bash(curl -sI \"https://sublizme.com\")",
+      "Bash(curl -sI \"https://sublizme.com/projet-lacourdesgrands.html\")"
     ]
   }
 }
