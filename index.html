@@ -212,9 +212,15 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 /* Responsive */
 @media(max-width:960px){
   .pct,.preview-fixed{display:none}
-  .rail{right:16px}
-  .rail .stack{padding-right:0}
+  /* Rail : centrage fixe indépendant de la barre iOS */
+  .rail{right:16px;top:50%;bottom:auto;transform:translateY(-50%) translateX(20px)}
+  .rail.visible{transform:translateY(-50%) translateX(0)}
+  .rail.hide{transform:translateY(-50%) translateX(20px)}
+  .rail .stack{height:260px;padding-right:0}
+  .rail .tick{height:60px}
   .rail .tick::after{writing-mode:vertical-rl;right:8px;top:50%;transform:translateY(-50%);font-size:9px;letter-spacing:.06em}
+  /* Hero : svh = viewport visible réel sur iOS (barre d'adresse incluse) */
+  .hero{min-height:100svh}
   .hero-foot{grid-template-columns:1fr;gap:14px}
   .hero-foot .nav{justify-content:flex-start}
   .about .copy{max-width:100%;font-size:42px}
