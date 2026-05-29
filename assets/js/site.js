@@ -247,7 +247,7 @@
       nav.innerHTML =
         '<div class="sn-left">' + leftHTML + '</div>' +
         '<div class="sn-links">' +
-          '<a href="index.html#contact">Contact</a>' +
+          '<a href="#contact">Contact</a>' +
           '<button class="lang-btn" id="lang-btn">' + (localStorage.getItem('sublizme_lang') || 'FR') + '</button>' +
           '<button class="mode-btn" id="mode-btn">' + (isLight ? '◐' : '◑') + '</button>' +
         '</div>';

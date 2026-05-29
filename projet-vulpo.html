@@ -31,7 +31,8 @@ body.light{--bg:#f2f2ef;--ink:#0a0a0a;--ink-dim:#6a6a66;--ink-mute:#c5c5c0;--lin
 body,body *{transition:background-color .4s ease,color .35s ease,border-color .35s ease}
 /* MASONRY */
 .masonry{margin:80px var(--pad) 100px;columns:2;column-gap:12px}
-.masonry img{width:100%;margin-bottom:12px;break-inside:avoid;display:block;border-radius:4px}
+.masonry img,.masonry video{width:100%;margin-bottom:12px;break-inside:avoid;display:block;border-radius:4px}
+.masonry video{pointer-events:none}
 @media(max-width:640px){.masonry{columns:1}}
 </style>
 </head>
@@ -75,6 +76,10 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 
 <!-- MASONRY -->
 <div class="masonry">
+  <video src="assets/img/projects/vulpo-video-1.mp4" autoplay loop muted playsinline disablepictureinpicture controlslist="nodownload nofullscreen noremoteplayback" aria-label="Vulpo — animation"></video>
+  <img src="assets/img/projects/vulpo-semnoz.jpg" alt="Vulpo — fiche Semnoz">
+  <video src="assets/img/projects/vulpo-video-2.mp4" autoplay loop muted playsinline disablepictureinpicture controlslist="nodownload nofullscreen noremoteplayback" aria-label="Vulpo — animation"></video>
+  <img src="assets/img/projects/vulpo-mockup.jpg" alt="Vulpo">
   <img src="assets/img/projects/vulpo-mid.jpg" alt="Vulpo">
 </div>
 
@@ -87,7 +92,7 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
   <div class="pn-right"><span class="pn-arrow">→</span></div>
 </a>
 
-<script src="assets/js/site.js?v=3"></script>
+<script src="assets/js/site.js?v=5"></script>
 <script>
 SublizmeSite.injectNav({back: 'index.html#projects', label: 'Projets'});
 SublizmeSite.injectFooter();

@@ -46,7 +46,28 @@
       "WebFetch(domain:sublizme.com)",
       "Bash(curl -s \"https://sublizme.com/\")",
       "WebFetch(domain:www.benjaminhocq.com)",
-      "Bash(cp \"/Users/vivasante/Desktop/Perso/Projets/Perso/Sublizme/Claude Code - Sublizme/\"projet-*.html /tmp/sublizme_preview/ && echo \"OK\")"
+      "Bash(cp \"/Users/vivasante/Desktop/Perso/Projets/Perso/Sublizme/Claude Code - Sublizme/\"projet-*.html /tmp/sublizme_preview/ && echo \"OK\")",
+      "Bash(mkdir -p archives)",
+      "Bash(mv projects/congresannecy-cover.png projects/congresannecy-duo1.png projects/congresannecy-duo2.png projects/congresannecy-mid.png archives/)",
+      "Bash(mv projects/fablab-cover.png projects/fablab-duo1.png projects/fablab-duo2.png projects/fablab-mid.png archives/)",
+      "Bash(mv projects/lacourdesgrands-cover.png projects/lacourdesgrands-duo1.png projects/lacourdesgrands-duo2.png projects/lacourdesgrands-mid.png archives/)",
+      "Bash(mv projects/lakepub-id-cover.png projects/lakepub-id-duo1.jpg projects/lakepub-id-duo2.jpg projects/lakepub-id-mid.png archives/)",
+      "Bash(mv \"la cour des grands - 03.png\" projects/lacourdesgrands-cover.png)",
+      "Bash(mv \"la cour des grands - 01.png\" projects/lacourdesgrands-bourse.png)",
+      "Bash(mv \"la cour des grands - 02.png\" projects/lacourdesgrands-suite.png)",
+      "Bash(mv \"centre de congrès - 02.png\" projects/congresannecy-cover.png)",
+      "Bash(mv \"centre de congrès - 01.png\" projects/congresannecy-presentation.png)",
+      "Bash(rsync -a --delete --exclude=.git --exclude=node_modules '/Users/vivasante/Desktop/Perso/Projets/Perso/Sublizme/Claude Code - Sublizme/' /tmp/sublizme_preview/)",
+      "Bash(curl -s -o /dev/null -w '%{http_code}' http://localhost:3456/assets/img/projects/__TRACKED_VAR__)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:3456/assets/img/Profil%2001.jpg\")",
+      "Bash(mv logo-blanc.png logo-noir.png logo-favicon.png archives/)",
+      "Bash(mv archives/lacourdesgrands-duo1.png archives/lacourdesgrands-duo2.png archives/lacourdesgrands-mid.png projects/)",
+      "Bash(mv archives/lacourdesgrands-cover.png projects/lacourdesgrands-mockup.png)",
+      "Bash(mv archives/congresannecy-duo1.png archives/congresannecy-duo2.png archives/congresannecy-mid.png projects/)",
+      "Bash(mv archives/congresannecy-cover.png projects/congresannecy-mockup.png)",
+      "Bash(md5 -r congresannecy-*.png)",
+      "Bash(md5 -r fablab-*.png)",
+      "Bash(rsync -a --delete --exclude=.git '/Users/vivasante/Desktop/Perso/Projets/Perso/Sublizme/Claude Code - Sublizme/' /tmp/sublizme_preview/)"
     ]
   }
 }

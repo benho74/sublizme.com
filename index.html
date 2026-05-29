@@ -150,8 +150,8 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 .about-portrait.in{transform:translateX(0)}
 .about-portrait img{
   width:auto;height:auto;max-width:58%;max-height:100%;display:block;
-  -webkit-mask-image:linear-gradient(to right,transparent 0%,black 28%);
-  mask-image:linear-gradient(to right,transparent 0%,black 28%);
+  -webkit-mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.45) 50%,black 100%);
+  mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.45) 50%,black 100%);
 }
 /* Flottement doux */
 @keyframes floatImg{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
@@ -308,7 +308,7 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
 <!-- ========== ABOUT ========== -->
 <section class="about" id="about">
   <div class="about-portrait" aria-hidden="true">
-    <img src="assets/img/Profil 01.png" alt="">
+    <img src="assets/img/Profil 01.jpg" alt="">
   </div>
   <div class="copy" id="about-copy">
     <span class="rw">Un studio créatif</span>
@@ -401,7 +401,7 @@ body,body *{transition:background-color .4s ease,color .35s ease,border-color .3
   </div>
 </section>
 
-<script src="assets/js/site.js?v=4"></script>
+<script src="assets/js/site.js?v=5"></script>
 <script>
 
 /* ── Elements ─────────────────────────────────────── */
@@ -430,7 +430,7 @@ const PROJECTS = [
   { label:'Styling Coiffure',   cat:'Web design',      num:'02', img:'assets/img/projects/stylingcoiffure-cover.png' },
   { label:'Congrès Annecy',     cat:'Identité',        num:'03', img:'assets/img/projects/congresannecy-cover.png'   },
   { label:'Vulpo',              cat:'UX · UI',         num:'04', img:'assets/img/projects/vulpo-cover.jpg'           },
-  { label:'Lake Pub — Identité',cat:'Branding',        num:'05', img:'assets/img/projects/lakepub-id-cover.png'      },
+  { label:'Lake Pub — Identité',cat:'Branding',        num:'05', img:'assets/img/projects/lakepub-id-cover.jpg'      },
   { label:'Fab Lab',            cat:'UX · UI',         num:'06', img:'assets/img/projects/fablab-cover.png'          },
   { label:"L'Empire",          cat:'Identité',        num:'07', img:'assets/img/projects/lempire-cover.png'         },
   { label:'Lake Pub — Site web',cat:'Web design',      num:'08', img:'assets/img/projects/lakepub-web-cover.png'     },
