@@ -67,7 +67,16 @@
       "Bash(mv archives/congresannecy-cover.png projects/congresannecy-mockup.png)",
       "Bash(md5 -r congresannecy-*.png)",
       "Bash(md5 -r fablab-*.png)",
-      "Bash(rsync -a --delete --exclude=.git '/Users/vivasante/Desktop/Perso/Projets/Perso/Sublizme/Claude Code - Sublizme/' /tmp/sublizme_preview/)"
+      "Bash(rsync -a --delete --exclude=.git '/Users/vivasante/Desktop/Perso/Projets/Perso/Sublizme/Claude Code - Sublizme/' /tmp/sublizme_preview/)",
+      "Bash(git rm *)",
+      "Bash(awk '{print $5, $9}')",
+      "Bash(git ls-tree *)",
+      "Bash(awk '$4 > 104857600 {print $4, $5}')",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" \"http://localhost:3456/assets/img/projects/lacourdesgrands-video.mp4\")",
+      "Bash(awk '{print $5}')",
+      "Bash(curl -sI \"http://localhost:3456/assets/img/projects/lacourdesgrands-video.mp4\")",
+      "Bash(curl -s -r 0-99 -o /dev/null -w \"range status: %{http_code}, downloaded: %{size_download} bytes\\\\n\" \"http://localhost:3456/assets/img/projects/lacourdesgrands-video.mp4\")",
+      "Bash(python3 -)"
     ]
   }
 }
