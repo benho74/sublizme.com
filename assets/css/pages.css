@@ -273,6 +273,10 @@
   min-height:100vh;position:relative;overflow:hidden;
   padding:120px var(--pad) 80px;
   display:flex;flex-direction:column;justify-content:flex-end;
+  /* Contient le groupe d'isolation créé par .ph-num (mix-blend-mode:overlay)
+     dans .ph au lieu du root SC. Sans ça, Chrome n'évalue plus
+     correctement backdrop-filter:url(#svg) sur .site-nav. */
+  isolation:isolate;
 }
 .ph-bg{
   /* inset:-2% remplace l'ancien transform:scale(1.04) :
