@@ -180,6 +180,11 @@
     if (prev && prev.w === w && prev.h === h) { _applyGlass(el, filterId); return true; }
 
     var radius      = opts.radius      != null ? opts.radius      : (parseFloat(getComputedStyle(el).borderTopLeftRadius) || 24);
+    /* Plafonne le rayon à la moitié de la plus petite dimension :
+       un border-radius:999px (pill) reste plafonné à h/2 visuellement
+       → la bande bezel doit suivre, sinon la carte de déplacement
+       est totalement neutre et l'effet ne se voit pas. */
+    radius = Math.min(radius, Math.min(w, h) / 2);
     var bezelW      = opts.bezelWidth  != null ? opts.bezelWidth  : 26;
     var glassThick  = opts.thickness   != null ? opts.thickness   : 12;
     var ior         = opts.ior         != null ? opts.ior         : 1.45;
@@ -214,7 +219,10 @@
       defs.appendChild(holder);
     }
     holder.innerHTML =
-      '<filter id="' + filterId + '" x="0%" y="0%" width="100%" height="100%">' +
+      /* Région étendue : avec 0/100, les pixels déplacés par
+         feDisplacementMap au-delà des bords étaient clippés et
+         la réfraction n'était quasi pas visible. */
+      '<filter id="' + filterId + '" x="-25%" y="-25%" width="150%" height="150%">' +
         '<feGaussianBlur in="SourceGraphic" stdDeviation="' + blurAmt + '" result="b"/>' +
         '<feImage href="' + dispUrl + '" x="0" y="0" width="' + w + '" height="' + h + '" result="dm"/>' +
         '<feDisplacementMap in="b" in2="dm" scale="' + scale + '" xChannelSelector="R" yChannelSelector="G" result="disp"/>' +
@@ -235,6 +243,33 @@
     el.style.webkitBackdropFilter = 'url(#' + filterId + ')';
     el.style.backdropFilter        = 'url(#' + filterId + ')';
   }
+
+  /* ── Glass appliqué à tous les .menu-btn de la page ──────────
+     Tu peux régler ici les paramètres de réfraction du bouton. */
+  var BTN_GLASS_OPTS = {
+    bezelWidth:  14,
+    thickness:   80,
+    ior:         1.6,
+    scaleRatio:  2.0,
+    blur:        0.3,
+    specOpacity: 0.25,
+    specSat:     2
+  };
+  function applyMenuBtnGlasses () {
+    document.querySelectorAll(
+      '.menu-btn, .sn-logo, .sn-back, ' +              /* nav */
+      '.ph-tag, ' +                                    /* tags hero projet */
+      '.contact-card, .contact-portrait, ' +           /* footer cards */
+      '.response-badge, .portrait-tag'                 /* footer petits pills */
+    ).forEach(function (el, i) {
+      buildLiquidGlass(el, 'nav-glass-' + i, BTN_GLASS_OPTS);
+    });
+  }
+  var _btnGlassT;
+  window.addEventListener('resize', function () {
+    clearTimeout(_btnGlassT);
+    _btnGlassT = setTimeout(applyMenuBtnGlasses, 200);
+  });
 
   /* ── API publique ─────────────────────────────────────────── */
   window.SublizmeSite = {
@@ -259,6 +294,9 @@
       document.body.prepend(nav);
       nav.querySelectorAll('a, button').forEach(addHover);
       this.injectMenu();
+      /* Le bouton menu de cette nav vient d'être ajouté → on lui
+         applique le liquid glass tout de suite. */
+      applyMenuBtnGlasses();
     },
 
     /* Bloc contact + footer en bas de page.
@@ -534,10 +572,22 @@
   initProjectHero();
   initProjectReveal();
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCursor);
-  } else {
+  function boot () {
     initCursor();
+    /* Applique le liquid glass sur tous les éléments visés (nav + tags +
+       cards). On rebuilde une seconde fois après chargement des fonts
+       custom : sinon la taille mesurée à DOMContentLoaded peut être
+       fausse (fallback font) et la carte de déplacement se calcule pour
+       de mauvaises dimensions → glass invisible (cas des pages projet). */
+    requestAnimationFrame(applyMenuBtnGlasses);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(applyMenuBtnGlasses);
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
   }
 
 })();

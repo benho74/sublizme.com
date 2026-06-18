@@ -36,7 +36,9 @@
 
 /* ── Nav globale ──────────────────────────────────────────── */
 .site-nav{
-  position:fixed;top:0;left:0;right:0;z-index:80;
+  position:fixed;top:0;left:0;right:0;z-index:199;
+  will-change:transform;
+  contain:paint;
   display:grid;grid-template-columns:auto 1fr;align-items:center;
   padding:16px var(--pad);
   font-size:12px;font-weight:500;
@@ -47,35 +49,36 @@
 @keyframes navIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 
 .sn-left{display:flex;align-items:center}
-.sn-logo{display:flex;align-items:center;color:var(--ink);transition:opacity var(--t-fast)}
-.sn-logo:hover{opacity:.6}
-.sn-logo svg{height:17px;width:auto;display:block}
-
-.sn-back{display:flex;align-items:center;gap:9px;color:var(--ink-dim);transition:opacity var(--t-fast), color var(--t-fast)}
-.sn-back:hover{opacity:.75;color:var(--ink)}
+.sn-logo{display:inline-flex;align-items:center}
+.sn-logo svg{height:14px;width:auto;display:block}
+.sn-back{display:inline-flex;align-items:center;gap:9px}
 .sn-arr{display:inline-block;transition:transform .25s}
 .sn-back:hover .sn-arr{transform:translateX(-5px)}
 
 .sn-links{display:flex;justify-content:flex-end;align-items:center;gap:28px}
 
-/* ── Bouton menu (effet verre) ────────────────────────────── */
-.menu-btn{
-  position:relative;color:var(--ink);
+/* ── Boutons nav (menu / logo / retour) — même look liquid glass ── */
+.menu-btn,
+.sn-logo,
+.sn-back{
+  position:relative;
+  color:#fff;
   border:1px solid rgba(255,255,255,.28);
   border-radius:var(--radius-pill);
-  background:linear-gradient(140deg, rgba(255,255,255,.16), rgba(255,255,255,.04));
-  backdrop-filter:blur(10px) saturate(160%);
+  background:rgba(0,0,0,.08);                /* Glass Tint — noir 8% */
+  backdrop-filter:blur(10px) saturate(160%); /* Fallback avant filtre SVG */
   -webkit-backdrop-filter:blur(10px) saturate(160%);
-  box-shadow:var(--shadow-card);
+  box-shadow:
+    0 0 14px rgba(0,0,0,.25),                /* Outer Shadow — blur 24 */
+    inset 0 0 14px -5px rgba(255,255,255,.4);               /* Inner Shadow — blanc 16/-6 */
   font-family:var(--sans);font-weight:700;font-size:12px;
   letter-spacing:.08em;text-transform:uppercase;
   padding:11px 24px;line-height:1;cursor:none;
-  transition:transform .3s var(--ease), box-shadow .3s ease;
+  transition:transform .3s var(--ease);
 }
-.menu-btn:hover{
-  transform:scale(1.06);
-  box-shadow:0 8px 26px rgba(0,0,0,.28), inset 0 1px 1px rgba(255,255,255,.6);
-}
+.menu-btn:hover,
+.sn-logo:hover,
+.sn-back:hover{transform:scale(1.06)}
 
 /* ── Menu plein-écran ─────────────────────────────────────── */
 .menu-overlay{

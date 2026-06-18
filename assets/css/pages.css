@@ -275,9 +275,12 @@
   display:flex;flex-direction:column;justify-content:flex-end;
 }
 .ph-bg{
-  position:absolute;inset:0;z-index:0;
+  /* inset:-2% remplace l'ancien transform:scale(1.04) :
+     même rendu visuel (légère sur-taille de l'image) mais
+     SANS créer un compositing layer GPU séparé, qui empêchait
+     la backdrop-filter de la nav fixe de capter le fond. */
+  position:absolute;inset:-2%;z-index:0;
   background-size:cover;background-position:center;
-  transform:scale(1.04);
 }
 .ph-overlay{
   position:absolute;inset:0;z-index:1;
