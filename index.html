@@ -1,627 +1,114 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Sublizme — Studio créatif. Graphisme, branding et web design haut de gamme. Paris.">
-<title>Sublizme — Studio Créatif</title>
-<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
-<style>
-/* Articulat CF */
-@font-face{font-family:'Articulat CF';src:url('assets/fonts/ArticulatCF-Light.otf') format('opentype');font-weight:300;font-style:normal;font-display:swap}
-@font-face{font-family:'Articulat CF';src:url('assets/fonts/ArticulatCF-Normal.otf') format('opentype');font-weight:400;font-style:normal;font-display:swap}
-@font-face{font-family:'Articulat CF';src:url('assets/fonts/ArticulatCF-Medium.otf') format('opentype');font-weight:500;font-style:normal;font-display:swap}
-@font-face{font-family:'Articulat CF';src:url('assets/fonts/ArticulatCF-DemiBold.otf') format('opentype');font-weight:600;font-style:normal;font-display:swap}
-@font-face{font-family:'Articulat CF';src:url('assets/fonts/ArticulatCF-Bold.otf') format('opentype');font-weight:700;font-style:normal;font-display:swap}
-@font-face{font-family:'Articulat CF';src:url('assets/fonts/ArticulatCF-ExtraBold.otf') format('opentype');font-weight:800;font-style:normal;font-display:swap}
-@font-face{font-family:'Articulat CF';src:url('assets/fonts/ArticulatCF-Heavy.otf') format('opentype');font-weight:900;font-style:normal;font-display:swap}
-
-:root{
-  --bg:#0a0a0a;--bg-r:10;--bg-g:10;--bg-b:10;--ink:#ededeb;--ink-dim:#6a6a66;--ink-mute:#3a3a36;
-  --line:#1f1f1c;--accent:#ff1f1f;
-  --sans:'Articulat CF',-apple-system,sans-serif;
-  --pad:clamp(24px,3vw,56px);
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:400;-webkit-font-smoothing:antialiased;letter-spacing:-.005em}
-html{scroll-behavior:smooth}
-body{overflow-x:hidden;line-height:1.45;font-size:15px;cursor:none}
-a{color:inherit;text-decoration:none}
-img{display:block;max-width:100%}
-::selection{background:var(--accent);color:#fff}
-
-/* Cursor — blend mode : blanc sur noir, noir sur blanc */
-.cursor{width:9px;height:9px;background:#fff;border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);will-change:left,top;mix-blend-mode:difference;transition:transform .15s ease}
-.cursor-ring{width:38px;height:38px;border:1px solid rgba(255,255,255,.55);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);will-change:left,top;mix-blend-mode:difference;transition:transform .15s ease}
-.cursor.hover{transform:translate(-50%,-50%) scale(.4)}
-.cursor-ring.hover{transform:translate(-50%,-50%) scale(1.6)}
-/* Masquer le curseur sur mobile/touch */
-@media(hover:none),(pointer:coarse){
-  .cursor,.cursor-ring{display:none}
-  body{cursor:auto!important}
-}
-
-/* Grain */
-body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;mix-blend-mode:overlay;opacity:.05;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='.85'/></svg>")}
-
-/* Left % counter — blend mode = blanc sur noir, noir sur blanc */
-.pct{
-  position:fixed;left:24px;top:50%;transform:translateY(-50%);
-  z-index:70;font-size:12px;font-weight:500;letter-spacing:.04em;
-  color:#fff;mix-blend-mode:difference;
-  font-variant-numeric:tabular-nums;pointer-events:none;
-  opacity:0;transition:opacity .5s;
-}
-.pct.visible{opacity:1}
-
-/* Right rail */
-.rail{position:fixed;right:28px;top:0;bottom:0;z-index:70;display:flex;flex-direction:column;justify-content:center;align-items:flex-end;pointer-events:none;opacity:0;transform:translateX(20px);transition:opacity .9s cubic-bezier(.4,0,.2,1),transform .9s cubic-bezier(.4,0,.2,1)}
-.rail.visible{opacity:1;transform:translateX(0)}
-.rail.hide{opacity:0;transform:translateX(20px)}
-.rail .stack{height:60vh;display:flex;flex-direction:column;justify-content:space-between;padding-right:14px}
-.rail .tick{width:1px;height:14vh;background:var(--ink-mute);position:relative;align-self:flex-end;transition:background .4s;pointer-events:auto}
-.rail .tick::after{content:attr(data-label);position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--ink);opacity:.18;transition:opacity .4s;white-space:nowrap}
-.rail .tick:hover::after{opacity:.65}
-.rail .tick.active{background:var(--ink)}
-.rail .tick.active::after{opacity:1}
-
-/* ── HERO ─────────────────────────────────────────── */
-.hero{min-height:100vh;padding:0 var(--pad) 32px;display:flex;flex-direction:column;justify-content:space-between}
-.hero-center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:60px 0 32px}
-.hero-symbol{display:flex;justify-content:center}
-.hero-symbol svg{width:clamp(100px,18vw,240px);height:auto;display:block}
-.hero-tagline{font-size:13px;line-height:1.6;color:var(--ink-dim);text-align:center;font-weight:300;letter-spacing:.01em}
-.hero-tagline em{font-style:italic}
-
-/* Hero footer → nav */
-.hero-foot{
-  display:grid;grid-template-columns:auto 1fr;align-items:center;gap:24px;
-  border-top:1px solid var(--line);padding-top:22px;
-  font-size:12px;letter-spacing:.06em;font-weight:500;text-transform:uppercase;
-}
-.hero-foot .version{display:flex;align-items:center;gap:10px}
-.hero-foot .nav{display:flex;justify-content:flex-end;align-items:center;gap:14px}
-.hero-foot a{cursor:none;transition:opacity .2s}
-.hero-foot a:hover{opacity:.55}
-.hero-foot .version a{display:flex;align-items:center;cursor:none}
-.hero-foot .version svg{height:16px;width:auto;display:block}
-/* Lang toggle */
-.lang-btn{
-  background:none;border:1px solid var(--ink-mute);border-radius:999px;
-  color:var(--ink);font-family:var(--sans);font-size:11px;font-weight:600;
-  letter-spacing:.06em;padding:4px 11px;cursor:none;
-  transition:border-color .25s,color .25s;line-height:1.4;
-}
-.lang-btn:hover{border-color:var(--ink)}
-body.light .lang-btn{border-color:rgba(0,0,0,.2);color:#0a0a0a}
-
-/* Toggle dark/light */
-.mode-btn{
-  background:none;border:1px solid var(--ink-mute);border-radius:999px;
-  color:var(--ink);font-family:var(--sans);font-size:11px;font-weight:500;
-  letter-spacing:.04em;padding:4px 11px;cursor:none;
-  transition:border-color .25s,color .25s;line-height:1.4;
-}
-.mode-btn:hover{border-color:var(--ink)}
-
-/* État sticky : glassmorphisme 2026 */
-.hero-foot.is-sticky{
-  position:fixed;top:0;left:0;right:0;z-index:80;
-  padding:16px var(--pad);margin:0;
-  border-top:none;border-bottom:1px solid rgba(255,255,255,.07);
-  background:rgba(10,10,10,.55);
-  backdrop-filter:blur(22px) saturate(180%);
-  -webkit-backdrop-filter:blur(22px) saturate(180%);
-  color:var(--ink);
-  animation:navIn .32s cubic-bezier(.2,.8,.2,1) forwards;
-}
-body.light .hero-foot.is-sticky{
-  background:rgba(242,242,239,.65);
-  border-bottom-color:rgba(0,0,0,.07);
-}
-@keyframes navIn{
-  from{opacity:0;transform:translateY(-8px)}
-  to  {opacity:1;transform:translateY(0)}
-}
-/* Spacer pour éviter le saut de layout */
-.hero-foot-spacer{display:none}
-.hero-foot-spacer.active{display:block}
-
-/* Mode clair */
-body.light{
-  --bg:#f2f2ef;--bg-r:242;--bg-g:242;--bg-b:239;--ink:#0a0a0a;--ink-dim:#6a6a66;--ink-mute:#c5c5c0;--line:#d8d8d3;
-}
-body.light .blob{opacity:.35;filter:blur(80px)}
-body.light .mode-btn{border-color:rgba(0,0,0,.2);color:#0a0a0a}
-body.light .mode-btn:hover{border-color:#0a0a0a}
-/* Transitions globales lors du switch de thème */
-body,body *{transition:background-color .4s ease,color .35s ease,border-color .35s ease,opacity .3s ease}
-
-/* ── ABOUT ────────────────────────────────────────── */
-.about{min-height:100vh;position:relative;padding:0 var(--pad);display:flex;align-items:center;overflow:hidden}
-/* Portrait — pleine largeur, fondu sur la gauche via masque CSS */
-.about-portrait{
-  position:absolute;inset:0;
-  z-index:1;
-  display:flex;align-items:center;justify-content:flex-end;
-  transform:translateX(100%);
-  transition:transform 1.4s cubic-bezier(.16,1,.3,1);
-}
-.about-portrait.in{transform:translateX(0)}
-.about-portrait img{
-  width:auto;height:auto;max-width:58%;max-height:100%;display:block;
-  -webkit-mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.45) 50%,black 100%);
-  mask-image:linear-gradient(to right,transparent 0%,rgba(0,0,0,.45) 50%,black 100%);
-}
-/* Flottement doux */
-@keyframes floatImg{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-.about-portrait.floating img{animation:floatImg 5s ease-in-out infinite}
-.about .copy{position:relative;z-index:3;max-width:62%;font-family:var(--sans);font-weight:300;font-size:clamp(42px,5.2vw,88px);line-height:1.04;letter-spacing:-.025em}
-.rw{display:inline;filter:blur(16px);opacity:.1;transition:filter 1.1s cubic-bezier(.25,.46,.45,.94),opacity 1.1s cubic-bezier(.25,.46,.45,.94)}
-.rw.revealed{filter:blur(0);opacity:1}
-.rw em{font-style:italic;letter-spacing:-.015em}
-
-/* ── PROJECTS ─────────────────────────────────────── */
-.projects{min-height:100vh;position:relative;padding:120px var(--pad) 80px;overflow:hidden}
-/* Fond image mobile (caché sur desktop, remplacé par .preview-fixed) */
-.projects-bg{display:none;position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity .6s ease;pointer-events:none;z-index:0}
-.project-list{margin-top:80px;display:flex;flex-direction:column;padding-right:96px;position:relative;z-index:2}
-.project-row{
-  padding:34px 0;border-bottom:1px solid var(--line);
-  font-family:var(--sans);font-size:clamp(36px,4.2vw,68px);font-weight:400;line-height:1;letter-spacing:-.02em;
-  color:var(--ink);cursor:none;
-  display:flex;align-items:baseline;justify-content:space-between;gap:24px;
-  transition:color .45s ease;
-}
-.project-row:first-child{border-top:1px solid var(--line)}
-.project-row.muted{color:var(--ink-mute)}
-.project-row .meta{font-size:13px;color:var(--ink-dim);font-weight:500;letter-spacing:.04em;text-transform:uppercase;flex-shrink:0;transition:color .45s}
-
-/* Preview centrée en fond — faible opacité */
-.preview-fixed{
-  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
-  width:clamp(380px,52vw,760px);z-index:0;
-  opacity:0;pointer-events:none;
-  transition:opacity .7s ease;
-}
-.preview-fixed.visible{opacity:.18}
-.prev-frame{border-radius:12px;overflow:hidden;box-shadow:none;transform:rotate(-2deg);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
-.prev-body{aspect-ratio:16/9;position:relative;display:flex;align-items:center;justify-content:center;transition:background 0s}
-.prev-num{font-family:var(--sans);font-size:clamp(72px,9vw,130px);font-weight:800;letter-spacing:-.05em;color:rgba(255,255,255,.06);user-select:none;position:absolute}
-
-
-/* ── SERVICES ─────────────────────────────────────── */
-.services{min-height:100vh;position:relative;padding:120px var(--pad);display:grid;grid-template-columns:1fr 1.2fr;gap:8vw;align-items:start}
-.services-left{position:sticky;top:120px}
-.services-left .label{color:var(--ink);font-size:14px;margin-bottom:38px;font-weight:300}
-.services-left h2{font-family:var(--sans);font-weight:700;font-size:clamp(28px,3vw,46px);line-height:1.1;letter-spacing:-.01em;text-transform:uppercase;max-width:18ch}
-.services-left .cta{display:inline-flex;align-items:center;gap:10px;margin-top:48px;font-size:13px;letter-spacing:.06em;font-weight:600;text-transform:uppercase;cursor:none;transition:opacity .25s}
-.services-left .cta:hover{opacity:.6}
-.services-left .cta .star{color:var(--accent)}
-.services-right{display:flex;flex-direction:column;margin-top:60px;padding-right:80px}
-.service-row:first-child{border-top:1px solid var(--line)}
-.service-row{border-bottom:1px solid var(--line);padding:36px 0;display:flex;align-items:center;justify-content:space-between;cursor:none;transition:border-bottom-color .3s}
-.service-row.open{border-bottom-color:transparent}
-.service-row .name{font-family:var(--sans);font-size:clamp(28px,3.4vw,52px);font-weight:400;letter-spacing:-.02em;line-height:1}
-.service-row .plus{width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:var(--ink-dim);font-size:24px;font-weight:300;transition:transform .35s,color .25s;flex-shrink:0}
-.service-row.open .plus{transform:rotate(45deg);color:var(--ink)}
-.service-body{overflow:hidden;max-height:0;transition:max-height .5s cubic-bezier(.2,.7,.2,1),border-bottom-color .3s;border-bottom:1px solid transparent}
-.service-row.open + .service-body{max-height:360px;border-bottom-color:var(--line)}
-.service-body .inner{padding:0 0 28px;display:flex;flex-direction:column;gap:6px}
-/* Chips : top-to-bottom sans flou */
-.service-body .chip{
-  padding:6px 12px;border:1px solid var(--line);border-radius:999px;
-  font-size:12px;color:var(--ink);letter-spacing:.02em;
-  align-self:flex-start;
-  opacity:0;transform:translateY(-8px);
-  transition:opacity .22s ease,transform .22s ease;
-}
-.service-row.open + .service-body .chip{opacity:1;transform:translateY(0)}
-.service-row.open + .service-body .chip:nth-child(1){transition-delay:.03s}
-.service-row.open + .service-body .chip:nth-child(2){transition-delay:.07s}
-.service-row.open + .service-body .chip:nth-child(3){transition-delay:.11s}
-.service-row.open + .service-body .chip:nth-child(4){transition-delay:.15s}
-.service-row.open + .service-body .chip:nth-child(5){transition-delay:.19s}
-.service-row.open + .service-body .chip:nth-child(6){transition-delay:.23s}
-
-/* Responsive */
-@media(max-width:960px){
-  .pct,.preview-fixed{display:none}
-  /* Rail : centrage fixe indépendant de la barre iOS */
-  .rail{right:16px;top:50%;bottom:auto;transform:translateY(-50%) translateX(20px)}
-  .rail.visible{transform:translateY(-50%) translateX(0)}
-  .rail.hide{transform:translateY(-50%) translateX(20px)}
-  .rail .stack{height:260px;padding-right:0}
-  .rail .tick{height:60px}
-  .rail .tick::after{writing-mode:vertical-rl;right:8px;top:50%;transform:translateY(-50%);font-size:9px;letter-spacing:.06em}
-  /* Hero : svh = viewport visible réel sur iOS (barre d'adresse incluse) */
-  .hero{min-height:100svh}
-  .hero-foot{grid-template-columns:1fr;gap:14px}
-  .hero-foot .nav{justify-content:flex-start}
-  .about{flex-direction:column;align-items:flex-start;min-height:auto;padding-top:80px;padding-bottom:0}
-  .about::before{display:none}
-  .about .copy{max-width:100%;font-size:42px;order:1}
-  .about-portrait{position:relative;width:100vw;margin-left:calc(-1 * var(--pad));order:2;margin-top:48px;transform:none!important;transition:none!important;justify-content:center;opacity:1}
-  .about-portrait img{width:100%;height:auto;max-width:100%;max-height:none;display:block;mask-image:none;-webkit-mask-image:none}
-  .projects-bg{display:block}
-  .projects-bg.visible{opacity:.13}
-  .project-list{padding-right:60px;position:relative;z-index:2}
-  .project-row .meta{display:none}
-  .services{grid-template-columns:1fr;gap:40px}
-  .services-left{position:static;padding-right:60px}
-  .services-right{padding-right:60px}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sublizme — Studio créatif. Graphisme, branding et web design haut de gamme. Paris.">
+  <title>Sublizme — Studio Créatif</title>
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/pages.css">
 </head>
 <body>
 
-<div class="cursor" aria-hidden="true"></div>
-<div class="cursor-ring" aria-hidden="true"></div>
-
-<!-- % gauche -->
-<div class="pct" id="pct">00%</div>
-
-<!-- Rail droite -->
-<aside class="rail" aria-label="Navigation sections">
-  <div class="stack">
-    <div class="tick" data-label="Studio"   data-section="about"></div>
-    <div class="tick" data-label="Projets"  data-section="projects"></div>
-    <div class="tick" data-label="Services" data-section="services"></div>
-  </div>
-</aside>
-
-<!-- Preview fixe droite (page Projets) -->
-<div class="preview-fixed" id="preview-fixed" aria-hidden="true">
-  <div class="prev-frame" id="preview-frame">
-    <div class="prev-body" id="preview-screen">
-      <div class="prev-num" id="preview-num">01</div>
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="hero">
+    <div class="hero-center">
+      <figure class="hero-symbol" aria-label="Sublizme">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 177.56 163.43" fill="currentColor" role="img">
+          <path d="M136.19,81.71h0c-26.12.19-47.27,26.7-47.42,59.45-.08-16.27-5.33-30.99-13.8-41.72-7.46-9.45-20.74-11.79-31.1-5.65-23.82,14.12-39.65,39.43-39.65,69.63h173.32v-81.71h-41.37Z"/>
+          <path d="M88.78,22.26c.08,16.27,5.33,30.99,13.8,41.72,7.46,9.45,20.74,11.79,31.1,5.65,23.82-14.12,39.65-39.43,39.65-69.63H0v81.71h41.37c26.12-.19,47.26-26.7,47.41-59.45Z"/>
+        </svg>
+      </figure>
     </div>
-  </div>
-</div>
 
-<!-- ========== HERO ========== -->
-<section class="hero" id="hero">
-  <div class="hero-center">
-    <figure class="hero-symbol" aria-label="Sublizme">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 177.56 163.43" fill="currentColor" role="img">
-        <path d="M136.19,81.71h0c-26.12.19-47.27,26.7-47.42,59.45-.08-16.27-5.33-30.99-13.8-41.72-7.46-9.45-20.74-11.79-31.1-5.65-23.82,14.12-39.65,39.43-39.65,69.63h173.32v-81.71h-41.37Z"/>
-        <path d="M88.78,22.26c.08,16.27,5.33,30.99,13.8,41.72,7.46,9.45,20.74,11.79,31.1,5.65,23.82-14.12,39.65-39.43,39.65-69.63H0v81.71h41.37c26.12-.19,47.26-26.7,47.41-59.45Z"/>
-      </svg>
-    </figure>
-    <p class="hero-tagline">Studio créatif indépendant, <em>l'esthétique</em><br>au sommet de son art.</p>
-  </div>
-
-  <div class="hero-foot" id="hero-foot">
-    <div class="version">
-      <a href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1382.81 239.48" fill="currentColor" aria-label="Sublizme"><path d="M114.4,103.4l-28.28-5.66c-14.46-3.14-17.6-11-17.6-16.66,0-8.49,5.97-18.54,25.77-18.54,14.77,0,30.17,5.03,28.91,23.89h61.91c0-50.28-36.46-72.91-89.26-72.91S5.97,34.88,5.97,81.08c0,43.69,33.63,57.83,66.31,64.11l31.74,6.29c16.97,3.46,23.26,8.49,23.26,18.23,0,13.83-12.57,20.74-30.8,20.74-25.14,0-33.63-14.14-34.57-30.8H0c0,53.74,38.34,79.83,96.17,79.83,49.97,0,94.28-18.86,94.28-70.09,0-32.06-17.28-54.37-76.06-66Z"/><path d="M315.85,163.74c0,21.06-12.57,27.97-26.08,27.97s-22.94-6.91-22.94-27.97v-90.83h-58.14v105.29c0,39.29,23.57,61.28,55,61.28s46.51-20.74,49.66-38.34h2.51v35.2h58.14V72.91h-58.14v90.83Z"/><path d="M497.5,69.77c-21.69,0-37.71,10.06-42.43,18.86V16.34h-58.14v220h58.14v-15.72c4.72,8.8,20.74,18.86,42.43,18.86,33.63,0,70.08-23.89,70.08-84.86s-36.46-84.86-70.08-84.86ZM482.42,191.39c-14.14,0-29.86-11.31-29.86-36.77s15.71-36.77,29.86-36.77,30.48,11.31,30.48,36.77-16.03,36.77-30.48,36.77Z"/><rect x="582.67" y="16.34" width="58.14" height="220"/><rect x="663.75" y="72.91" width="58.14" height="163.43"/><path d="M692.66,0c-16.03,0-30.48,13.2-30.48,30.8s14.46,30.49,30.48,30.49,30.8-12.88,30.8-30.49-14.46-30.8-30.8-30.8Z"/><path d="M1149.3,69.77c-27.34,0-46.83,20.11-49.34,37.4h-.32c-7.23-24.2-26.08-37.4-48.08-37.4-25.46,0-43.06,20.75-45.57,38.34h-2.51v-35.2h-58.14v163.43h58.14v-90.83c0-21.06,10.69-27.97,21.37-27.97s19.8,6.91,19.8,27.97v90.83h58.14v-90.83c0-21.06,10.69-27.97,21.37-27.97s19.8,6.91,19.8,27.97v90.83h58.14v-105.28c0-39.29-21.69-61.29-52.8-61.29Z"/><path d="M1382.81,155.57c0-66-38.34-85.8-80.46-85.8s-85.17,22.31-85.17,83.91c0,65.05,45.57,85.8,84.86,85.8,42.43,0,71.97-22.95,78.57-60.66h-50.6c-1.89,7.54-5.66,16.97-27.03,16.97-16.97,0-27.66-6.91-30.48-27.03h109.37c.63-3.77.94-6.91.94-13.2ZM1272.81,136.08c2.83-14.77,11.32-22.63,27.97-22.63,21.69,0,26.4,13.51,27.34,22.63h-55.31Z"/><path d="M833.61,214.08c-.08-16.27-5.33-30.99-13.8-41.72-7.46-9.45-20.74-11.79-31.1-5.65-23.82,14.12-39.65,39.43-39.65,69.63h173.32v-81.71h-41.36c-26.12.19-47.27,26.7-47.42,59.45Z"/><path d="M833.61,95.17c.08,16.27,5.33,30.99,13.8,41.72,7.46,9.45,20.74,11.79,31.1,5.65,23.82-14.12,39.65-39.43,39.65-69.63h-173.32v81.71h41.37c26.12-.19,47.26-26.7,47.41-59.45Z"/></svg></a>
+    <div class="hero-foot" id="hero-foot">
+      <div class="version">
+        <a href="#" aria-label="Sublizme">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1382.81 239.48" fill="currentColor">
+            <path d="M114.4,103.4l-28.28-5.66c-14.46-3.14-17.6-11-17.6-16.66,0-8.49,5.97-18.54,25.77-18.54,14.77,0,30.17,5.03,28.91,23.89h61.91c0-50.28-36.46-72.91-89.26-72.91S5.97,34.88,5.97,81.08c0,43.69,33.63,57.83,66.31,64.11l31.74,6.29c16.97,3.46,23.26,8.49,23.26,18.23,0,13.83-12.57,20.74-30.8,20.74-25.14,0-33.63-14.14-34.57-30.8H0c0,53.74,38.34,79.83,96.17,79.83,49.97,0,94.28-18.86,94.28-70.09,0-32.06-17.28-54.37-76.06-66Z"/>
+            <path d="M315.85,163.74c0,21.06-12.57,27.97-26.08,27.97s-22.94-6.91-22.94-27.97v-90.83h-58.14v105.29c0,39.29,23.57,61.28,55,61.28s46.51-20.74,49.66-38.34h2.51v35.2h58.14V72.91h-58.14v90.83Z"/>
+            <path d="M497.5,69.77c-21.69,0-37.71,10.06-42.43,18.86V16.34h-58.14v220h58.14v-15.72c4.72,8.8,20.74,18.86,42.43,18.86,33.63,0,70.08-23.89,70.08-84.86s-36.46-84.86-70.08-84.86ZM482.42,191.39c-14.14,0-29.86-11.31-29.86-36.77s15.71-36.77,29.86-36.77,30.48,11.31,30.48,36.77-16.03,36.77-30.48,36.77Z"/>
+            <rect x="582.67" y="16.34" width="58.14" height="220"/>
+            <rect x="663.75" y="72.91" width="58.14" height="163.43"/>
+            <path d="M692.66,0c-16.03,0-30.48,13.2-30.48,30.8s14.46,30.49,30.48,30.49,30.8-12.88,30.8-30.49-14.46-30.8-30.8-30.8Z"/>
+            <path d="M1149.3,69.77c-27.34,0-46.83,20.11-49.34,37.4h-.32c-7.23-24.2-26.08-37.4-48.08-37.4-25.46,0-43.06,20.75-45.57,38.34h-2.51v-35.2h-58.14v163.43h58.14v-90.83c0-21.06,10.69-27.97,21.37-27.97s19.8,6.91,19.8,27.97v90.83h58.14v-90.83c0-21.06,10.69-27.97,21.37-27.97s19.8,6.91,19.8,27.97v90.83h58.14v-105.28c0-39.29-21.69-61.29-52.8-61.29Z"/>
+            <path d="M1382.81,155.57c0-66-38.34-85.8-80.46-85.8s-85.17,22.31-85.17,83.91c0,65.05,45.57,85.8,84.86,85.8,42.43,0,71.97-22.95,78.57-60.66h-50.6c-1.89,7.54-5.66,16.97-27.03,16.97-16.97,0-27.66-6.91-30.48-27.03h109.37c.63-3.77.94-6.91.94-13.2ZM1272.81,136.08c2.83-14.77,11.32-22.63,27.97-22.63,21.69,0,26.4,13.51,27.34,22.63h-55.31Z"/>
+            <path d="M833.61,214.08c-.08-16.27-5.33-30.99-13.8-41.72-7.46-9.45-20.74-11.79-31.1-5.65-23.82,14.12-39.65,39.43-39.65,69.63h173.32v-81.71h-41.36c-26.12.19-47.27,26.7-47.42,59.45Z"/>
+            <path d="M833.61,95.17c.08,16.27,5.33,30.99,13.8,41.72,7.46,9.45,20.74,11.79,31.1,5.65,23.82-14.12,39.65-39.43,39.65-69.63h-173.32v81.71h41.37c26.12-.19,47.26-26.7,47.41-59.45Z"/>
+          </svg>
+        </a>
+      </div>
+      <div class="nav">
+        <button class="menu-btn" aria-label="Ouvrir le menu">menu</button>
+      </div>
     </div>
-    <div class="nav">
-      <a href="#contact">Contact</a>
-      <button class="lang-btn" id="lang-btn">FR</button>
-      <button class="mode-btn" id="mode-btn">◑</button>
+  </section>
+
+  <!-- ========== ABOUT ========== -->
+  <section class="about" id="about">
+    <div class="copy" id="about-copy">Un studio créatif fondé sur une conviction : <em>l'esthétique</em> n'est pas un luxe, c'est un avantage compétitif. Chaque détail compte.</div>
+  </section>
+
+  <!-- ========== PROJECTS ========== -->
+  <section class="projects" id="projects">
+    <div class="project-list">
+      <a class="project-row"       data-idx="0" href="projet-lacourdesgrands.html"><span class="title">La Cour des Grands</span><span class="meta">Branding</span></a>
+      <a class="project-row muted" data-idx="1" href="projet-stylingcoiffure.html"><span class="title">Styling Coiffure</span><span class="meta">Web design</span></a>
+      <a class="project-row muted" data-idx="2" href="projet-congresannecy.html"><span class="title">Congrès Annecy</span><span class="meta">Identité visuelle</span></a>
+      <a class="project-row muted" data-idx="3" href="projet-vulpo.html"><span class="title">Vulpo</span><span class="meta">UX · UI Design</span></a>
+      <a class="project-row muted" data-idx="4" href="projet-lakepub-identite.html"><span class="title">Lake Pub — Identité</span><span class="meta">Branding</span></a>
+      <a class="project-row muted" data-idx="5" href="projet-fablab.html"><span class="title">Fab Lab</span><span class="meta">UX · UI Design</span></a>
+      <a class="project-row muted" data-idx="6" href="projet-lempire.html"><span class="title">L'Empire</span><span class="meta">Identité visuelle</span></a>
+      <a class="project-row muted" data-idx="7" href="projet-lakepub-web.html"><span class="title">Lake Pub — Site web</span><span class="meta">Web design</span></a>
     </div>
-  </div>
-  <div class="hero-foot-spacer" id="hero-foot-spacer"></div>
-</section>
+  </section>
 
+  <!-- ========== SERVICES ========== -->
+  <section class="services" id="services">
+    <div class="services-left">
+      <div class="label">Notre expertise</div>
+      <h2>Graphisme, Branding &amp; Web design.</h2>
+      <a href="#contact" class="cta">DÉMARRER UN PROJET <span class="star">✦</span></a>
+    </div>
+    <div class="services-right">
 
-<!-- ========== ABOUT ========== -->
-<section class="about" id="about">
-  <div class="about-portrait" aria-hidden="true">
-    <img src="assets/img/Profil 01.jpg" alt="">
-  </div>
-  <div class="copy" id="about-copy">
-    <span class="rw">Un studio créatif</span>
-    <span class="rw">fondé sur une conviction :</span>
-    <span class="rw"><em>l'esthétique</em></span>
-    <span class="rw">n'est pas un luxe,</span>
-    <span class="rw">c'est un avantage</span>
-    <span class="rw">compétitif.</span>
-    <span class="rw">Chaque détail</span>
-    <span class="rw">compte.</span>
-  </div>
-</section>
+      <div class="service-row"><span class="name">Graphisme</span><span class="plus">+</span></div>
+      <div class="service-body"><div class="inner">
+        <div class="svc-item"><div class="svc-info"><span class="svc-name">Identité éditoriale</span><span class="svc-desc">Magazines, rapports annuels, éditions</span></div><span class="svc-price">à partir de —€</span></div>
+        <div class="svc-item"><div class="svc-info"><span class="svc-name">Affiches &amp; print</span><span class="svc-desc">Affiches, flyers, supports imprimés</span></div><span class="svc-price">à partir de —€</span></div>
+        <div class="svc-item"><div class="svc-info"><span class="svc-name">Packaging design</span><span class="svc-desc">Conception d'emballages &amp; étiquettes</span></div><span class="svc-price">sur devis</span></div>
+        <div class="svc-item"><div class="svc-info"><span class="svc-name">Motion graphics</span><span class="svc-desc">Animations, habillage vidéo</span></div></div>
+        <div class="svc-item"><div class="svc-info"><span class="svc-name">Direction artistique</span><span class="svc-desc">Concept créatif &amp; cohérence visuelle</span></div><span class="svc-price">sur devis</span></div>
+      </div></div>
 
-<!-- ========== PROJECTS ========== -->
-<section class="projects" id="projects">
-  <div class="projects-bg" id="projects-bg" aria-hidden="true"></div>
-  <div class="project-list">
-    <a class="project-row" data-idx="0" href="projet-lacourdesgrands.html">
-      <span class="title">La Cour des Grands</span>
-      <span class="meta">Branding</span>
-    </a>
-    <a class="project-row muted" data-idx="1" href="projet-stylingcoiffure.html">
-      <span class="title">Styling Coiffure</span>
-      <span class="meta">Web design</span>
-    </a>
-    <a class="project-row muted" data-idx="2" href="projet-congresannecy.html">
-      <span class="title">Congrès Annecy</span>
-      <span class="meta">Identité visuelle</span>
-    </a>
-    <a class="project-row muted" data-idx="3" href="projet-vulpo.html">
-      <span class="title">Vulpo</span>
-      <span class="meta">UX · UI Design</span>
-    </a>
-    <a class="project-row muted" data-idx="4" href="projet-lakepub-identite.html">
-      <span class="title">Lake Pub — Identité</span>
-      <span class="meta">Branding</span>
-    </a>
-    <a class="project-row muted" data-idx="5" href="projet-fablab.html">
-      <span class="title">Fab Lab</span>
-      <span class="meta">UX · UI Design</span>
-    </a>
-    <a class="project-row muted" data-idx="6" href="projet-lempire.html">
-      <span class="title">L'Empire</span>
-      <span class="meta">Identité visuelle</span>
-    </a>
-    <a class="project-row muted" data-idx="7" href="projet-lakepub-web.html">
-      <span class="title">Lake Pub — Site web</span>
-      <span class="meta">Web design</span>
-    </a>
-  </div>
-</section>
+      <div class="service-row"><span class="name">Branding</span><span class="plus">+</span></div>
+      <div class="service-body"><div class="inner">
+        <div class="svc-item"><div class="svc-info"><span class="svc-name">Stratégie de marque</span><span class="svc-desc">Positionnement, plateforme de marque</span></div><span class="svc-price">sur devis</span></div>
+        <div class="svc-item"><div class="svc-info"><span class="svc-name">Logo &amp; wordmark</span><span class="svc-desc">Création de logotype sur mesure</span></div><span class="svc-price">à partir de —€</span></div>
+        <div class="svc-item"><div class="svc-info"><span class="svc-name">Charte graphique</span><span class="svc-desc">Couleurs, typographies, déclinaisons</span></div><span class="svc-price">à partir de —€</span></div>
+        <div class="svc-item"><div class="svc-info"><span class="svc-name">Naming</span><span class="svc-desc">Recherche de nom &amp; baseline</span></div></div>
+        <div class="svc-item"><div class="svc-info"><span class="svc-name">Brand guidelines</span><span class="svc-desc">Document de référence complet</span></div></div>
+      </div></div>
 
-<!-- ========== SERVICES ========== -->
-<section class="services" id="services">
-  <div class="services-left">
-    <div class="label">Notre expertise</div>
-    <h2>Graphisme, Branding &amp; Web design.</h2>
-    <a href="#contact" class="cta">DÉMARRER UN PROJET <span class="star">✦</span></a>
-  </div>
-  <div class="services-right">
-    <div class="service-row"><span class="name">Graphisme</span><span class="plus">+</span></div>
-    <div class="service-body"><div class="inner">
-      <span class="chip">Identité éditoriale</span>
-      <span class="chip">Affiches &amp; print</span>
-      <span class="chip">Packaging design</span>
-      <span class="chip">Motion graphics</span>
-      <span class="chip">Signalétique</span>
-      <span class="chip">Direction artistique</span>
-    </div></div>
+      <div class="service-row"><span class="name">Web design</span><span class="plus">+</span></div>
+      <div class="service-body"><div class="inner">
+        <div class="svc-item"><div class="svc-info"><span class="svc-name">Site vitrine</span><span class="svc-desc">Design + intégration, jusqu'à 6 sections</span></div><span class="svc-price">à partir de —€</span></div>
+        <div class="svc-item"><div class="svc-info"><span class="svc-name">Landing page</span><span class="svc-desc">Page unique orientée conversion</span></div><span class="svc-price">à partir de —€</span></div>
+        <div class="svc-item"><div class="svc-info"><span class="svc-name">UX/UI design</span><span class="svc-desc">Maquettes, design system</span></div><span class="svc-price">sur devis</span></div>
+        <div class="svc-item"><div class="svc-info"><span class="svc-name">Prototypage Figma</span><span class="svc-desc">Prototype interactif cliquable</span></div></div>
+        <div class="svc-item"><div class="svc-info"><span class="svc-name">Intégration web</span><span class="svc-desc">Développement responsive</span></div><span class="svc-price">à partir de —€</span></div>
+      </div></div>
 
-    <div class="service-row"><span class="name">Branding</span><span class="plus">+</span></div>
-    <div class="service-body"><div class="inner">
-      <span class="chip">Stratégie de marque</span>
-      <span class="chip">Logo &amp; wordmark</span>
-      <span class="chip">Charte graphique</span>
-      <span class="chip">Naming</span>
-      <span class="chip">Brand guidelines</span>
-      <span class="chip">Rebranding</span>
-    </div></div>
+    </div>
+  </section>
 
-    <div class="service-row"><span class="name">Web design</span><span class="plus">+</span></div>
-    <div class="service-body"><div class="inner">
-      <span class="chip">Sites vitrines</span>
-      <span class="chip">Landing pages</span>
-      <span class="chip">UX/UI design</span>
-      <span class="chip">Prototypage Figma</span>
-      <span class="chip">Intégration web</span>
-      <span class="chip">Optimisation mobile</span>
-    </div></div>
-  </div>
-</section>
+  <!-- Curseur custom, % de scroll, pile d'aperçus projet — injectés/utilisés par JS -->
+  <div class="pct" id="pct">00%</div>
+  <div class="cursor-stack" id="cursor-stack" aria-hidden="true"></div>
 
-<script src="assets/js/site.js?v=5"></script>
-<script>
-
-/* ── Elements ─────────────────────────────────────── */
-const heroEl      = document.getElementById('hero');
-const heroFoot    = document.getElementById('hero-foot');
-const heroSpacer  = document.getElementById('hero-foot-spacer');
-const pctEl       = document.getElementById('pct');
-const railEl      = document.querySelector('.rail');
-const ticks       = document.querySelectorAll('.rail .tick');
-const railSecs    = ['about','projects','services'].map(id=>document.getElementById(id));
-SublizmeSite.injectFooter();
-const contactEl   = document.getElementById('contact');
-const aboutEl     = document.getElementById('about');
-const projectsEl  = document.getElementById('projects');
-const previewEl   = document.getElementById('preview-fixed');
-const previewFrame= document.getElementById('preview-frame');
-const previewScr  = document.getElementById('preview-screen');
-const previewNum  = document.getElementById('preview-num');
-const projectsBg  = document.getElementById('projects-bg');
-const projectRows = document.querySelectorAll('.project-row');
-const revealWords = document.querySelectorAll('.rw');
-
-/* ── Project data ─────────────────────────────────── */
-const PROJECTS = [
-  { label:'La Cour des Grands', cat:'Branding',        num:'01', img:'assets/img/projects/lacourdesgrands-cover.png' },
-  { label:'Styling Coiffure',   cat:'Web design',      num:'02', img:'assets/img/projects/stylingcoiffure-cover.png' },
-  { label:'Congrès Annecy',     cat:'Identité',        num:'03', img:'assets/img/projects/congresannecy-cover.png'   },
-  { label:'Vulpo',              cat:'UX · UI',         num:'04', img:'assets/img/projects/vulpo-cover.jpg'           },
-  { label:'Lake Pub — Identité',cat:'Branding',        num:'05', img:'assets/img/projects/lakepub-id-cover.jpg'      },
-  { label:'Fab Lab',            cat:'UX · UI',         num:'06', img:'assets/img/projects/fablab-cover.png'          },
-  { label:"L'Empire",          cat:'Identité',        num:'07', img:'assets/img/projects/lempire-cover.png'         },
-  { label:'Lake Pub — Site web',cat:'Web design',      num:'08', img:'assets/img/projects/lakepub-web-cover.png'     },
-];
-let currentIdx = 0;
-
-function setPreview(idx){
-  const d = PROJECTS[idx];
-  /* Mobile : fond section toujours à jour */
-  if(projectsBg){
-    projectsBg.style.backgroundImage = `url('${d.img}')`;
-  }
-  if(idx===currentIdx && previewEl.classList.contains('visible'))return;
-  currentIdx = idx;
-  previewScr.style.background = '#0a0a0a';
-  previewScr.style.backgroundImage = `url('${d.img}')`;
-  previewScr.style.backgroundSize = 'cover';
-  previewScr.style.backgroundPosition = 'center';
-  previewNum.textContent = d.num;
-}
-
-/* ── Parallaxe douce sur le fond preview ─────────── */
-projectsEl.addEventListener('mousemove', e=>{
-  const x = (e.clientX/window.innerWidth  - 0.5) * 38;
-  const y = (e.clientY/window.innerHeight - 0.5) * 28;
-  previewFrame.style.transition = 'transform .1s ease';
-  previewFrame.style.transform = `rotate(-2deg) translate(${x}px,${y}px)`;
-});
-projectsEl.addEventListener('mouseleave', ()=>{
-  previewFrame.style.transition = 'transform .9s cubic-bezier(.2,.8,.2,1)';
-  previewFrame.style.transform  = 'rotate(-2deg) translate(0,0)';
-});
-
-/* ── Project active — souris en priorité, scroll en fallback ── */
-let mouseY = null;
-const projectListEl = document.querySelector('.project-list');
-
-projectListEl.addEventListener('mousemove', e=>{
-  mouseY = e.clientY;
-  highlightByY(mouseY);
-});
-projectListEl.addEventListener('mouseleave', ()=>{ mouseY = null; });
-
-function highlightByY(y){
-  let closest=0, minDist=Infinity;
-  projectRows.forEach((row,i)=>{
-    const r = row.getBoundingClientRect();
-    const mid = r.top + r.height/2;
-    const d = Math.abs(mid - y);
-    if(d<minDist){ minDist=d; closest=i; }
-  });
-  projectRows.forEach((row,i)=>row.classList.toggle('muted',i!==closest));
-  setPreview(closest);
-}
-
-function updateActiveProjectByScroll(){
-  if(mouseY!==null)return; // souris active, on laisse faire
-  const prjRect = projectsEl.getBoundingClientRect();
-  if(prjRect.top>window.innerHeight||prjRect.bottom<0)return;
-  highlightByY(window.innerHeight * 0.5); // milieu de l'écran
-}
-
-/* ── About blur reveal ────────────────────────────── */
-const aboutPortrait = document.querySelector('.about-portrait');
-if(aboutPortrait){
-  aboutPortrait.addEventListener('transitionend', ()=>{
-    aboutPortrait.classList.add('floating');
-  }, {once:true});
-}
-function updateAboutReveal(){
-  const rect = aboutEl.getBoundingClientRect();
-  const progress = 1 - (rect.top / (window.innerHeight * 0.85));
-  const clamped  = Math.max(0, Math.min(1, progress));
-  revealWords.forEach((w,i)=>{
-    if(clamped > (i/revealWords.length)*0.85) w.classList.add('revealed');
-  });
-  if(clamped > 0.1 && aboutPortrait) aboutPortrait.classList.add('in');
-}
-
-/* ── Hero foot sticky — transition invisible ──────── */
-let heroFootSticky = false;
-let heroFootAnimating = false;
-function updateHeroFootSticky(){
-  const hh = heroFoot.offsetHeight;
-  const threshold = heroEl.offsetTop + heroEl.offsetHeight - hh - 40;
-  const shouldStick = window.scrollY >= threshold;
-
-  /* Fade out progressif sur les derniers 80px avant le seuil */
-  if(!shouldStick && !heroFootAnimating){
-    const dist = threshold - window.scrollY;
-    const fadeZone = 80;
-    heroFoot.style.opacity = dist < fadeZone ? String(Math.max(0, dist / fadeZone)) : '';
-  }
-
-  if(shouldStick === heroFootSticky || heroFootAnimating) return;
-
-  if(shouldStick){
-    heroFootSticky = true;
-    heroFootAnimating = true;
-    heroFoot.style.opacity = '0';
-    /* Petit délai pour que le fade-out soit visible, puis snap+slide-in */
-    setTimeout(()=>{
-      heroFoot.classList.add('is-sticky');
-      heroSpacer.classList.add('active');
-      heroSpacer.style.height = hh + 'px';
-      heroFoot.style.opacity = '';   /* CSS animation prend le relai */
-      heroFootAnimating = false;
-    }, 90);
-  } else {
-    heroFootSticky = false;
-    heroFoot.classList.remove('is-sticky');
-    heroSpacer.classList.remove('active');
-    heroSpacer.style.height = '0';
-    heroFoot.style.opacity = '0';
-    requestAnimationFrame(()=>{ heroFoot.style.opacity = ''; });
-  }
-}
-
-/* ── Main scroll ──────────────────────────────────── */
-function onScroll(){
-  const scrollY = window.scrollY;
-  const heroH   = heroEl.offsetHeight;
-  const pastHero = scrollY >= heroH * 0.85;
-
-  /* Hero foot sticky */
-  updateHeroFootSticky();
-
-  /* Rail + % : après hero, avant/pendant contact */
-  const contactRatio = contactEl ? contactEl.getBoundingClientRect().top/window.innerHeight : 1;
-
-  /* % : 100% atteint un peu avant le top de contact (viewport à 80%) */
-  const earlyEnd = contactEl
-    ? contactEl.offsetTop - window.innerHeight * 0.2
-    : document.documentElement.scrollHeight - window.innerHeight;
-  const p = Math.max(0, Math.min(100, Math.round(scrollY / earlyEnd * 100)));
-  pctEl.textContent = String(p).padStart(2,'0') + '%';
-
-  /* Visibilité % : apparaît après hero, disparaît comme la rail un peu après 100% */
-  const showPct = pastHero && contactRatio > 0.22;
-  pctEl.classList.toggle('visible', showPct);
-
-  /* Rail */
-  if(!pastHero){ railEl.classList.remove('visible'); railEl.classList.add('hide'); }
-  else if(contactRatio<0.35){ railEl.classList.add('hide'); }
-  else if(contactRatio>0.6){ railEl.classList.remove('hide'); railEl.classList.add('visible'); }
-
-  /* Rail ticks */
-  const yCenter = scrollY + window.innerHeight*0.4;
-  let activeIdx = -1;
-  railSecs.forEach((s,i)=>{ if(!s)return; if(yCenter>=s.offsetTop&&yCenter<s.offsetTop+s.offsetHeight)activeIdx=i; });
-  ticks.forEach((t,i)=>t.classList.toggle('active',i===activeIdx));
-
-  /* Preview fixe : apparaît plus tard, disparaît plus tôt */
-  const prjRect = projectsEl.getBoundingClientRect();
-  const prjVisible = prjRect.top < window.innerHeight * 0.3 && prjRect.bottom > window.innerHeight * 0.55;
-  previewEl.classList.toggle('visible', prjVisible);
-  if(projectsBg) projectsBg.classList.toggle('visible', prjVisible);
-
-  /* About reveal */
-  updateAboutReveal();
-
-  /* Projects highlight by scroll */
-  updateActiveProjectByScroll();
-}
-
-onScroll();
-window.addEventListener('scroll', onScroll, {passive:true});
-window.addEventListener('resize', onScroll);
-
-/* ── Rail — navigation par clic ──────────────────── */
-document.querySelectorAll('.rail .tick').forEach(tick => {
-  tick.addEventListener('click', () => {
-    const el = document.getElementById(tick.getAttribute('data-section'));
-    if (el) el.scrollIntoView({behavior:'smooth'});
-  });
-});
-
-/* ── Services accordion ───────────────────────────── */
-document.querySelectorAll('.service-row').forEach(row=>{
-  row.addEventListener('click',()=>{
-    const wasOpen = row.classList.contains('open');
-    document.querySelectorAll('.service-row.open').forEach(r=>r.classList.remove('open'));
-    if(!wasOpen) row.classList.add('open');
-  });
-});
-/* Ouvrir le premier item au chargement */
-document.querySelector('.service-row')?.classList.add('open');
-
-/* ── Module commun : restauration scroll + hover curseur ── */
-SublizmeSite.initScrollRestore();
-SublizmeSite.addCursorHover('.project-row,.service-row');
-</script>
+  <script src="assets/js/site.js?v=14"></script>
+  <script src="assets/js/index.js?v=14"></script>
 </body>
 </html>

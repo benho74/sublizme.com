@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "sublizme",
-      "runtimeExecutable": "ruby",
-      "runtimeArgs": ["/tmp/sublizme_serve.rb"],
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["/tmp/sublizme_serve.py"],
       "port": 3456
     }
   ]

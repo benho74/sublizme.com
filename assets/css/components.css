@@ -1,0 +1,292 @@
+/* ============================================================
+   Sublizme — components.css
+   Composants réutilisables : nav, menu, contact, footer,
+   plus des classes utilitaires (.pill, .label-caps, .avail).
+   Chargé par TOUTES les pages.
+   ============================================================ */
+
+/* ── Utilitaires réutilisables ────────────────────────────── */
+
+/* Petit label en majuscules — sections, kickers, meta */
+.label-caps{
+  font-size:11px;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-dim);
+}
+
+/* Badge / tag arrondi (utilisé pour tags projet, response-badge…) */
+.pill{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:5px 13px;
+  border:1px solid var(--line);
+  border-radius:var(--radius-pill);
+  font-size:11px;font-weight:500;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-dim);
+}
+
+/* Indicateur "disponible" — point vert qui pulse */
+.avail-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:#22c55e;flex-shrink:0;
+  box-shadow:0 0 7px rgba(34,197,94,.7);
+  animation:pulse 2.2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* ── Nav globale ──────────────────────────────────────────── */
+.site-nav{
+  position:fixed;top:0;left:0;right:0;z-index:80;
+  display:grid;grid-template-columns:auto 1fr;align-items:center;
+  padding:16px var(--pad);
+  font-size:12px;font-weight:500;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink);
+  animation:navIn var(--t-med) var(--ease) both;
+}
+@keyframes navIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+
+.sn-left{display:flex;align-items:center}
+.sn-logo{display:flex;align-items:center;color:var(--ink);transition:opacity var(--t-fast)}
+.sn-logo:hover{opacity:.6}
+.sn-logo svg{height:17px;width:auto;display:block}
+
+.sn-back{display:flex;align-items:center;gap:9px;color:var(--ink-dim);transition:opacity var(--t-fast), color var(--t-fast)}
+.sn-back:hover{opacity:.75;color:var(--ink)}
+.sn-arr{display:inline-block;transition:transform .25s}
+.sn-back:hover .sn-arr{transform:translateX(-5px)}
+
+.sn-links{display:flex;justify-content:flex-end;align-items:center;gap:28px}
+
+/* ── Bouton menu (effet verre) ────────────────────────────── */
+.menu-btn{
+  position:relative;color:var(--ink);
+  border:1px solid rgba(255,255,255,.28);
+  border-radius:var(--radius-pill);
+  background:linear-gradient(140deg, rgba(255,255,255,.16), rgba(255,255,255,.04));
+  backdrop-filter:blur(10px) saturate(160%);
+  -webkit-backdrop-filter:blur(10px) saturate(160%);
+  box-shadow:var(--shadow-card);
+  font-family:var(--sans);font-weight:700;font-size:12px;
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:11px 24px;line-height:1;cursor:none;
+  transition:transform .3s var(--ease), box-shadow .3s ease;
+}
+.menu-btn:hover{
+  transform:scale(1.06);
+  box-shadow:0 8px 26px rgba(0,0,0,.28), inset 0 1px 1px rgba(255,255,255,.6);
+}
+
+/* ── Menu plein-écran ─────────────────────────────────────── */
+.menu-overlay{
+  position:fixed;inset:0;z-index:200;
+  display:flex;justify-content:flex-end;align-items:stretch;
+  visibility:hidden;pointer-events:none;
+}
+.menu-overlay.open{visibility:visible;pointer-events:auto}
+
+.menu-scrim{
+  position:absolute;inset:0;
+  background:rgba(5,5,5,.5);opacity:0;
+}
+
+.menu-panel{
+  position:relative;z-index:1;
+  margin:16px 16px 16px 0;
+  width:min(480px, calc(100vw - 32px));
+  max-height:calc(100% - 32px);
+  padding:32px 36px 36px;
+  display:flex;flex-direction:column;
+  border:1px solid rgba(255,255,255,.3);
+  border-radius:var(--radius-xl);
+  /* Glass tint : noir 6 % (par-dessus la réfraction) */
+  background:rgba(0,0,0,.06);
+  /* Fallback flou tant que le filtre SVG de réfraction n'est pas
+     attaché par JS (buildLiquidGlass écrase ensuite en inline). */
+  backdrop-filter:blur(14px) saturate(150%);
+  -webkit-backdrop-filter:blur(14px) saturate(150%);
+  /* Outer shadow : blur 24. Inner shadow : blanc, blur 20, spread -5. */
+  box-shadow:
+    0 0 24px rgba(0,0,0,.45),
+    inset 0 0 14px -5px rgba(255,255,255,.4);
+  overflow-y:auto;
+  transform:translateX(105%);opacity:0;
+}
+.menu-overlay.open .menu-panel{transform:translateX(0);opacity:1}
+
+.menu-top{display:flex;justify-content:flex-end;margin-bottom:20px}
+.menu-close{
+  display:inline-flex;align-items:center;gap:14px;
+  background:none;border:none;cursor:none;
+  color:var(--ink);font-family:var(--sans);
+}
+.menu-close .mc-txt{font-size:14px;font-weight:500}
+.menu-close .mc-x{
+  width:44px;height:44px;border-radius:50%;
+  background:var(--ink);color:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;
+  transition:transform .4s var(--ease);
+}
+.menu-close:hover .mc-x{transform:rotate(90deg)}
+
+.menu-links{
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+  gap:4px;padding:24px 0;
+}
+.menu-links a{
+  font-family:var(--sans);font-weight:500;
+  font-size:clamp(40px, 7vw, 72px);line-height:1.14;letter-spacing:-.03em;
+  color:var(--ink);cursor:none;
+  width:max-content;
+  opacity:0;transform:translateY(26px);
+  transition:opacity .3s ease, transform var(--t-med) ease;
+}
+.menu-overlay.open .menu-links a{
+  opacity:1;transform:translateY(0);
+  transition:opacity var(--t-slow) ease, transform .7s var(--ease-out);
+}
+.menu-overlay.open .menu-links a:nth-child(1){transition-delay:.16s}
+.menu-overlay.open .menu-links a:nth-child(2){transition-delay:.22s}
+.menu-overlay.open .menu-links a:nth-child(3){transition-delay:.28s}
+.menu-overlay.open .menu-links a:nth-child(4){transition-delay:.34s}
+.menu-overlay.open .menu-links a:hover{
+  opacity:.5;transform:translateX(14px);
+  transition:opacity .25s ease, transform .4s var(--ease);
+  transition-delay:0s;
+}
+
+/* ── Section contact ──────────────────────────────────────── */
+.contact{
+  background:var(--bg);color:var(--ink);
+  padding:140px var(--pad) 0;
+  position:relative;overflow:hidden;
+}
+.contact-head{padding-bottom:16px;margin-bottom:40px}
+.contact-head-top{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:24px;
+}
+
+.contact-grid{
+  display:grid;grid-template-columns:1.35fr 1fr;gap:14px;
+  padding-bottom:100px;
+  border-bottom:1px solid var(--line);
+}
+.contact-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* ── Carte de contact (motif réutilisable) ────────────────── */
+.contact-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius-lg);
+  padding:28px 30px;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  transition:border-color .25s, background .25s;
+}
+.contact-card:hover{border-color:var(--surface-h)}
+.contact-card.card-project{grid-column:1 / -1}
+.contact-card .col-label{
+  font-size:11px;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-dim);
+  margin-bottom:18px;
+}
+.contact-card p{
+  font-size:14px;line-height:1.7;font-weight:300;
+  color:var(--ink-dim);max-width:34ch;
+}
+.contact-card .response-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  margin-top:18px;padding:4px 12px;
+  border:1px solid var(--line);border-radius:var(--radius-pill);
+  font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--ink-dim);
+}
+
+/* Lignes de lien dans une carte */
+.contact-card .link-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 0;
+  border-bottom:1px solid var(--line);
+  font-size:16px;font-weight:600;letter-spacing:-.01em;
+  cursor:none;transition:opacity var(--t-fast);
+}
+.contact-card .link-row:first-of-type{border-top:1px solid var(--line)}
+.contact-card .link-row:last-of-type{border-bottom:none}
+.contact-card .link-row .arr{color:var(--ink-dim);font-size:13px;transition:transform .25s}
+.contact-card .link-row:hover{opacity:.55}
+.contact-card .link-row:hover .arr{transform:translate(3px, -3px)}
+
+/* Bloc coordonnées (Adresse, Téléphone, Email…) */
+.contact-card .coord{font-size:15px;color:var(--ink);font-weight:500;margin-bottom:14px}
+.contact-card .coord:last-child{margin-bottom:0}
+.contact-card .coord-k{
+  display:block;margin-bottom:5px;
+  font-size:11px;font-weight:500;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-dim);
+}
+.contact-card .coord a{transition:opacity var(--t-fast)}
+.contact-card .coord a:hover{opacity:.6}
+
+/* Portrait à droite */
+.contact-portrait{
+  position:relative;min-height:340px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+}
+.contact-portrait img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;
+  transition:transform .8s var(--ease);
+}
+.contact-portrait:hover img{transform:scale(1.03)}
+.contact-portrait .portrait-tag{
+  position:absolute;left:18px;bottom:18px;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 13px;
+  background:rgba(0,0,0,.45);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:var(--radius-pill);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  font-size:11px;font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:#fff;
+}
+
+/* ── Footer ───────────────────────────────────────────────── */
+.contact-footer{position:relative;padding-top:72px}
+.contact-footer-bar{
+  position:relative;z-index:2;
+  display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;
+  padding-bottom:48px;
+  border-bottom:1px solid var(--line);
+  font-size:11px;font-weight:500;
+  letter-spacing:.07em;text-transform:uppercase;
+  color:var(--ink-mute);
+}
+.contact-footer-bar .f-nav{display:flex;gap:20px;justify-content:flex-end}
+.contact-footer-bar a{color:var(--ink-mute);cursor:none;transition:color var(--t-fast)}
+.contact-footer-bar a:hover{color:var(--ink)}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 960px){
+  .site-nav{grid-template-columns:1fr auto}
+  .contact-grid,
+  .contact-cards,
+  .contact-footer-bar{grid-template-columns:1fr}
+  .contact-grid{gap:14px}
+  .contact-portrait{min-height:280px;aspect-ratio:4/3}
+  .menu-panel{
+    margin:10px 10px 10px 0;
+    width:min(300px, calc(100vw - 20px));
+    max-height:calc(100% - 20px);
+    padding:18px 20px 22px;
+    border-radius:var(--radius-lg);
+  }
+  .menu-links{padding:14px 0;gap:0}
+  .menu-links a{font-size:28px;line-height:1.18}
+}

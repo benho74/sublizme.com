@@ -76,7 +76,11 @@
       "Bash(awk '{print $5}')",
       "Bash(curl -sI \"http://localhost:3456/assets/img/projects/lacourdesgrands-video.mp4\")",
       "Bash(curl -s -r 0-99 -o /dev/null -w \"range status: %{http_code}, downloaded: %{size_download} bytes\\\\n\" \"http://localhost:3456/assets/img/projects/lacourdesgrands-video.mp4\")",
-      "Bash(python3 -)"
+      "Bash(python3 -)",
+      "Bash(ls -la \"/Users/vivasante/Desktop/Perso/Projets/Perso/BH/Claude Code - BH\")",
+      "Bash(mkdir -p \"/Users/vivasante/Desktop/Perso/Projets/Perso/BH/Claude Code - BH/assets/css\" \"/Users/vivasante/Desktop/Perso/Projets/Perso/BH/Claude Code - BH/assets/js\" \"/Users/vivasante/Desktop/Perso/Projets/Perso/BH/Claude Code - BH/assets/images\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code} %{time_total}s\\\\n\" http://localhost:3456/index.html)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code} %{time_total}s\\\\n\" http://localhost:3456/assets/js/site.js)"
     ]
   }
 }
