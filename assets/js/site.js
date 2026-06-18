@@ -207,7 +207,11 @@
       var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       svg.setAttribute('width', '0'); svg.setAttribute('height', '0');
       svg.setAttribute('color-interpolation-filters', 'sRGB');
-      svg.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden';
+      /* PAS de overflow:hidden ni width/height:0 en CSS : sur le
+         chemin GPU de Chrome ça clippe la rasterisation des feImage
+         (cartes de déplacement) à zéro → la réfraction disparaît,
+         seul le flou subsiste. Conteneur identique au test qui marche. */
+      svg.style.cssText = 'position:absolute';
       defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
       defs.id = 'liquid-glass-defs';
       svg.appendChild(defs); document.body.appendChild(svg);
