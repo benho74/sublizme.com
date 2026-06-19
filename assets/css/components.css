@@ -154,11 +154,42 @@
 .menu-overlay.open .menu-links a:nth-child(2){transition-delay:.22s}
 .menu-overlay.open .menu-links a:nth-child(3){transition-delay:.28s}
 .menu-overlay.open .menu-links a:nth-child(4){transition-delay:.34s}
-/* Léger slide vers la droite au hover. Porté par le <span> interne :
+/* Slide vers la droite au hover. Porté par le <span> interne :
    le <a> est piloté par GSAP (transform inline) au moment de
    l'ouverture, un hover en transform dessus serait écrasé. */
-.menu-links a span{display:inline-block;transition:transform .35s var(--ease)}
-.menu-overlay.open .menu-links a:hover span{transform:translateX(8px)}
+.menu-links a span{display:inline-block;transition:transform .4s var(--ease)}
+.menu-overlay.open .menu-links a:hover span{transform:translateX(.5em)}
+
+/* ── Étoile rouge réutilisable au survol (.hover-star) ───────────
+   À poser sur un élément survolable : au survol le texte glisse vers
+   la droite (padding-left) et l'étoile ✦ rouge apparaît (scale 0→1)
+   dans l'espace ouvert, à gauche du texte. Taille en em → s'adapte
+   à la police de l'élément, réutilisable partout.
+   `.pn .pn-title` est inclus ici car « Projet suivant » a un
+   déclencheur (.pn) différent de l'hôte de l'étoile (.pn-title).
+   La transition padding-left est posée sur chaque élément cible
+   (sinon une transition existante l'écraserait). */
+.hover-star,
+.pn .pn-title{position:relative}
+.hover-star::before,
+.pn .pn-title::before{
+  content:"✦";
+  position:absolute;
+  left:0;top:50%;
+  color:var(--accent);
+  font-size:.42em;line-height:1;
+  transform:translateY(-50%) scale(0);
+  transform-origin:left center;
+  transition:transform .4s var(--ease);
+  pointer-events:none;
+}
+.hover-star:hover,
+.pn:hover .pn-title{padding-left:.6em}
+.hover-star:hover::before,
+.pn:hover .pn-title::before{transform:translateY(-50%) scale(1)}
+/* Menu : le texte glisse via le <span> (le <a> est piloté par GSAP,
+   une transition sur le <a> serait écrasée) → pas de padding ici. */
+.menu-links a.hover-star:hover{padding-left:0}
 
 /* ── Section contact ──────────────────────────────────────── */
 .contact{
@@ -214,12 +245,11 @@
   padding:11px 0;
   border-bottom:1px solid var(--line);
   font-size:16px;font-weight:600;letter-spacing:-.01em;
-  transition:opacity var(--t-fast);
+  transition:padding-left .4s var(--ease);
 }
 .contact-card .link-row:first-of-type{border-top:1px solid var(--line)}
 .contact-card .link-row:last-of-type{border-bottom:none}
 .contact-card .link-row .arr{color:var(--ink-dim);font-size:13px;transition:transform .25s}
-.contact-card .link-row:hover{opacity:.55}
 .contact-card .link-row:hover .arr{transform:translate(3px, -3px)}
 
 /* Bloc coordonnées (Adresse, Téléphone, Email…) */
@@ -232,7 +262,6 @@
   color:var(--ink-dim);
 }
 .contact-card .coord a{transition:opacity var(--t-fast)}
-.contact-card .coord a:hover{opacity:.6}
 
 /* Portrait à droite */
 .contact-portrait{

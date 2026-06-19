@@ -58,6 +58,10 @@
    `animation-timeline: scroll()` → fluide même à 120 Hz.
    Fallback : `translateY` calculé en JS dans index.js. */
 .hero-foot{
+  /* Distance entre le bas du foot et le bas du viewport au repos.
+     Surchargée en mobile pour dégager la barre du navigateur / le
+     home indicator (voir media query responsive). */
+  --foot-bottom:32px;
   position:fixed;top:0;left:0;right:0;z-index:80;
   display:grid;grid-template-columns:auto 1fr;align-items:center;gap:24px;
   padding:16px var(--pad);
@@ -69,16 +73,17 @@
   .hero-foot{
     animation: foot-rise linear both;
     animation-timeline: scroll(root);
-    animation-range: 0 calc(100vh - 100px);
+    /* svh = hauteur RÉELLEMENT visible (sans la barre mobile) → le foot
+       se cale par rapport au viewport visible, pas au viewport « large ». */
+    animation-range: 0 calc(100svh - 100px);
   }
   @keyframes foot-rise{
-    from{transform:translateY(calc(100vh - 100% - 32px))}
+    from{transform:translateY(calc(100svh - 100% - var(--foot-bottom)))}
     to  {transform:translateY(0)}
   }
 }
 .hero-foot .version{display:flex;align-items:center;gap:10px;color:var(--ink)}
 .hero-foot .nav{display:flex;justify-content:flex-end;align-items:center;gap:14px}
-.hero-foot a{transition:opacity var(--t-fast)}
 .hero-foot .version a{display:flex;align-items:center}
 .hero-foot .version svg{height:12px;width:auto}
 
@@ -127,7 +132,7 @@
   font-family:var(--sans);font-weight:400;
   font-size:clamp(36px, 4.2vw, 68px);line-height:1;letter-spacing:-.02em;
   color:var(--ink);
-  transition:color .45s ease;
+  transition:color .45s ease, padding-left .4s var(--ease);
 }
 .project-row:first-child{border-top:1px solid var(--line)}
 .project-row.muted{color:var(--ink-mute)}
@@ -396,7 +401,6 @@
   padding:100px var(--pad);
   border-top:1px solid var(--line);
 }
-.pn:hover .pn-title{opacity:.6}
 .pn:hover .pn-arrow{transform:translateX(14px);color:var(--ink)}
 .pn .pn-label{
   margin-bottom:16px;
@@ -407,7 +411,7 @@
 .pn .pn-title{
   font-family:var(--sans);font-weight:800;
   font-size:clamp(36px, 5vw, 88px);line-height:.9;letter-spacing:-.04em;
-  transition:opacity .3s;
+  transition:padding-left .4s var(--ease);
 }
 .pn-right{display:flex;justify-content:flex-end;align-items:center}
 .pn-arrow{
@@ -423,7 +427,12 @@
   .pct,
   .cursor-stack{display:none}
   .hero{min-height:100svh}
-  .hero-foot{grid-template-columns:auto 1fr;gap:14px}
+  /* On remonte le foot : svh + plus de marge basse pour dégager la
+     barre du navigateur et le home indicator (+ safe-area si dispo). */
+  .hero-foot{
+    grid-template-columns:auto 1fr;gap:14px;
+    --foot-bottom:calc(36px + env(safe-area-inset-bottom, 0px));
+  }
   .hero-foot .nav{justify-content:flex-end}
   .about{min-height:100svh;padding-top:80px;padding-bottom:80px}
   .about .copy{max-width:100%;font-size:clamp(34px, 8vw, 44px)}

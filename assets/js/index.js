@@ -115,13 +115,17 @@
   }
 
   function highlightByY (y) {
-    var closest = 0, min = Infinity;
+    /* On prend la ligne réellement SOUS le curseur (rect qui contient y),
+       pour rester en raccord avec le :hover CSS (étoile + slide). Le repli
+       « plus proche du centre » ne sert qu'en dehors des lignes. */
+    var idx = -1, closest = 0, min = Infinity;
     rows.forEach(function (row, i) {
       var r = row.getBoundingClientRect();
+      if (y >= r.top && y < r.bottom) idx = i;
       var d = Math.abs(r.top + r.height / 2 - y);
       if (d < min) { min = d; closest = i; }
     });
-    setActive(closest);
+    setActive(idx === -1 ? closest : idx);
   }
 
   projectListEl.addEventListener('mousemove', function (e) {
@@ -150,10 +154,13 @@
   })();
 
   function updateActiveProjectByScroll () {
-    if (mouseY !== null) return;
     var r = projectsEl.getBoundingClientRect();
     if (r.top > window.innerHeight || r.bottom < 0) return;
-    highlightByY(window.innerHeight * .5);
+    /* Si le curseur est sur la liste, on suit sa position pendant le scroll
+       (le contenu défile sous un curseur fixe → la ligne active change) afin
+       que la surbrillance reste en raccord avec l'étoile/le slide du :hover.
+       Sinon (souris hors liste), on se base sur le centre du viewport. */
+    highlightByY(mouseY !== null ? mouseY : window.innerHeight * .5);
   }
 
   /* ── Hero foot piloté par scroll ──────────────────────────

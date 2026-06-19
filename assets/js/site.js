@@ -301,9 +301,9 @@
             '</div>' +
             '<div class="contact-card">' +
               '<div class="col-label">Réseaux</div>' +
-              '<a href="#" class="link-row">Instagram<span class="arr">↗</span></a>' +
-              '<a href="#" class="link-row">Behance<span class="arr">↗</span></a>' +
-              '<a href="#" class="link-row">LinkedIn<span class="arr">↗</span></a>' +
+              '<a href="#" class="link-row hover-star">Instagram<span class="arr">↗</span></a>' +
+              '<a href="#" class="link-row hover-star">Behance<span class="arr">↗</span></a>' +
+              '<a href="#" class="link-row hover-star">LinkedIn<span class="arr">↗</span></a>' +
             '</div>' +
             '<div class="contact-card">' +
               '<div class="col-label">Coordonnées</div>' +
@@ -350,10 +350,10 @@
             '</button>' +
           '</div>' +
           '<nav class="menu-links">' +
-            '<a href="index.html#about"    data-target="about"><span>Studio</span></a>' +
-            '<a href="index.html#projects" data-target="projects"><span>Projet</span></a>' +
-            '<a href="index.html#services" data-target="services"><span>Services</span></a>' +
-            '<a href="index.html#contact"  data-target="contact"><span>Contact</span></a>' +
+            '<a href="index.html#about"    data-target="about"    class="hover-star"><span>Studio</span></a>' +
+            '<a href="index.html#projects" data-target="projects" class="hover-star"><span>Projet</span></a>' +
+            '<a href="index.html#services" data-target="services" class="hover-star"><span>Services</span></a>' +
+            '<a href="index.html#contact"  data-target="contact"  class="hover-star"><span>Contact</span></a>' +
           '</nav>' +
         '</div>';
 
