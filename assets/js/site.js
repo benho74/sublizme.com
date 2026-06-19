@@ -26,42 +26,14 @@
       '<path d="M833.61,95.17c.08,16.27,5.33,30.99,13.8,41.72,7.46,9.45,20.74,11.79,31.1,5.65,23.82-14.12,39.65-39.43,39.65-69.63h-173.32v81.71h41.37c26.12-.19,47.26-26.7,47.41-59.45Z"/>' +
     '</svg>';
 
-  /* ── Curseur custom ───────────────────────────────────────── */
-  var cur, ring;
-
-  function initCursor () {
-    if (!document.querySelector('.cursor')) {
-      var c = document.createElement('div'); c.className = 'cursor';      c.setAttribute('aria-hidden', 'true');
-      var r = document.createElement('div'); r.className = 'cursor-ring'; r.setAttribute('aria-hidden', 'true');
-      document.body.prepend(r); document.body.prepend(c);
-    }
-    cur  = document.querySelector('.cursor');
-    ring = document.querySelector('.cursor-ring');
-    if (!cur || !ring) return;
-
-    var cx = 0, cy = 0, rx = 0, ry = 0;
-    document.addEventListener('mousemove', function (e) {
-      cx = e.clientX; cy = e.clientY;
-      cur.style.left = cx + 'px'; cur.style.top = cy + 'px';
-    });
-    (function loop () {
-      rx += (cx - rx) * .12;
-      ry += (cy - ry) * .12;
-      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
-      requestAnimationFrame(loop);
-    })();
-
-    addCursorHover('a, button');
-  }
-
-  function addHover (el) {
-    if (!cur) return;
-    el.addEventListener('mouseenter', function () { cur.classList.add('hover');    ring.classList.add('hover');    });
-    el.addEventListener('mouseleave', function () { cur.classList.remove('hover'); ring.classList.remove('hover'); });
-  }
-  function addCursorHover (selector) {
-    document.querySelectorAll(selector).forEach(addHover);
-  }
+  /* ── Curseur ──────────────────────────────────────────────────
+     Curseur personnalisé retiré : on garde le curseur système par
+     défaut sur tout le site. `initCursor`, `addHover` et
+     `addCursorHover` restent des no-op pour ne pas casser les
+     appels existants (nav, footer, menu, index.js). */
+  function initCursor () {}
+  function addHover () {}
+  function addCursorHover () {}
 
   /* ── GSAP (CDN, chargé une seule fois pour le menu) ──────── */
   var _gsapLoading = false;
@@ -378,10 +350,10 @@
             '</button>' +
           '</div>' +
           '<nav class="menu-links">' +
-            '<a href="index.html#about"    data-target="about">Studio</a>' +
-            '<a href="index.html#projects" data-target="projects">Projet</a>' +
-            '<a href="index.html#services" data-target="services">Services</a>' +
-            '<a href="index.html#contact"  data-target="contact">Contact</a>' +
+            '<a href="index.html#about"    data-target="about"><span>Studio</span></a>' +
+            '<a href="index.html#projects" data-target="projects"><span>Projet</span></a>' +
+            '<a href="index.html#services" data-target="services"><span>Services</span></a>' +
+            '<a href="index.html#contact"  data-target="contact"><span>Contact</span></a>' +
           '</nav>' +
         '</div>';
 

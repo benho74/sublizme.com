@@ -51,7 +51,7 @@
 
 .sn-left{display:flex;align-items:center}
 .sn-logo{display:inline-flex;align-items:center}
-.sn-logo svg{height:14px;width:auto;display:block}
+.sn-logo svg{height:12px;width:auto;display:block}
 .sn-back{display:inline-flex;align-items:center;gap:9px}
 .sn-arr{display:inline-block;transition:transform .25s}
 .sn-back:hover .sn-arr{transform:translateX(-5px)}
@@ -74,7 +74,7 @@
     inset 0 0 14px -5px rgba(255,255,255,.4);               /* Inner Shadow — blanc 16/-6 */
   font-family:var(--sans);font-weight:700;font-size:12px;
   letter-spacing:.08em;text-transform:uppercase;
-  padding:11px 24px;line-height:1;cursor:none;
+  padding:11px 24px;line-height:1;
   transition:transform .3s var(--ease);
 }
 .menu-btn:hover,
@@ -121,7 +121,7 @@
 .menu-top{display:flex;justify-content:flex-end;margin-bottom:20px}
 .menu-close{
   display:inline-flex;align-items:center;gap:14px;
-  background:none;border:none;cursor:none;
+  background:none;border:none;
   color:var(--ink);font-family:var(--sans);
 }
 .menu-close .mc-txt{font-size:14px;font-weight:500}
@@ -141,7 +141,7 @@
 .menu-links a{
   font-family:var(--sans);font-weight:500;
   font-size:clamp(40px, 7vw, 72px);line-height:1.14;letter-spacing:-.03em;
-  color:var(--ink);cursor:none;
+  color:var(--ink);
   width:max-content;
   opacity:0;transform:translateY(26px);
   transition:opacity .3s ease, transform var(--t-med) ease;
@@ -154,11 +154,11 @@
 .menu-overlay.open .menu-links a:nth-child(2){transition-delay:.22s}
 .menu-overlay.open .menu-links a:nth-child(3){transition-delay:.28s}
 .menu-overlay.open .menu-links a:nth-child(4){transition-delay:.34s}
-.menu-overlay.open .menu-links a:hover{
-  opacity:.5;transform:translateX(14px);
-  transition:opacity .25s ease, transform .4s var(--ease);
-  transition-delay:0s;
-}
+/* Léger slide vers la droite au hover. Porté par le <span> interne :
+   le <a> est piloté par GSAP (transform inline) au moment de
+   l'ouverture, un hover en transform dessus serait écrasé. */
+.menu-links a span{display:inline-block;transition:transform .35s var(--ease)}
+.menu-overlay.open .menu-links a:hover span{transform:translateX(8px)}
 
 /* ── Section contact ──────────────────────────────────────── */
 .contact{
@@ -214,7 +214,7 @@
   padding:11px 0;
   border-bottom:1px solid var(--line);
   font-size:16px;font-weight:600;letter-spacing:-.01em;
-  cursor:none;transition:opacity var(--t-fast);
+  transition:opacity var(--t-fast);
 }
 .contact-card .link-row:first-of-type{border-top:1px solid var(--line)}
 .contact-card .link-row:last-of-type{border-bottom:none}
@@ -273,7 +273,7 @@
   color:var(--ink-mute);
 }
 .contact-footer-bar .f-nav{display:flex;gap:20px;justify-content:flex-end}
-.contact-footer-bar a{color:var(--ink-mute);cursor:none;transition:color var(--t-fast)}
+.contact-footer-bar a{color:var(--ink-mute);transition:color var(--t-fast)}
 .contact-footer-bar a:hover{color:var(--ink)}
 
 /* ── Responsive ───────────────────────────────────────────── */
@@ -284,13 +284,16 @@
   .contact-footer-bar{grid-template-columns:1fr}
   .contact-grid{gap:14px}
   .contact-portrait{min-height:280px;aspect-ratio:4/3}
+  /* Menu mobile : ancré en haut → la hauteur suit le contenu
+     (plus de panneau plein écran), plus compact et plus lisible. */
+  .menu-overlay{align-items:flex-start}
   .menu-panel{
     margin:10px 10px 10px 0;
-    width:min(300px, calc(100vw - 20px));
+    width:min(248px, calc(100vw - 20px));
     max-height:calc(100% - 20px);
-    padding:18px 20px 22px;
+    padding:14px 16px 18px;
     border-radius:var(--radius-lg);
   }
-  .menu-links{padding:14px 0;gap:0}
-  .menu-links a{font-size:28px;line-height:1.18}
+  .menu-links{padding:8px 0;gap:0}
+  .menu-links a{font-size:32px;line-height:1.12}
 }
