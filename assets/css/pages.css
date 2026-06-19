@@ -39,19 +39,55 @@
 }
 .pct.visible{opacity:1}
 
+/* ── Écran de chargement (accueil) ────────────────────────────
+   Couvre tout dès le 1er paint. Le % suit le chargement RÉEL des
+   assets (vidéo + images + polices), piloté dans index.js. */
+.loader{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .7s var(--ease);
+}
+.loader.is-done{opacity:0;pointer-events:none}
+.loader-inner{
+  display:flex;flex-direction:column;align-items:center;gap:20px;
+  width:min(260px, 68vw);
+}
+.loader-pct{
+  font-family:var(--sans);font-weight:300;
+  font-size:clamp(44px, 9vw, 92px);line-height:1;
+  letter-spacing:-.03em;color:var(--ink);
+  font-variant-numeric:tabular-nums;
+}
+.loader-sign{color:var(--ink-dim);margin-left:.04em}
+.loader-bar{
+  width:100%;height:2px;border-radius:2px;
+  background:var(--line);overflow:hidden;
+}
+.loader-bar-fill{
+  display:block;height:100%;width:0;
+  background:var(--ink);
+}
+
 /* ── Hero ─────────────────────────────────────────────────── */
+/* Hero = scène scrollée. La hauteur de .hero définit la longueur du
+   « scrub » : 1 écran visible + ~2 écrans de défilement pendant
+   lesquels la vidéo reste épinglée et avance au scroll (voir index.js). */
 .hero{
-  min-height:100vh;
-  padding:0 var(--pad) 32px;
-  display:flex;flex-direction:column;justify-content:space-between;
+  height:calc(100svh + 200vh);
+  padding:0;
 }
-.hero-center{
-  flex:1;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:22px;padding:60px 0 32px;
+.hero-stage{
+  position:sticky;top:0;
+  height:100svh;
+  overflow:hidden;
 }
-.hero-symbol{display:flex;justify-content:center}
-.hero-symbol svg{width:clamp(100px, 18vw, 240px);height:auto}
+/* Juste la vidéo, plein écran, aucun contrôle. */
+.hero-video{
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+}
 
 /* Hero foot — position pilotée par scroll.
    Modernes : animation tournée par le compositeur via
@@ -73,13 +109,15 @@
   .hero-foot{
     animation: foot-rise linear both;
     animation-timeline: scroll(root);
-    /* svh = hauteur RÉELLEMENT visible (sans la barre mobile) → le foot
-       se cale par rapport au viewport visible, pas au viewport « large ». */
-    animation-range: 0 calc(100svh - 100px);
+    /* La plage couvre TOUT le hero (pas de dépendance au remplissage
+       « avant plage »). Le foot reste en bas sur les 2/3 (= la vidéo,
+       scrub 200vh sur 300vh ≈ 66,67 %) puis monte sur le dernier tiers
+       = la transition vers la page 1. svh = hauteur réellement visible. */
+    animation-range: 0 calc(100svh + 200vh);
   }
   @keyframes foot-rise{
-    from{transform:translateY(calc(100svh - 100% - var(--foot-bottom)))}
-    to  {transform:translateY(0)}
+    0%, 66.67%{transform:translateY(calc(100svh - 100% - var(--foot-bottom)))}
+    100%      {transform:translateY(0)}
   }
 }
 .hero-foot .version{display:flex;align-items:center;gap:10px;color:var(--ink)}
@@ -93,6 +131,16 @@
   padding:0 var(--pad);
   display:flex;align-items:center;justify-content:center;
   overflow:hidden;
+}
+/* Dégradé noir en haut de la page 1 : prolonge le noir de fin de la
+   vidéo (#000) et le fond en s'effaçant → le hero et la page 1 ne
+   forment qu'un, sans couture visible. */
+.about::before{
+  content:'';
+  position:absolute;left:0;right:0;top:0;
+  height:42vh;
+  background:linear-gradient(to bottom, #000 0%, transparent 100%);
+  pointer-events:none;z-index:1;
 }
 .about .copy{
   position:relative;z-index:3;

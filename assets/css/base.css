@@ -53,7 +53,9 @@
 
 /* ── Reset ────────────────────────────────────────────────── */
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+/* overscroll-behavior:none → supprime le « rebond » élastique quand on
+   est déjà tout en haut / tout en bas (plus de saut). */
+html{scroll-behavior:smooth;overscroll-behavior:none}
 body{
   background:var(--bg);
   color:var(--ink);
@@ -63,6 +65,7 @@ body{
   line-height:1.45;
   letter-spacing:-.005em;
   overflow-x:hidden;
+  overscroll-behavior:none;
   -webkit-font-smoothing:antialiased;
 }
 a{color:inherit;text-decoration:none}

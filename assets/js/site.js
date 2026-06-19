@@ -544,12 +544,56 @@
     });
   }
 
+  /* ── Scroll lissé (molette) ───────────────────────────────────
+     Rend le défilement molette/trackpad un peu plus doux et « lent ».
+     · On n'intercepte QUE la molette → le tactile, le clavier et les
+       ancres restent natifs (et la zone défilante du menu aussi).
+     · scrollTo en `instant` pour ne pas cumuler avec scroll-behavior.
+     · clamp [0, max] → aucun dépassement/rebond en haut et en bas.
+     Respecte prefers-reduced-motion et est désactivé sur le tactile. */
+  function initSmoothScroll () {
+    var mm = window.matchMedia;
+    if (mm && (mm('(prefers-reduced-motion: reduce)').matches || mm('(pointer: coarse)').matches)) return;
+
+    var EASE = 0.12;   // plus bas = plus doux / plus « lent »
+    var SPEED = 0.85;  // < 1 = un peu plus lent que la normale
+    var target = window.scrollY, current = target, running = false;
+
+    function maxScroll () {
+      return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    }
+    function clamp (v) { return Math.max(0, Math.min(v, maxScroll())); }
+
+    function loop () {
+      current += (target - current) * EASE;
+      if (Math.abs(target - current) < 0.4) { current = target; running = false; }
+      window.scrollTo({ top: Math.round(current), left: 0, behavior: 'instant' });
+      if (running) requestAnimationFrame(loop);
+    }
+
+    window.addEventListener('wheel', function (e) {
+      if (e.ctrlKey) return;                                   // pinch-zoom : on laisse
+      if (e.target.closest && e.target.closest('.menu-panel, [data-native-scroll]')) return;
+      e.preventDefault();
+      var dy = e.deltaY * (e.deltaMode === 1 ? 16 : (e.deltaMode === 2 ? window.innerHeight : 1));
+      target = clamp(target + dy * SPEED);
+      if (!running) { running = true; current = window.scrollY; requestAnimationFrame(loop); }
+    }, { passive: false });
+
+    /* Si le scroll bouge autrement (clavier, ancre, barre), on resynchronise. */
+    window.addEventListener('scroll', function () {
+      if (!running) { target = current = window.scrollY; }
+    }, { passive: true });
+    window.addEventListener('resize', function () { target = clamp(target); });
+  }
+
   /* ── Boot ─────────────────────────────────────────────────── */
   initProjectHero();
   initProjectReveal();
 
   function boot () {
     initCursor();
+    initSmoothScroll();
     /* Applique le liquid glass sur tous les éléments visés (nav + tags +
        cards). On rebuilde une seconde fois après chargement des fonts
        custom : sinon la taille mesurée à DOMContentLoaded peut être

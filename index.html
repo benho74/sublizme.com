@@ -6,21 +6,27 @@
   <meta name="description" content="Sublizme — Studio créatif. Graphisme, branding et web design haut de gamme. Paris.">
   <title>Sublizme — Studio Créatif</title>
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
-  <link rel="stylesheet" href="assets/css/base.css?v=23">
-  <link rel="stylesheet" href="assets/css/components.css?v=23">
-  <link rel="stylesheet" href="assets/css/pages.css?v=23">
+  <link rel="stylesheet" href="assets/css/base.css?v=31">
+  <link rel="stylesheet" href="assets/css/components.css?v=31">
+  <link rel="stylesheet" href="assets/css/pages.css?v=31">
 </head>
 <body>
 
+  <!-- ========== ÉCRAN DE CHARGEMENT ========== -->
+  <div class="loader" id="loader">
+    <div class="loader-inner">
+      <div class="loader-pct"><span id="loader-num">0</span><span class="loader-sign">%</span></div>
+      <div class="loader-bar"><span class="loader-bar-fill" id="loader-bar"></span></div>
+    </div>
+  </div>
+
   <!-- ========== HERO ========== -->
   <section class="hero" id="hero">
-    <div class="hero-center">
-      <figure class="hero-symbol" aria-label="Sublizme">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 177.56 163.43" fill="currentColor" role="img">
-          <path d="M136.19,81.71h0c-26.12.19-47.27,26.7-47.42,59.45-.08-16.27-5.33-30.99-13.8-41.72-7.46-9.45-20.74-11.79-31.1-5.65-23.82,14.12-39.65,39.43-39.65,69.63h173.32v-81.71h-41.37Z"/>
-          <path d="M88.78,22.26c.08,16.27,5.33,30.99,13.8,41.72,7.46,9.45,20.74,11.79,31.1,5.65,23.82-14.12,39.65-39.43,39.65-69.63H0v81.71h41.37c26.12-.19,47.26-26.7,47.41-59.45Z"/>
-        </svg>
-      </figure>
+    <div class="hero-stage">
+      <video id="hero-video" class="hero-video"
+             src="assets/img/hero-logo.mp4"
+             muted playsinline preload="auto"
+             disablepictureinpicture aria-hidden="true"></video>
     </div>
 
     <div class="hero-foot" id="hero-foot">
@@ -108,7 +114,7 @@
   <div class="pct" id="pct">00%</div>
   <div class="cursor-stack" id="cursor-stack" aria-hidden="true"></div>
 
-  <script src="assets/js/site.js?v=23"></script>
-  <script src="assets/js/index.js?v=23"></script>
+  <script src="assets/js/site.js?v=31"></script>
+  <script src="assets/js/index.js?v=31"></script>
 </body>
 </html>
