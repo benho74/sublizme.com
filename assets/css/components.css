@@ -305,6 +305,35 @@
 .contact-footer-bar a{color:var(--ink-mute);transition:color var(--t-fast)}
 .contact-footer-bar a:hover{color:var(--ink)}
 
+/* ── Transition de page (balayage vertical) ───────────────────
+   Overlay noir avec le symbole, présent dès le 1er paint sur chaque
+   page. Il couvre par défaut (translateY 0) → on le retire (slide vers
+   le haut) à l'arrivée, et on le ramène (depuis le bas) au départ.
+   Tout est piloté par JS (site.js) ; l'animation pt-safety n'est qu'un
+   filet de sécurité si le JS ne tourne pas (sinon page noire). */
+.pt{
+  position:fixed;inset:0;z-index:9000;
+  background:var(--bg);
+  transform:scaleY(1);transform-origin:bottom;
+  pointer-events:none;will-change:transform;
+  animation:pt-safety .01s linear 3s forwards;
+}
+@keyframes pt-safety{to{transform:scaleY(0)}}
+/* Bande « liquid glass » qui balaie de haut en bas, en tête de la zone
+   révélée. Animée via `top` (pas transform) pour préserver le
+   backdrop-filter sur le chemin GPU de Chrome. */
+.pt-line{
+  position:fixed;left:0;right:0;top:-78px;height:78px;z-index:9001;
+  pointer-events:none;
+  background:linear-gradient(to bottom, rgba(255,255,255,.02), rgba(255,255,255,.12));
+  backdrop-filter:blur(18px) saturate(180%);
+  -webkit-backdrop-filter:blur(18px) saturate(180%);
+  border-bottom:1.5px solid rgba(255,255,255,.6);
+  box-shadow:0 16px 55px rgba(0,0,0,.5),
+             inset 0 1px 1px rgba(255,255,255,.45),
+             inset 0 -18px 26px -18px rgba(255,255,255,.32);
+}
+
 /* ── Responsive ───────────────────────────────────────────── */
 @media (max-width: 960px){
   .site-nav{grid-template-columns:1fr auto}

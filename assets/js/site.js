@@ -26,6 +26,13 @@
       '<path d="M833.61,95.17c.08,16.27,5.33,30.99,13.8,41.72,7.46,9.45,20.74,11.79,31.1,5.65,23.82-14.12,39.65-39.43,39.65-69.63h-173.32v81.71h41.37c26.12-.19,47.26-26.7,47.41-59.45Z"/>' +
     '</svg>';
 
+  /* Symbole (marque 4 pétales) — utilisé dans la transition de page. */
+  var SYMBOL =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 177.56 163.43" fill="currentColor" aria-hidden="true">' +
+      '<path d="M136.19,81.71h0c-26.12.19-47.27,26.7-47.42,59.45-.08-16.27-5.33-30.99-13.8-41.72-7.46-9.45-20.74-11.79-31.1-5.65-23.82,14.12-39.65,39.43-39.65,69.63h173.32v-81.71h-41.37Z"/>' +
+      '<path d="M88.78,22.26c.08,16.27,5.33,30.99,13.8,41.72,7.46,9.45,20.74,11.79,31.1,5.65,23.82-14.12,39.65-39.43,39.65-69.63H0v81.71h41.37c26.12-.19,47.26-26.7,47.41-59.45Z"/>' +
+    '</svg>';
+
   /* ── Curseur ──────────────────────────────────────────────────
      Curseur personnalisé retiré : on garde le curseur système par
      défaut sur tout le site. `initCursor`, `addHover` et
@@ -587,11 +594,90 @@
     window.addEventListener('resize', function () { target = clamp(target); });
   }
 
+  /* ── Transition de page (balayage vertical) ───────────────────
+     L'overlay #pt couvre dès le 1er paint. À l'arrivée il se retire en
+     glissant vers le haut ; au départ (lien vers un projet ou retour
+     accueil) il revient depuis le bas pour couvrir, puis on navigue.
+     Même animation enchaînée après le loader → expérience unifiée. */
+  function initPageTransition () {
+    var pt = document.getElementById('pt');
+    if (!pt) return;
+    pt.style.animation = 'none';                  // JS prend la main (annule le filet CSS)
+
+    /* Bande de verre qui balaie en tête (créée ici, cachée au-dessus). */
+    var line = document.createElement('div');
+    line.className = 'pt-line';
+    line.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(line);
+
+    var EASE = 'cubic-bezier(.76,0,.24,1)';
+    var navigating = false;
+
+    /* Arrivée : le cache noir se rétracte vers le bas (scaleY 1→0, ancré
+       en bas) et la bande de verre descend en tête → la page se dévoile
+       du haut vers le bas, révélée par la ligne de liquid glass. */
+    function reveal () {
+      pt.style.transformOrigin = 'bottom';
+      pt.style.transition = 'transform .75s ' + EASE;
+      pt.style.transform = 'scaleY(0)';
+      line.style.transition = 'top .75s ' + EASE;
+      line.style.top = '100vh';
+    }
+    /* Départ : le cache se déroule depuis le haut (scaleY 0→1) et la bande
+       descend → on couvre, puis on navigue. */
+    function cover (href) {
+      if (navigating) return; navigating = true;
+      pt.style.transition = 'none';
+      pt.style.transformOrigin = 'top';
+      pt.style.transform = 'scaleY(0)';
+      line.style.transition = 'none';
+      line.style.top = '-78px';
+      pt.offsetHeight;                            // reflow forcé
+      pt.style.transition = 'transform .55s ' + EASE;
+      pt.style.transform = 'scaleY(1)';
+      line.style.transition = 'top .55s ' + EASE;
+      line.style.top = '100vh';
+      setTimeout(function () { window.location.href = href; }, 560);
+    }
+    window.__revealPage = reveal;
+
+    /* Intercepte uniquement les liens internes vers un projet ou l'accueil. */
+    document.addEventListener('click', function (e) {
+      if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var a = e.target.closest('a');
+      if (!a) return;
+      var href = a.getAttribute('href');
+      if (!href || a.target === '_blank' || a.hasAttribute('download')) return;
+      if (/^(mailto:|tel:|#)/.test(href)) return;
+      if (!/(?:^|\/)(?:projet-[\w-]+|index)\.html(?:[?#]|$)/.test(href)) return;
+      /* Lien vers la PAGE COURANTE (ancre #section sur l'accueil) → pas de
+         transition, on laisse le comportement natif. On normalise « /index.html »
+         et « / » pour qu'ils soient équivalents. */
+      var dest = new URL(href, location.href);
+      var norm = function (p) { return p.replace(/\/index\.html$/, '/'); };
+      if (norm(dest.pathname) === norm(location.pathname)) return;
+      e.preventDefault();
+      cover(href);
+    });
+
+    /* Retour navigateur (bfcache) : l'overlay peut être resté en position
+       « couvre » → on le retire. */
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted) { navigating = false; reveal(); }
+    });
+
+    /* Reveal à l'arrivée : si le loader va s'afficher (1ʳᵉ visite accueil),
+       c'est lui qui enchaînera (via __revealPage) ; sinon on révèle direct. */
+    var loaderWillShow = document.getElementById('loader') && !sessionStorage.getItem('sublizme_loaded');
+    if (!loaderWillShow) requestAnimationFrame(function () { requestAnimationFrame(reveal); });
+  }
+
   /* ── Boot ─────────────────────────────────────────────────── */
   initProjectHero();
   initProjectReveal();
 
   function boot () {
+    initPageTransition();
     initCursor();
     initSmoothScroll();
     /* Applique le liquid glass sur tous les éléments visés (nav + tags +

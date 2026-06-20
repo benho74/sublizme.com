@@ -34,10 +34,16 @@
     var track = 1, target = 0, shown = -1, ready = false, raf = false;
     v.pause();
 
-    /* Longueur de scroll pendant laquelle la vidéo reste épinglée =
-       hauteur de .hero moins un écran visible. */
+    /* Durée d'épinglage = hauteur de .hero moins la hauteur de la scène
+       épinglée. On se base sur .hero-stage (et NON window.innerHeight) :
+       sur mobile, innerHeight change quand la barre du navigateur
+       apparaît/disparaît pendant le scroll → ça recalculait la « track »
+       en plein milieu et faisait sauter/buguer la vidéo. .hero-stage
+       (en svh) reste stable → scrub fluide. */
+    var stageEl = document.querySelector('.hero-stage');
     function measure () {
-      track = Math.max(1, heroEl.offsetHeight - window.innerHeight);
+      var stageH = stageEl ? stageEl.offsetHeight : window.innerHeight;
+      track = Math.max(1, heroEl.offsetHeight - stageH);
     }
     function setTarget () {
       var p = Math.max(0, Math.min(1, window.scrollY / track));
@@ -140,7 +146,12 @@
       faded = true;
       loader.classList.add('is-done');
       if (!location.hash) window.scrollTo(0, 0);   // respecte une ancre éventuelle
-      setTimeout(function () { if (loader.parentNode) loader.parentNode.removeChild(loader); }, 800);
+      setTimeout(function () {
+        if (loader.parentNode) loader.parentNode.removeChild(loader);
+        /* Enchaîne sur la transition de page (balayage) → loader et arrivée
+           unifiés. Le panneau #pt (noir, sous le loader) se retire en slidant. */
+        if (window.__revealPage) window.__revealPage();
+      }, 500);
     }
 
     /* setInterval plutôt que rAF : avance même si l'onglet passe en
