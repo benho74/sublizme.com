@@ -499,6 +499,12 @@
       var saved = sessionStorage.getItem('sublizme_scrollY');
       if (saved === null) return;
       sessionStorage.removeItem('sublizme_scrollY');
+      /* Si on arrive sur une ancre de section précise (menu → #about,
+         #services, #contact), elle doit primer : on NE restaure PAS la
+         position mémorisée (qui ne vaut que pour le retour vers la liste
+         projets : #projects ou sans ancre). Sinon on « revient en arrière »
+         au lieu d'aller à la section demandée. */
+      if (location.hash && location.hash !== '#projects') return;
       document.documentElement.style.scrollBehavior = 'auto';
       var y = parseInt(saved, 10);
       requestAnimationFrame(function () {
