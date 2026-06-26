@@ -6,9 +6,9 @@
   <meta name="description" content="Sublizme — Studio créatif. Graphisme, branding et web design haut de gamme. Paris.">
   <title>Sublizme — Studio Créatif</title>
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
-  <link rel="stylesheet" href="assets/css/base.css?v=36">
-  <link rel="stylesheet" href="assets/css/components.css?v=36">
-  <link rel="stylesheet" href="assets/css/pages.css?v=36">
+  <link rel="stylesheet" href="assets/css/base.css?v=57">
+  <link rel="stylesheet" href="assets/css/components.css?v=57">
+  <link rel="stylesheet" href="assets/css/pages.css?v=57">
 </head>
 <body>
   <div class="pt" id="pt" aria-hidden="true"></div>
@@ -24,10 +24,15 @@
   <!-- ========== HERO ========== -->
   <section class="hero" id="hero">
     <div class="hero-stage">
-      <video id="hero-video" class="hero-video"
-             src="assets/img/hero-logo.mp4"
-             muted playsinline preload="auto"
-             disablepictureinpicture aria-hidden="true"></video>
+      <!-- Grille animée en fond (canvas). -->
+      <canvas class="hero-grid" id="hero-grid" aria-hidden="true"></canvas>
+      <!-- Média qui s'agrandit au scroll (vidéo desktop / image figée mobile,
+           injecté par index.js) + accroche qui s'écarte. -->
+      <div class="hero-expand" id="hero-expand"></div>
+      <div class="hero-title" id="hero-title" aria-hidden="true">
+        <span class="ht-word ht-1">Studio</span>
+        <span class="ht-word ht-2">Créatif</span>
+      </div>
     </div>
 
     <div class="hero-foot" id="hero-foot">
@@ -48,7 +53,7 @@
         </a>
       </div>
       <div class="nav">
-        <button class="menu-btn" aria-label="Ouvrir le menu">menu</button>
+        <a class="menu-btn" href="#contact">contact</a>
       </div>
     </div>
   </section>
@@ -77,11 +82,11 @@
     <div class="services-left">
       <div class="label">Notre expertise</div>
       <h2>Graphisme, Branding &amp; Web design.</h2>
-      <a href="#contact" class="cta">DÉMARRER UN PROJET <span class="star">✦</span></a>
+      <a href="#contact" class="cta fx-x-trigger"><span class="cta-txt">DÉMARRER UN PROJET</span> <span class="star">✦</span></a>
     </div>
     <div class="services-right">
 
-      <div class="service-row"><span class="name">Graphisme</span><span class="plus">+</span></div>
+      <div class="service-row fx-x-trigger"><span class="name">Graphisme</span><span class="plus">+</span></div>
       <div class="service-body"><div class="inner">
         <div class="svc-item"><div class="svc-info"><span class="svc-name">Identité éditoriale</span><span class="svc-desc">Magazines, rapports annuels, éditions</span></div><span class="svc-price">à partir de —€</span></div>
         <div class="svc-item"><div class="svc-info"><span class="svc-name">Affiches &amp; print</span><span class="svc-desc">Affiches, flyers, supports imprimés</span></div><span class="svc-price">à partir de —€</span></div>
@@ -90,7 +95,7 @@
         <div class="svc-item"><div class="svc-info"><span class="svc-name">Direction artistique</span><span class="svc-desc">Concept créatif &amp; cohérence visuelle</span></div><span class="svc-price">sur devis</span></div>
       </div></div>
 
-      <div class="service-row"><span class="name">Branding</span><span class="plus">+</span></div>
+      <div class="service-row fx-x-trigger"><span class="name">Branding</span><span class="plus">+</span></div>
       <div class="service-body"><div class="inner">
         <div class="svc-item"><div class="svc-info"><span class="svc-name">Stratégie de marque</span><span class="svc-desc">Positionnement, plateforme de marque</span></div><span class="svc-price">sur devis</span></div>
         <div class="svc-item"><div class="svc-info"><span class="svc-name">Logo &amp; wordmark</span><span class="svc-desc">Création de logotype sur mesure</span></div><span class="svc-price">à partir de —€</span></div>
@@ -99,7 +104,7 @@
         <div class="svc-item"><div class="svc-info"><span class="svc-name">Brand guidelines</span><span class="svc-desc">Document de référence complet</span></div></div>
       </div></div>
 
-      <div class="service-row"><span class="name">Web design</span><span class="plus">+</span></div>
+      <div class="service-row fx-x-trigger"><span class="name">Web design</span><span class="plus">+</span></div>
       <div class="service-body"><div class="inner">
         <div class="svc-item"><div class="svc-info"><span class="svc-name">Site vitrine</span><span class="svc-desc">Design + intégration, jusqu'à 6 sections</span></div><span class="svc-price">à partir de —€</span></div>
         <div class="svc-item"><div class="svc-info"><span class="svc-name">Landing page</span><span class="svc-desc">Page unique orientée conversion</span></div><span class="svc-price">à partir de —€</span></div>
@@ -115,7 +120,7 @@
   <div class="pct" id="pct">00%</div>
   <div class="cursor-stack" id="cursor-stack" aria-hidden="true"></div>
 
-  <script src="assets/js/site.js?v=36"></script>
-  <script src="assets/js/index.js?v=36"></script>
+  <script src="assets/js/site.js?v=57"></script>
+  <script src="assets/js/index.js?v=57"></script>
 </body>
 </html>

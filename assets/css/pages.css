@@ -70,24 +70,58 @@
 }
 
 /* ── Hero ─────────────────────────────────────────────────── */
-/* Hero = scène scrollée. La hauteur de .hero définit la longueur du
-   « scrub » : 1 écran visible + ~2 écrans de défilement pendant
-   lesquels la vidéo reste épinglée et avance au scroll (voir index.js). */
+/* Scène épinglée : grille animée en fond, média (vidéo desktop / image
+   mobile) qui s'agrandit au scroll, accroche qui s'écarte. La hauteur
+   en plus de .hero = la course de scroll de l'agrandissement. */
 .hero{
-  height:calc(100svh + 200vh);
+  height:calc(100svh + 150vh);
   padding:0;
 }
 .hero-stage{
   position:sticky;top:0;
   height:100svh;
   overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
 }
-/* Juste la vidéo, plein écran, aucun contrôle. */
-.hero-video{
+/* Grille animée en fond, plein écran. */
+.hero-grid{
+  position:absolute;inset:0;
+  width:100%;height:100%;display:block;
+}
+/* Dégradé en bas : la grille se fond dans le noir du fond. */
+.hero-stage::after{
+  content:'';
+  position:absolute;left:0;right:0;bottom:0;
+  height:42%;
+  background:linear-gradient(to bottom, transparent, var(--bg));
+  pointer-events:none;z-index:1;
+}
+/* Média qui s'agrandit (taille pilotée au scroll par index.js). */
+.hero-expand{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%, -50%);
+  z-index:2;
+  width:300px;height:380px;
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,.45);
+}
+.hero-exp-media{
   width:100%;height:100%;
-  object-fit:cover;
-  display:block;
+  object-fit:cover;display:block;
 }
+/* Accroche par-dessus : les deux mots s'écartent au scroll. */
+.hero-title{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%, -50%);
+  z-index:3;
+  display:flex;flex-direction:column;align-items:center;gap:.05em;
+  font-family:var(--sans);font-weight:800;
+  font-size:clamp(40px, 8vw, 96px);line-height:1;letter-spacing:-.03em;
+  color:#fff;mix-blend-mode:difference;
+  pointer-events:none;text-align:center;white-space:nowrap;
+}
+.hero-title .ht-word{display:block;will-change:transform}
 
 /* Hero foot — position pilotée par scroll.
    Modernes : animation tournée par le compositeur via
@@ -109,15 +143,12 @@
   .hero-foot{
     animation: foot-rise linear both;
     animation-timeline: scroll(root);
-    /* La plage couvre TOUT le hero (pas de dépendance au remplissage
-       « avant plage »). Le foot reste en bas sur les 2/3 (= la vidéo,
-       scrub 200vh sur 300vh ≈ 66,67 %) puis monte sur le dernier tiers
-       = la transition vers la page 1. svh = hauteur réellement visible. */
-    animation-range: 0 calc(100svh + 200vh);
+    /* Le foot part du bas et monte sur le 1er écran (hero = 100svh). */
+    animation-range: 0 calc(100svh - 100px);
   }
   @keyframes foot-rise{
-    0%, 66.67%{transform:translateY(calc(100svh - 100% - var(--foot-bottom)))}
-    100%      {transform:translateY(0)}
+    from{transform:translateY(calc(100svh - 100% - var(--foot-bottom)))}
+    to  {transform:translateY(0)}
   }
 }
 .hero-foot .version{display:flex;align-items:center;gap:10px;color:var(--ink)}
@@ -131,16 +162,6 @@
   padding:0 var(--pad);
   display:flex;align-items:center;justify-content:center;
   overflow:hidden;
-}
-/* Dégradé noir en haut de la page 1 : prolonge le noir de fin de la
-   vidéo (#000) et le fond en s'effaçant → le hero et la page 1 ne
-   forment qu'un, sans couture visible. */
-.about::before{
-  content:'';
-  position:absolute;left:0;right:0;top:0;
-  height:42vh;
-  background:linear-gradient(to bottom, #000 0%, transparent 100%);
-  pointer-events:none;z-index:1;
 }
 .about .copy{
   position:relative;z-index:3;
@@ -215,7 +236,6 @@
   position:absolute;inset:0;
   border-radius:var(--radius-md);overflow:hidden;
   background:#0a0a0a center/cover no-repeat;
-  box-shadow:var(--shadow-stack);
   animation:cardIn .7s var(--ease-out) both;
 }
 @keyframes cardIn{
@@ -248,7 +268,6 @@
   letter-spacing:.06em;text-transform:uppercase;
   transition:opacity .25s;
 }
-.services-left .cta:hover{opacity:.6}
 .services-left .cta .star{color:var(--accent)}
 
 .services-right{
@@ -449,7 +468,6 @@
   padding:100px var(--pad);
   border-top:1px solid var(--line);
 }
-.pn:hover .pn-arrow{transform:translateX(14px);color:var(--ink)}
 .pn .pn-label{
   margin-bottom:16px;
   font-size:12px;font-weight:500;
@@ -467,6 +485,9 @@
   color:var(--ink-dim);
   transition:transform .4s var(--ease), color .3s;
 }
+/* Au survol du bloc « Projet suivant » : la flèche glisse vers la droite
+   et passe au blanc, en parallèle de l'animation X sur le titre. */
+.pn:hover .pn-arrow{transform:translateX(14px);color:var(--ink)}
 
 /* ╔════════════════════════════════════════════════════════╗
    ║  RESPONSIVE                                            ║
@@ -474,9 +495,8 @@
 @media (max-width: 960px){
   .pct,
   .cursor-stack{display:none}
-  .hero{min-height:100svh}
-  /* On remonte le foot : svh + plus de marge basse pour dégager la
-     barre du navigateur et le home indicator (+ safe-area si dispo). */
+  /* Foot mobile : marge basse pour dégager la barre du navigateur / le
+     home indicator (+ safe-area si dispo). */
   .hero-foot{
     grid-template-columns:auto 1fr;gap:14px;
     --foot-bottom:calc(36px + env(safe-area-inset-bottom, 0px));

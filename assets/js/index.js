@@ -22,50 +22,181 @@
   SublizmeSite.injectMenu();
   var contactEl  = document.getElementById('contact');
 
-  /* ── Hero : vidéo « scrubbée » au scroll ──────────────────────
-     Vidéo plein écran épinglée (sticky, voir .hero / .hero-stage).
-     Aucune lecture auto, aucun contrôle. En haut = 1ʳᵉ frame ; plus
-     on scrolle, plus la vidéo avance (sa position ne bouge pas) ; en
-     remontant elle revient en arrière. Une fois la vidéo finie, la
-     scène se libère et la page continue normalement. */
-  (function initHeroScrub () {
-    var v = document.getElementById('hero-video');
-    if (!v) return;
-    var track = 1, target = 0, shown = -1, ready = false, raf = false;
-    v.pause();
+  /* ── Hero : grille animée en fond (canvas) ────────────────────
+     Port vanilla du composant « FlowingRibbons » : une grille déformée
+     par des ondes (+ réaction au survol et au clic). Couleurs inversées :
+     lignes blanches sur fond noir. Le logo noir est posé par-dessus (CSS).
+     L'animation se met en pause quand le hero n'est plus visible. */
+  (function initHeroGrid () {
+    var canvas = document.getElementById('hero-grid');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-    /* Durée d'épinglage = hauteur de .hero moins la hauteur de la scène
-       épinglée. On se base sur .hero-stage (et NON window.innerHeight) :
-       sur mobile, innerHeight change quand la barre du navigateur
-       apparaît/disparaît pendant le scroll → ça recalculait la « track »
-       en plein milieu et faisait sauter/buguer la vidéo. .hero-stage
-       (en svh) reste stable → scrub fluide. */
-    var stageEl = document.querySelector('.hero-stage');
-    function measure () {
-      var stageH = stageEl ? stageEl.offsetHeight : window.innerHeight;
-      track = Math.max(1, heroEl.offsetHeight - stageH);
+    /* Exactement le noir du site : on lit la variable CSS --bg (au lieu
+       d'écrire la couleur en dur) → toujours identique au fond du site,
+       au logo et au dégradé (qui utilisent tous var(--bg)). */
+    var BG = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#0a0a0a';
+    var LINE = 'rgba(255,255,255,0.4)';
+    var SPEED = 0.3;
+    var DENSITY = (window.matchMedia && window.matchMedia('(max-width: 900px)').matches) ? 46 : 64;
+
+    var t = 0, raf = null, visible = true;
+    var mouse = { x: -9999, y: -9999 };
+    var waves = [];
+
+    function resize () {
+      var dpr = window.devicePixelRatio || 1;
+      var rect = canvas.parentElement.getBoundingClientRect();
+      var w = rect.width || window.innerWidth, h = rect.height || window.innerHeight;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(dpr, dpr);
     }
-    function setTarget () {
-      var p = Math.max(0, Math.min(1, window.scrollY / track));
-      target = p * (v.duration || 8);
+
+    function mouseInfluence (x, y) {
+      var dx = x - mouse.x, dy = y - mouse.y;
+      return Math.max(0, 1 - Math.sqrt(dx * dx + dy * dy) / 200);
     }
-    function seek () {
-      raf = false;
-      if (!ready) return;
-      if (Math.abs(target - shown) > 0.001) {
-        shown = target;
-        try { v.currentTime = target; } catch (e) {}
+    function waveDisturbance (x, y, now) {
+      var total = 0;
+      for (var k = 0; k < waves.length; k++) {
+        var d = waves[k], age = now - d.time;
+        if (age < 3000) {
+          var dx = x - d.x, dy = y - d.y, dist = Math.sqrt(dx * dx + dy * dy);
+          var wr = (age / 3000) * 400;
+          if (Math.abs(dist - wr) < 80) {
+            total += (1 - age / 3000) * d.intensity * (1 - Math.abs(dist - wr) / 80) * Math.sin((dist - wr) * 0.1);
+          }
+        }
+      }
+      return total;
+    }
+    function deform (x, y, tt, p) {
+      var mi = mouseInfluence(x, y), dist = waveDisturbance(x, y, Date.now());
+      var mw = mi * Math.sin(tt * 0.02 + p * Math.PI * 2) * 20;
+      var dw = dist * Math.sin(tt * 0.015 + p * Math.PI * 3) * 25;
+      return {
+        ox: Math.sin(p * Math.PI * 4 + tt * 0.01) * 30 + Math.sin(x * 0.02 + y * 0.015 + tt * 0.005) * 10 + mw + dw,
+        oy: Math.sin(p * Math.PI * 7 - tt * 0.008) * 15 + mw * 0.5 + dw * 0.7
+      };
+    }
+
+    function frame () {
+      if (!visible) { raf = null; return; }
+      t += SPEED;
+      var w = canvas.clientWidth, h = canvas.clientHeight;
+      /* rw > largeur viewport → la grille déborde des deux côtés : pas
+         d'espace vide à gauche/droite même avec la déformation. */
+      var rw = w * 1.2, off = (w - rw) / 2, i, j, p, x, y, d;
+      ctx.fillStyle = BG; ctx.fillRect(0, 0, w, h);
+      ctx.strokeStyle = LINE; ctx.lineWidth = 1.6;
+      for (i = 0; i < DENSITY; i++) {
+        x = off + (i / DENSITY) * rw;
+        ctx.beginPath();
+        for (j = 0; j <= DENSITY; j++) {
+          p = (j / DENSITY) * 1.2 - 0.1; y = p * h;
+          d = deform(x, y, t, p);
+          if (j === 0) ctx.moveTo(x + d.ox, y + d.oy); else ctx.lineTo(x + d.ox, y + d.oy);
+        }
+        ctx.stroke();
+      }
+      for (j = 0; j < DENSITY; j++) {
+        p = (j / DENSITY) * 1.2 - 0.1; y = p * h;
+        ctx.beginPath();
+        for (i = 0; i <= DENSITY; i++) {
+          x = off + (i / DENSITY) * rw;
+          d = deform(x, y, t, p);
+          if (i === 0) ctx.moveTo(x + d.ox, y + d.oy); else ctx.lineTo(x + d.ox, y + d.oy);
+        }
+        ctx.stroke();
+      }
+      raf = requestAnimationFrame(frame);
+    }
+    function start () { if (raf === null) raf = requestAnimationFrame(frame); }
+
+    resize();
+    window.addEventListener('resize', resize);
+    canvas.addEventListener('mousemove', function (e) {
+      var r = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
+    });
+    canvas.addEventListener('mousedown', function (e) {
+      var r = canvas.getBoundingClientRect(), now = Date.now();
+      waves.push({ x: e.clientX - r.left, y: e.clientY - r.top, time: now, intensity: 2 });
+      waves = waves.filter(function (d) { return now - d.time < 3000; });
+    });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (en) {
+        visible = en[0].isIntersecting;
+        if (visible) start();
+      }, { threshold: 0 }).observe(canvas);
+    }
+    start();
+  })();
+
+  /* ── Hero : média qui s'agrandit au scroll + accroche qui s'écarte ──
+     Scène épinglée (.hero / .hero-stage). On pilote la TAILLE du média et
+     l'écartement des mots du titre selon la progression du scroll dans la
+     scène — scroll naturel, aucun détournement de molette.
+     Desktop = vidéo (autoplay/loop) ; mobile = image figée (économie data). */
+  (function initHeroExpand () {
+    var stage = document.querySelector('.hero-stage');
+    var expand = document.getElementById('hero-expand');
+    var title = document.getElementById('hero-title');
+    if (!stage || !expand) return;
+
+    var isMobile = window.matchMedia && window.matchMedia('(max-width: 960px)').matches;
+
+    var media;
+    if (isMobile) {
+      media = document.createElement('img');
+      media.src = 'assets/img/hero-poster.jpg';
+      media.alt = '';
+    } else {
+      media = document.createElement('video');
+      media.id = 'hero-video';                 // pour que le loader l'attende
+      media.src = 'assets/img/hero-geneve.mp4?v=54';
+      media.muted = true; media.loop = true; media.autoplay = true;
+      media.setAttribute('muted', ''); media.setAttribute('playsinline', '');
+      media.setAttribute('preload', 'auto'); media.setAttribute('disablepictureinpicture', '');
+      if (media.play) { var pr = media.play(); if (pr && pr.catch) pr.catch(function () {}); }
+    }
+    media.className = 'hero-exp-media';
+    media.setAttribute('aria-hidden', 'true');
+    expand.appendChild(media);
+
+    var w1 = title && title.querySelector('.ht-1');
+    var w2 = title && title.querySelector('.ht-2');
+
+    function track () { return Math.max(1, heroEl.offsetHeight - stage.offsetHeight); }
+
+    function update () {
+      var p = Math.max(0, Math.min(1, window.scrollY / track()));
+      var mw = 300 + p * (isMobile ? 560 : 1300);
+      var mh = 380 + p * (isMobile ? 360 : 520);
+      expand.style.width = 'min(' + Math.round(mw) + 'px, 96vw)';
+      expand.style.height = 'min(' + Math.round(mh) + 'px, 86vh)';
+      /* Désaturation pilotée par le scroll :
+         · 0 %  → grayscale(1) = N&B
+         · 80 % → grayscale(0) = couleur complète
+         (clampé à 0 entre 80 % et 100 %). */
+      var gs = Math.max(0, 1 - p / 0.8);
+      media.style.filter = 'grayscale(' + gs.toFixed(3) + ')';
+      if (w1 && w2) {
+        var tx = p * (isMobile ? 55 : 42);
+        w1.style.transform = 'translateX(-' + tx + 'vw)';
+        w2.style.transform = 'translateX(' + tx + 'vw)';
+        title.style.opacity = String(Math.max(0, 1 - p * 1.5));
       }
     }
-    function requestSeek () { if (!raf) { raf = true; requestAnimationFrame(seek); } }
-
-    function onReady () { ready = true; measure(); setTarget(); requestSeek(); }
-    if (v.readyState >= 1) onReady();
-    else v.addEventListener('loadedmetadata', onReady);
-
-    window.addEventListener('scroll', function () { setTarget(); requestSeek(); }, { passive: true });
-    window.addEventListener('resize', function () { measure(); setTarget(); requestSeek(); });
-    setTarget();
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', function () {
+      isMobile = window.matchMedia && window.matchMedia('(max-width: 960px)').matches;
+      update();
+    });
   })();
 
   /* ── Données des projets ──────────────────────────────────── */
@@ -102,6 +233,10 @@
     var barEl = document.getElementById('loader-bar');
     var video = document.getElementById('hero-video');
 
+    /* Mobile : la vidéo est cachée (son chargement est déjà coupé par le
+       scrub) → le loader ne l'attend pas. */
+    var isMobile = window.matchMedia && window.matchMedia('(max-width: 960px)').matches;
+
     /* Images à précharger réellement (covers projet + portrait footer) */
     var imgs = PROJECTS.map(function (p) { return p.img; });
     imgs.push('assets/img/Profil 01.jpg');
@@ -116,7 +251,7 @@
     if (!fontsReady) document.fonts.ready.then(function () { fontsReady = true; });
 
     function videoProgress () {
-      if (!video) return 1;
+      if (isMobile || !video) return 1;
       if (video.readyState >= 4) return 1;            // HAVE_ENOUGH_DATA
       try {
         if (video.buffered.length && video.duration) {
@@ -365,8 +500,10 @@
   if ('IntersectionObserver' in window) {
     /* .svc-item est exclu : il a déjà sa propre animation au
        moment de l'ouverture de l'accordéon. */
+    /* .project-row exclu : a son propre effet « wavy » (translateX
+       piloté par scroll). L'animation fx01 utilise `transform` aussi
+       → elle écraserait le translateX en fin d'anim (fill-mode both). */
     var fxEls = document.querySelectorAll(
-      '.project-row, ' +
       '.services-left .label, ' +
       '.services-left h2, ' +
       '.services-left .cta, ' +
@@ -386,5 +523,50 @@
   /* ── Modules communs ─────────────────────────────────────── */
   SublizmeSite.initScrollRestore();
   SublizmeSite.addCursorHover('.project-row, .service-row');
+
+  /* ── « WavyBlock » sur la liste des projets ───────────────────
+     Chaque rangée est translatée horizontalement selon une sinusoïde
+     pilotée par le scroll : la même phase passe à travers les lignes
+     avec un déphasage par index → onde qui ondule serpente quand on
+     scrolle. Aucun conflit avec le système hover (la translation est
+     posée en inline, le hover modifie color/padding-left).
+     Pour ajuster : AMP (amplitude px), FREQ (vitesse de l'onde par
+     pixel scrollé), PHASE (déphasage entre 2 lignes adjacentes). */
+  (function initProjectsWavy () {
+    var rows = document.querySelectorAll('.project-row');
+    if (!rows.length) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var AMP   = 10;      // amplitude horizontale en px (dramatique)
+    var FREQ  = 0.003;    // vitesse de l'onde (rad / px de scroll)
+    var PHASE = 0.5;     // déphasage par ligne (rad)
+    var raf = null;
+
+    function update () {
+      raf = null;
+      var sy = window.scrollY || window.pageYOffset || 0;
+      for (var i = 0; i < rows.length; i++) {
+        var theta = sy * FREQ + i * PHASE;
+        var dx = Math.sin(theta) * AMP;
+        rows[i].style.transform = 'translateX(' + dx.toFixed(2) + 'px)';
+      }
+    }
+    function schedule () { if (raf === null) raf = requestAnimationFrame(update); }
+
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    update();
+  })();
+
+  /* ── Animation X : câblage des cibles de la home ──────────────
+     · Titres de la liste projets → synchro avec le changement de
+       couleur (déclenché par .project-row:not(.muted), géré en CSS).
+     · Noms des services (Graphisme, Branding, Web design) → déclenché
+       par .fx-x-trigger:hover sur la ligne.
+     · Texte du CTA « Démarrer un projet » → idem (l'étoile reste à
+       côté, hors du wrapping). */
+  document.querySelectorAll('.project-row .title').forEach(SublizmeSite.applyFxX);
+  document.querySelectorAll('.service-row .name').forEach(SublizmeSite.applyFxX);
+  document.querySelectorAll('.services-left .cta-txt').forEach(SublizmeSite.applyFxX);
 
 })();

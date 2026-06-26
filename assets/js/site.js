@@ -271,7 +271,7 @@
       nav.innerHTML =
         '<div class="sn-left">' + left + '</div>' +
         '<div class="sn-links">' +
-          '<button class="menu-btn" aria-label="Ouvrir le menu">menu</button>' +
+          '<a class="menu-btn" href="#contact">contact</a>' +
         '</div>';
 
       document.body.prepend(nav);
@@ -307,15 +307,10 @@
               '<span class="response-badge"><span class="avail-dot"></span>Réponse sous 48h</span>' +
             '</div>' +
             '<div class="contact-card">' +
-              '<div class="col-label">Réseaux</div>' +
-              '<a href="#" class="link-row hover-star">Instagram<span class="arr">↗</span></a>' +
-              '<a href="#" class="link-row hover-star">Behance<span class="arr">↗</span></a>' +
-              '<a href="#" class="link-row hover-star">LinkedIn<span class="arr">↗</span></a>' +
-            '</div>' +
-            '<div class="contact-card">' +
               '<div class="col-label">Coordonnées</div>' +
               '<p class="coord"><span class="coord-k">Email</span><a href="mailto:hello@sublizme.fr">hello@sublizme.fr</a></p>' +
               '<p class="coord"><span class="coord-k">Téléphone</span><a href="tel:+33600000000">+33 6 00 00 00 00</a></p>' +
+              '<p class="coord"><span class="coord-k">Instagram</span><a href="https://instagram.com/sublizme" target="_blank" rel="noopener">@sublizme</a></p>' +
               '<p class="coord"><span class="coord-k">Adresse</span>Paris, France</p>' +
             '</div>' +
           '</div>' +
@@ -340,8 +335,11 @@
       section.querySelectorAll('a, button').forEach(addHover);
     },
 
-    /* Menu plein-écran (drawer à droite) */
+    /* Menu retiré — remplacé par un bouton Contact dans la nav.
+       (corps conservé mais désactivé pour limiter les changements) */
     injectMenu: function () {
+      return;
+      // eslint-disable-next-line no-unreachable
       if (document.getElementById('menu-overlay')) return;
 
       var ov = document.createElement('div');
@@ -518,6 +516,9 @@
     }
   };
 
+  /* Helper Animation X exposé pour index.js (la fonction est définie
+     plus bas dans l'IIFE — l'assignation est différée à `boot()`). */
+
   /* ── Pages projet : hero (image du cover → fond du .ph) ─── */
   function initProjectHero () {
     var ph = document.querySelector('.ph');
@@ -678,6 +679,60 @@
     if (!loaderWillShow) requestAnimationFrame(function () { requestAnimationFrame(reveal); });
   }
 
+  /* ── Animation X : prépare un élément pour le « stagger horizontal ».
+     · Lit le contenu (textes + <br> et autres éléments inline)
+     · Construit deux couches identiques (.fx-x-on / .fx-x-off)
+     · Éclate chaque lettre en .fx-c avec un --i incrémental (la cascade
+       est ensuite assurée par le CSS via transition-delay).
+     · Idempotent : un élément déjà traité (dataset.fxx) est ignoré.
+     Toute la mécanique d'animation reste dans le CSS (.fx-x …) :
+     pour changer l'effet, modifier les règles .fx-x dans components.css. */
+  function applyFxX (el) {
+    if (!el || el.dataset.fxx) return;
+    el.dataset.fxx = '1';
+
+    function buildLayer (cls) {
+      var layer = document.createElement('span');
+      layer.className = 'fx-x-' + cls;
+      if (cls === 'off') layer.setAttribute('aria-hidden', 'true');
+      var counter = { n: 0 };
+      function walk (src, dst) {
+        for (var i = 0; i < src.childNodes.length; i++) {
+          var node = src.childNodes[i];
+          if (node.nodeType === 3) {
+            var text = node.textContent;
+            for (var j = 0; j < text.length; j++) {
+              var c = document.createElement('span');
+              c.className = 'fx-c';
+              c.style.setProperty('--i', counter.n);
+              c.textContent = text[j];
+              dst.appendChild(c);
+              counter.n++;
+            }
+          } else if (node.nodeType === 1) {
+            var clone = node.cloneNode(false);   /* <br>, <em>, etc. */
+            walk(node, clone);
+            dst.appendChild(clone);
+          }
+        }
+      }
+      var tmp = document.createElement('span');
+      tmp.innerHTML = el.innerHTML;
+      walk(tmp, layer);
+      return layer;
+    }
+
+    var on  = buildLayer('on');
+    var off = buildLayer('off');
+
+    el.innerHTML = '';
+    el.classList.add('fx-x');
+    el.appendChild(on);
+    el.appendChild(off);
+  }
+  /* Exposé pour index.js (cibles spécifiques à la home). */
+  window.SublizmeSite.applyFxX = applyFxX;
+
   /* ── Boot ─────────────────────────────────────────────────── */
   initProjectHero();
   initProjectReveal();
@@ -686,6 +741,13 @@
     initPageTransition();
     initCursor();
     initSmoothScroll();
+    /* Animation X : appliquée sur le titre du bloc « Projet suivant »
+       (pages projet). Sur la home, les autres cibles sont câblées par
+       index.js. Le wrapping est fait dans rAF pour laisser le moteur
+       calculer la mise en page après une éventuelle injection. */
+    requestAnimationFrame(function () {
+      document.querySelectorAll('.pn-title').forEach(applyFxX);
+    });
     /* Applique le liquid glass sur tous les éléments visés (nav + tags +
        cards). On rebuilde une seconde fois après chargement des fonts
        custom : sinon la taille mesurée à DOMContentLoaded peut être

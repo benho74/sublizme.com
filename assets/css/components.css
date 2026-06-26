@@ -160,36 +160,62 @@
 .menu-links a span{display:inline-block;transition:transform .4s var(--ease)}
 .menu-overlay.open .menu-links a:hover span{transform:translateX(.5em)}
 
-/* ── Étoile rouge réutilisable au survol (.hover-star) ───────────
-   À poser sur un élément survolable : au survol le texte glisse vers
-   la droite (padding-left) et l'étoile ✦ rouge apparaît (scale 0→1)
-   dans l'espace ouvert, à gauche du texte. Taille en em → s'adapte
-   à la police de l'élément, réutilisable partout.
-   `.pn .pn-title` est inclus ici car « Projet suivant » a un
-   déclencheur (.pn) différent de l'hôte de l'étoile (.pn-title).
-   La transition padding-left est posée sur chaque élément cible
-   (sinon une transition existante l'écraserait). */
-.hover-star,
-.pn .pn-title{position:relative}
-.hover-star::before,
-.pn .pn-title::before{
-  content:"✦";
-  position:absolute;
-  left:0;top:50%;
-  color:var(--accent);
-  font-size:.42em;line-height:1;
-  transform:translateY(-50%) scale(0);
-  transform-origin:left center;
-  transition:transform .4s var(--ease);
-  pointer-events:none;
+/* ── Animation X — survol « stagger » horizontal ──────────────────
+   Effet de remplacement lettre par lettre : à l'état actif (hover /
+   .is-fx-on / .project-row:not(.muted)), chaque lettre de la couche
+   visible (.fx-x-on) se compresse vers la droite (scaleX 1→0, origine
+   droite) pendant qu'une copie (.fx-x-off) se déploie depuis la gauche
+   (scaleX 0→1). Cascade pilotée par --i posée par le JS sur chaque
+   lettre.
+
+   Pour CHANGER l'animation plus tard : tout est ici.
+   · Réglage : --fx-dur, --fx-ease, --fx-step.
+   · Direction : ne modifier que les `transform-origin` et `transform`
+     (ex. translateY(±100%) pour une animation verticale, blur(8px)+
+     opacity pour un flou, etc.).
+   · Déclencheurs : les sélecteurs en bas. */
+.fx-x{
+  display:inline-grid;            /* deux couches superposées (même cellule) */
+  vertical-align:baseline;
+  --fx-dur:.2s;
+  --fx-ease:cubic-bezier(.22,.61,.36,1);
+  --fx-step:28ms;
 }
-.hover-star:hover,
-.pn:hover .pn-title{padding-left:.6em}
-.hover-star:hover::before,
-.pn:hover .pn-title::before{transform:translateY(-50%) scale(1)}
-/* Menu : le texte glisse via le <span> (le <a> est piloté par GSAP,
-   une transition sur le <a> serait écrasée) → pas de padding ici. */
-.menu-links a.hover-star:hover{padding-left:0}
+.fx-x > .fx-x-on,
+.fx-x > .fx-x-off{
+  grid-area:1 / 1;
+  display:block;                  /* contenu inline-block à l'intérieur */
+}
+.fx-x .fx-c{
+  display:inline-block;
+  white-space:pre;                /* préserve les espaces */
+  transition:transform var(--fx-dur) var(--fx-ease);
+  transition-delay:calc(var(--i, 0) * var(--fx-step));
+  will-change:transform;
+}
+/* État au repos — variante « Text Different Style » (vertical top/bottom).
+   La couche visible (on) garde la couleur héritée (texte normal du site).
+   La couche cachée (off) est en couleur d'accent et attend en bas. */
+.fx-x .fx-x-on  .fx-c{transform-origin:top;   transform:scaleY(1)}
+.fx-x .fx-x-off .fx-c{transform-origin:bottom;transform:scaleY(0)}
+
+/* Déclencheurs : tout ce qui doit jouer l'animation.
+   - .fx-x lui-même au :hover (lien direct)
+   - parent .fx-x-trigger au :hover (ligne, bouton qui enveloppe)
+   - parent .is-fx-on (état piloté par JS)
+   - .project-row:not(.muted) (synchro avec le changement de couleur) */
+.fx-x:hover                    .fx-x-on  .fx-c,
+.fx-x-trigger:hover       .fx-x .fx-x-on  .fx-c,
+.is-fx-on                 .fx-x .fx-x-on  .fx-c,
+.project-row:not(.muted)  .fx-x .fx-x-on  .fx-c{transform:scaleY(0)}
+
+.fx-x:hover                    .fx-x-off .fx-c,
+.fx-x-trigger:hover       .fx-x .fx-x-off .fx-c,
+.is-fx-on                 .fx-x .fx-x-off .fx-c,
+.project-row:not(.muted)  .fx-x .fx-x-off .fx-c{transform:scaleY(1)}
+
+/* Anti-doublon lecteur d'écran : la copie est cachée à l'accessibilité. */
+.fx-x .fx-x-off{pointer-events:none}
 
 /* ── Section contact ──────────────────────────────────────── */
 .contact{
@@ -203,12 +229,17 @@
   margin-bottom:24px;
 }
 
+/* Une seule ligne en 1:1:2 → projet · coordonnées · photo.
+   `.contact-cards` passe en display:contents : ses deux cartes
+   deviennent des items directs de la grille (colonnes 1 et 2),
+   le portrait occupant la colonne 2fr. */
 .contact-grid{
-  display:grid;grid-template-columns:1.35fr 1fr;gap:14px;
+  display:grid;grid-template-columns:1fr 1fr 2fr;gap:14px;
+  align-items:stretch;
   padding-bottom:100px;
   border-bottom:1px solid var(--line);
 }
-.contact-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.contact-cards{display:contents}
 
 /* ── Carte de contact (motif réutilisable) ────────────────── */
 .contact-card{
@@ -219,8 +250,6 @@
   backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
   transition:border-color .25s, background .25s;
 }
-.contact-card:hover{border-color:var(--surface-h)}
-.contact-card.card-project{grid-column:1 / -1}
 .contact-card .col-label{
   font-size:11px;font-weight:500;
   letter-spacing:.1em;text-transform:uppercase;
@@ -250,7 +279,6 @@
 .contact-card .link-row:first-of-type{border-top:1px solid var(--line)}
 .contact-card .link-row:last-of-type{border-bottom:none}
 .contact-card .link-row .arr{color:var(--ink-dim);font-size:13px;transition:transform .25s}
-.contact-card .link-row:hover .arr{transform:translate(3px, -3px)}
 
 /* Bloc coordonnées (Adresse, Téléphone, Email…) */
 .contact-card .coord{font-size:15px;color:var(--ink);font-weight:500;margin-bottom:14px}
@@ -261,7 +289,17 @@
   letter-spacing:.06em;text-transform:uppercase;
   color:var(--ink-dim);
 }
-.contact-card .coord a{transition:opacity var(--t-fast)}
+/* Liens cliquables des coordonnées : au survol, glisse vers la droite
+   et passe du blanc cassé (var(--ink)) au blanc pur. */
+.contact-card .coord a{
+  display:inline-block;
+  color:var(--ink);
+  transition:transform .35s var(--ease), color .25s ease;
+}
+.contact-card .coord a:hover{
+  transform:translateX(10px);
+  color:#fff;
+}
 
 /* Portrait à droite */
 .contact-portrait{
@@ -276,7 +314,6 @@
   object-fit:cover;
   transition:transform .8s var(--ease);
 }
-.contact-portrait:hover img{transform:scale(1.03)}
 .contact-portrait .portrait-tag{
   position:absolute;left:18px;bottom:18px;
   display:inline-flex;align-items:center;gap:8px;
@@ -303,7 +340,6 @@
 }
 .contact-footer-bar .f-nav{display:flex;gap:20px;justify-content:flex-end}
 .contact-footer-bar a{color:var(--ink-mute);transition:color var(--t-fast)}
-.contact-footer-bar a:hover{color:var(--ink)}
 
 /* ── Transition de page (balayage vertical) ───────────────────
    Overlay noir avec le symbole, présent dès le 1er paint sur chaque
